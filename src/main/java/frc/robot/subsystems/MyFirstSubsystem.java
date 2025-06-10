@@ -8,6 +8,7 @@ import frc.robot.Constants;
 public class MyFirstSubsystem extends SubsystemBase {
     // Define the motor 
     TalonFX motor;
+    public static final double gearRatio = 16;
 
     // Constructor
     public MyFirstSubsystem() {
@@ -25,10 +26,30 @@ public class MyFirstSubsystem extends SubsystemBase {
         setPower(0);
     }
 
+    public double getPosition() {
+        return motor.getPosition().getValueAsDouble();
+    }
+
+    public double getNormalizePosition() {
+        return normalizeDegrees(motorRotationToDegrees(getPosition()));
+    }
+
     @Override
     public void periodic() {
-        // TODO Auto-generated method stub
         super.periodic();
+    }
+
+    public static double motorRotationToDegrees(double rotations) {
+        return rotations/gearRatio * 360.0;
+    }
+    public static double degreesToMotorRotation(double degrees) {
+        return degrees / 360.0 * gearRatio;
+    }
+
+    public static double normalizeDegrees(double degrees) {
+        double normalized = degrees % 360;
+        return normalized < 0 ? normalized + 360 : normalized;
+
     }
 
 }   

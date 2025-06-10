@@ -5,7 +5,9 @@
 package frc.robot;
 
 import frc.robot.commands.MyFirstSubsystemCommand;
+import frc.robot.commands.MyFirstSubsystemTurnCommand;
 import frc.robot.subsystems.MyFirstSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -20,6 +22,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
   private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, 0.3, 1.0);
+  private final CommandXboxController controller = new CommandXboxController(0);
+  private final Command aCommand = new MyFirstSubsystemTurnCommand(subsystem, 45);
+  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -39,6 +44,7 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
+    controller.a().onTrue(aCommand);
   }
 
   /**
