@@ -3,6 +3,7 @@ package frc.robot.utils;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SmartMotionConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -225,6 +226,9 @@ public class SparkMotor extends SparkMax implements Sendable {
   }
   public double getCurrentVelocity() {
     return encoder.getVelocity();
+  }
+  public double getCurrentVoltage() {
+    return getBusVoltage();
   }
 
   /**
