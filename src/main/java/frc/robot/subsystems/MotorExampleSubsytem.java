@@ -10,7 +10,7 @@ public class MotorExampleSubsytem extends SubsystemBase {
     // Define the motor 
     TalonMotor talonMotor;
     SparkMotor sparkMotor;
-
+    
     // Constructor
     public MotorExampleSubsytem() {
         super();
