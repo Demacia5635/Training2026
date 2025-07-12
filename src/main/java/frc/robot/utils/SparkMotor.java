@@ -3,7 +3,6 @@ package frc.robot.utils;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SmartMotionConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -63,7 +62,6 @@ public class SparkMotor extends SparkMax implements Sendable {
     cfg.encoder.velocityConversionFactor(config.motorRatio / 60);
     if(config.maxVelocity != 0) {
       cfg.closedLoop.maxMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration);
-      cfg.closedLoop.smartMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration).minOutputVelocity(config.minVelocity);
     }
      this.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
@@ -135,8 +133,8 @@ public class SparkMotor extends SparkMax implements Sendable {
    * @param feedForward wanted feed forward to add to the ks kv ka and kg, defaults to 0
    */
   public void setVelocity(double velocity, double feedForward) {
-    super.closedLoopController.setReference(velocity, ControlType.kVelocity,slot, feedForward);
-    controlType = ControlType.kVelocity;
+    super.closedLoopController.setReference(velocity, ControlType.kMAXMotionVelocityControl,slot, feedForward);
+    controlType = ControlType.kMAXMotionVelocityControl;
   }
 
 	public void setVelocity(double velocity) {
@@ -144,8 +142,8 @@ public class SparkMotor extends SparkMax implements Sendable {
 	}
 
   public void setPositionVoltage(double position, double feedForward) {
-    super.closedLoopController.setReference(position, ControlType.kPosition,slot, feedForward);
-    controlType = ControlType.kPosition;
+    super.closedLoopController.setReference(position, ControlType.kMAXMotionPositionControl,slot, feedForward);
+    controlType = ControlType.kMAXMotionPositionControl;
   }
 
   public void setPositionVoltage(double position) {
