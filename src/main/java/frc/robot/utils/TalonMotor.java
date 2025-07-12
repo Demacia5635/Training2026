@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.utils.Log.LogManager;
+import frc.robot.utils.Log.MotorLogEntry;
 
 public class TalonMotor extends TalonFX {
 
@@ -136,13 +138,7 @@ public class TalonMotor extends TalonFX {
     }
 
     private void addLog() {
-        LogManager.addEntry(name + "/Position", getPosition(), 2);
-        LogManager.addEntry(name + "/Velocity", getVelocity(), 2);
-        LogManager.addEntry(name + "/Acceleration", getAcceleration(), 2);
-        LogManager.addEntry(name + "/Voltage", getMotorVoltage(), 2);
-        LogManager.addEntry(name + "/Current", getStatorCurrent(), 2);
-        LogManager.addEntry(name + "/CloseLoopError", getClosedLoopError(), 2);
-        LogManager.addEntry(name + "/CloseLoopSP", getClosedLoopReference(), 2);
+        MotorLogEntry.add(this);
     }
 
     public void checkElectronics() {
@@ -512,5 +508,13 @@ public class TalonMotor extends TalonFX {
         builder.addDoubleProperty("Velocity", this::getCurrentVelocity, null);
         builder.addDoubleProperty("Acceleration", this::getCurrentAcceleration, null);
         builder.addDoubleProperty("Voltage", this::getCurrentVoltage, null);
+    }
+
+    public double gearRatio() {
+        return config.motorRatio;
+    }
+
+    public String name() {
+        return name;
     }
 }

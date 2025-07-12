@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.utils.Log.LogManager;
+import frc.robot.utils.Log.MotorLogEntry;
 
 public class SparkMotor extends SparkMax implements Sendable {
 
@@ -21,10 +23,6 @@ public class SparkMotor extends SparkMax implements Sendable {
   ClosedLoopSlot slot = ClosedLoopSlot.kSlot0;
   ControlType controlType = ControlType.kDutyCycle;
 
-  LogManager.LogEntry dutyCycleEntry;
-  LogManager.LogEntry velocityEntry;
-  LogManager.LogEntry positionEntry;
-
   String lastControlMode;
   double lastClosedLoopSP;
   double lastClosedLoopError;
@@ -32,6 +30,7 @@ public class SparkMotor extends SparkMax implements Sendable {
   double lastVelocity;
   double lastAcceleration;
   double lastVoltage;
+  double setPoint = 0;
 
 
   public SparkMotor(SparkConfig config) {
@@ -68,14 +67,7 @@ public class SparkMotor extends SparkMax implements Sendable {
 
 
   private void addLog() {    
-    LogManager.addEntry(name + "/Position", encoder::getPosition, 3);
-    LogManager.addEntry(name + "/Velocity", encoder::getVelocity, 3);
-    LogManager.addEntry(name + "/Voltage", this::getAppliedOutput, 3);
-    LogManager.addEntry(name + "/Current", this::getOutputCurrent, 3);
-
-    dutyCycleEntry = LogManager.getEntry(name + "/SetDutyCycle");
-    velocityEntry = LogManager.getEntry(name + "/SetVelocity");
-    positionEntry = LogManager.getEntry(name + "/SetPosition");
+    MotorLogEntry.add(this);
   }
 
   /**
@@ -120,6 +112,7 @@ public class SparkMotor extends SparkMax implements Sendable {
   public void setDuty(double power) {
     super.set(power);
     controlType = ControlType.kDutyCycle;
+  
   }
 
   public void setVoltage(double voltage) {
@@ -135,6 +128,7 @@ public class SparkMotor extends SparkMax implements Sendable {
   public void setVelocity(double velocity, double feedForward) {
     super.closedLoopController.setReference(velocity, ControlType.kMAXMotionVelocityControl,slot, feedForward);
     controlType = ControlType.kMAXMotionVelocityControl;
+    setPoint = velocity;
   }
 
 	public void setVelocity(double velocity) {
@@ -144,6 +138,7 @@ public class SparkMotor extends SparkMax implements Sendable {
   public void setPositionVoltage(double position, double feedForward) {
     super.closedLoopController.setReference(position, ControlType.kMAXMotionPositionControl,slot, feedForward);
     controlType = ControlType.kMAXMotionPositionControl;
+    setPoint = position;
   }
 
   public void setPositionVoltage(double position) {
@@ -152,6 +147,15 @@ public class SparkMotor extends SparkMax implements Sendable {
 
   public String getCurrentControlMode() {
     return lastControlMode;
+  }
+
+  public double getCloseLoopError() {
+    return controlType == ControlType.kMAXMotionPositionControl ? setPoint - getCurrentPosition():
+      controlType == ControlType.kMAXMotionVelocityControl ? setPoint - getCurrentVelocity():
+      0;
+  }
+  public double getSetPoint() {
+    return setPoint;
   }
 
   /**
@@ -228,6 +232,8 @@ public class SparkMotor extends SparkMax implements Sendable {
   public double getCurrentVoltage() {
     return getBusVoltage();
   }
+  
+
 
   /**
    * override the sendable of the talonFX to our costum widget in elastic
@@ -242,4 +248,13 @@ public class SparkMotor extends SparkMax implements Sendable {
     builder.addDoubleProperty("Velocity", encoder::getVelocity,null);
     builder.addDoubleProperty("Voltage", super::getAppliedOutput, null);
   }
+
+
+  public double gearRatio() {
+    return config.motorRatio;
+}
+
+public String name() {
+    return name;
+}
 }

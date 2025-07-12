@@ -1,0 +1,92 @@
+package frc.robot.utils.Log;
+
+import static frc.robot.utils.constants.UtilsContants.*;
+
+import java.util.ArrayList;
+
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.ConsoleAlert;
+
+public class LogManager extends SubsystemBase {
+
+  public static LogManager logManager; // singelton reference
+
+  DataLog log;
+  private NetworkTableInstance ntInst = NetworkTableInstance.getDefault();
+  NetworkTable table = ntInst.getTable("Log");
+
+  private static ArrayList<ConsoleAlert> activeConsole;
+
+  // array of log entries
+  ArrayList<LogEntry> logEntries = new ArrayList<>();
+
+  // Log managerconstructor
+  public LogManager() {
+    logManager = this;
+
+    DataLogManager.start();
+    DataLogManager.logNetworkTables(false);
+    log = DataLogManager.getLog();
+    DriverStation.startDataLog(log);
+    
+    activeConsole = new ArrayList<>();
+    log("log manager is ready");
+  }
+
+
+  public static void removeInComp() {
+    for (int i = 0; i < LogManager.logManager.logEntries.size(); i++) {
+      LogManager.logManager.logEntries.get(i).removeInComp();
+      if (LogManager.logManager.logEntries.get(i).logLevel == 1) {
+        LogManager.logManager.logEntries.remove(LogManager.logManager.logEntries.get(i));
+        i--;
+      }
+    }
+  }
+
+  /*
+   * find a log entry by name
+   */
+  public LogEntry find(String name) {
+    for (LogEntry e : logEntries) {
+      if (name.equals(e.name)) {
+        return e;
+      }
+    }
+    return null;
+  }
+
+  /*
+   * Log text message - also will be sent System.out
+   */
+  public static ConsoleAlert log(Object message, AlertType alertType) {
+    DataLogManager.log(String.valueOf(message));
+    
+    ConsoleAlert alert = new ConsoleAlert(String.valueOf(message.toString()), alertType);
+    alert.set(true);
+    if (activeConsole.size() > ConsoleConstants.CONSOLE_LIMIT) {
+      activeConsole.get(0).close();
+      activeConsole.remove(0);
+    }
+    activeConsole.add(alert);
+    return alert;
+  }
+
+  public static ConsoleAlert log(Object meesage) {
+    return log(meesage, AlertType.kInfo);
+  }
+
+  @Override
+  public void periodic() {
+
+    for (LogEntry e : logEntries) {
+      e.log();
+    }
+  }
+}
