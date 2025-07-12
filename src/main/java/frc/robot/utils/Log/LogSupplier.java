@@ -69,13 +69,12 @@ public class LogSupplier {
       } else {
         newValue =  (float)doubleSupplier.getAsDouble();
       }
-      if(newValue != lastValue) {
-        if(doubleConsumer != null) {
+      if(newValue != lastValue && doubleConsumer != null) {
           doubleConsumer.accept(newValue);
-        }
       }
       return newValue;
     }
+
     @SuppressWarnings("unchecked")
     boolean getBoolean() {
       lastBool = newBool;
@@ -85,10 +84,8 @@ public class LogSupplier {
       } else {
         newBool = booleanSupplier.getAsBoolean();
       }
-      if(newBool != lastBool) {
-        if(booleanConsumer != null) {
+      if(newBool != lastBool && booleanConsumer != null) {
           booleanConsumer.accept(newBool);
-        }
       }
       return newBool;
     }

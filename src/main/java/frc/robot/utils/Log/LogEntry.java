@@ -1,11 +1,14 @@
 package frc.robot.utils.Log;
 
 
+import edu.wpi.first.networktables.BooleanArrayPublisher;
 import edu.wpi.first.networktables.BooleanArrayTopic;
+import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.BooleanTopic;
 import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.FloatArrayPublisher;
 import edu.wpi.first.networktables.FloatArrayTopic;
+import edu.wpi.first.networktables.FloatPublisher;
 import edu.wpi.first.networktables.Publisher;
 import edu.wpi.first.util.datalog.BooleanArrayLogEntry;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
@@ -118,13 +121,22 @@ import edu.wpi.first.util.datalog.FloatArrayLogEntry;
                     if(updateNetworkTable) {
                         ((FloatArrayPublisher)ntPublisher).accept(floatData);
                     }
-                    } else {
+                } else {
                     ((DoubleLogEntry)entry).append(floatData[0]);
+                    if(updateNetworkTable) {
+                        ((FloatPublisher)ntPublisher).accept(floatData[0]);
+                    }
                 }
             } else if(isArray) {
                 ((BooleanArrayLogEntry)entry).append(booleanData);
+                if(updateNetworkTable) {
+                    ((BooleanArrayPublisher)ntPublisher).accept(booleanData);
+                }
             } else {
                 ((BooleanLogEntry)entry).append(booleanData[0]);
+                if(updateNetworkTable) {
+                    ((BooleanPublisher)ntPublisher).accept(booleanData[0]);
+                }
             }
         }
     }
