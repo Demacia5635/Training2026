@@ -39,6 +39,5 @@ public class MotorLogEntry {
             "Motor", 
             "Spark", 
             "GearRatio:" + motor.gearRatio());
-
     }
 }

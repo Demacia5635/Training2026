@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "LogReader",
+      "request": "launch",
+      "mainClass": "frc.robot.utils.Log.LogReader",
+      "projectName": "Training2026"
+    },
+    {
+      "type": "java",
       "name": "IntakeSubsystem",
       "request": "launch",
       "mainClass": "frc.robot.utils.SensorTest.IntakeSubsystem",
