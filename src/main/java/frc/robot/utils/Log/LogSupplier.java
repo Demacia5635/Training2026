@@ -75,12 +75,11 @@ public class LogSupplier {
       return newValue;
     }
 
-    @SuppressWarnings("unchecked")
     boolean getBoolean() {
       lastBool = newBool;
       if(statusSignal != null) {
         statusSignal.refresh();
-        newBool =  ((StatusSignal<Boolean>)statusSignal).getValue();
+        newBool =  (Boolean)statusSignal.getValue();
       } else {
         newBool = booleanSupplier.getAsBoolean();
       }
@@ -99,7 +98,7 @@ public class LogSupplier {
     }
 
     boolean changed() {
-      return isFloat? lastValue != newValue: lastBool != newBool;
+      return isFloat? lastValue != newValue : lastBool != newBool;
     }
 
   }

@@ -50,18 +50,7 @@ public class LogManager extends SubsystemBase {
     }
   }
 
-  /*
-   * find a log entry by name
-   */
-  public LogEntry find(String name) {
-    for (LogEntry e : logEntries) {
-      if (name.equals(e.name)) {
-        return e;
-      }
-    }
-    return null;
-  }
-
+  
   /*
    * Log text message - also will be sent System.out
    */
@@ -84,9 +73,6 @@ public class LogManager extends SubsystemBase {
 
   @Override
   public void periodic() {
-
-    for (LogEntry e : logEntries) {
-      e.log();
-    }
+    LogEntry.periodic();
   }
 }

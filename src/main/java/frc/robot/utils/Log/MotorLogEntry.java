@@ -7,7 +7,6 @@ public class MotorLogEntry {
 
     public static void add(TalonMotor motor) {
         new LogEntry(
-            LogManager.logManager, 
             motor.name(), 
             new LogSupplier[] {
                 new LogSupplier(motor.getMotorVoltage(), "Volts",null),
@@ -26,7 +25,6 @@ public class MotorLogEntry {
     }
     public static void add(SparkMotor motor) {
         new LogEntry(
-            LogManager.logManager, 
             motor.name(), 
             new LogSupplier[] {
                 new LogSupplier(motor::getCurrentVoltage, "Volts",null),

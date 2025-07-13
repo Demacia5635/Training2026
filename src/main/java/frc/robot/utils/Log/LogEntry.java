@@ -1,6 +1,8 @@
 package frc.robot.utils.Log;
 
 
+import java.util.ArrayList;
+
 import edu.wpi.first.networktables.BooleanArrayPublisher;
 import edu.wpi.first.networktables.BooleanArrayTopic;
 import edu.wpi.first.networktables.BooleanPublisher;
@@ -16,6 +18,7 @@ import edu.wpi.first.util.datalog.DataLogEntry;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.FloatArrayLogEntry;
+import edu.wpi.first.util.datalog.FloatLogEntry;
 
 /*
    * class for a single data entry
@@ -46,12 +49,20 @@ import edu.wpi.first.util.datalog.FloatArrayLogEntry;
      */
     public int logLevel;
 
+    private static ArrayList<LogEntry> logEntries = new ArrayList<>();
+
+    public static void periodic() {
+        for(LogEntry entry : logEntries) {
+            entry.log();
+        }
+    }
+
     /*
      * Constructor with the suppliers and boolean if add to network table
      */
-    LogEntry(LogManager logManager, String name, LogSupplier[] suplliers, int logLevel, String type, String subType, String meta) {
+    LogEntry(String name, LogSupplier[] suplliers, int logLevel, String type, String subType, String meta) {
 
-      this.logManager = logManager;
+      this.logManager = LogManager.logManager;
       this.name = name;
       this.logLevel = logLevel;
       this.suppliers = suplliers;
@@ -60,14 +71,14 @@ import edu.wpi.first.util.datalog.FloatArrayLogEntry;
       isDouble = suplliers[0].isFloat();
       isArray = suplliers.length > 1;
       if(!isArray) {
-        if(isDouble) {
+        if(isDouble) { // Single Double
             entry = new DoubleLogEntry(logManager.log, name, this.meta);
             floatData = new float[] {suplliers[0].getFloat()};
             if(updateNetworkTable) {
                 DoubleTopic dt = this.logManager.table.getDoubleTopic(name);
                 ntPublisher = dt.publish();
             }
-        } else {
+        } else { // Single Boolean
             entry = new BooleanLogEntry(logManager.log, name, this.meta);
             booleanData = new boolean[] {suplliers[0].getBoolean()};
             if(updateNetworkTable) {
@@ -75,7 +86,7 @@ import edu.wpi.first.util.datalog.FloatArrayLogEntry;
                 ntPublisher = bt.publish();
             }
         }
-      } else if(isDouble) {
+      } else if(isDouble) { // double array
         entry = new DoubleArrayLogEntry(logManager.log, name, this.meta);
         floatData = new float[suplliers.length];
         for(int i = 0; i < suplliers.length; i++) {
@@ -85,7 +96,7 @@ import edu.wpi.first.util.datalog.FloatArrayLogEntry;
             FloatArrayTopic dt = this.logManager.table.getFloatArrayTopic(name);
             ntPublisher = dt.publish();
         }
-      } else {
+      } else { // Boolean array
         entry = new BooleanArrayLogEntry(logManager.log, name, this.meta);
         isDouble = false;
         booleanData = new boolean[suplliers.length];
@@ -97,7 +108,7 @@ import edu.wpi.first.util.datalog.FloatArrayLogEntry;
             ntPublisher = dt.publish();
         }
       }
-      logManager.logEntries.add(this);
+      logEntries.add(this);
     }
 
     /*
@@ -122,7 +133,7 @@ import edu.wpi.first.util.datalog.FloatArrayLogEntry;
                         ((FloatArrayPublisher)ntPublisher).accept(floatData);
                     }
                 } else {
-                    ((DoubleLogEntry)entry).append(floatData[0]);
+                    ((FloatLogEntry)entry).append(floatData[0]);
                     if(updateNetworkTable) {
                         ((FloatPublisher)ntPublisher).accept(floatData[0]);
                     }
