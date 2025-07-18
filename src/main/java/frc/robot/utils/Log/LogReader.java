@@ -13,7 +13,7 @@ public class LogReader {
     public LogReader(String file) throws IOException {
         this.file = file;
         try {
-            reader = new DataLogReader(file);
+            reader = new DataLogReader(this.file);
         } catch (IOException e) {
             System.err.println(" Can not open Log File " + file + " error:" + e.getMessage());
             throw e;
@@ -26,7 +26,7 @@ public class LogReader {
             var data = record.getStartData();
             System.out.println("start record - " + data.entry + " " + data.name + " " + data.metadata + " " + data.type);
         } else if(!record.isControl() && !record.isSetMetadata()) {
-//            System.out.println(" process data for rntry " + record.getEntry());
+//            System.out.println(" process data for entry " + record.getEntry());
         }
     }
 
@@ -36,7 +36,6 @@ public class LogReader {
         try {
             new LogReader(file);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
