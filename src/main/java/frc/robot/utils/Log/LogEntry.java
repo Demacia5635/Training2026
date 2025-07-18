@@ -3,20 +3,14 @@ package frc.robot.utils.Log;
 
 import java.util.ArrayList;
 
-import edu.wpi.first.networktables.BooleanArrayPublisher;
-import edu.wpi.first.networktables.BooleanArrayTopic;
 import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.BooleanTopic;
 import edu.wpi.first.networktables.DoubleTopic;
-import edu.wpi.first.networktables.FloatArrayPublisher;
-import edu.wpi.first.networktables.FloatArrayTopic;
 import edu.wpi.first.networktables.FloatPublisher;
 import edu.wpi.first.networktables.Publisher;
 import edu.wpi.first.util.datalog.BooleanArrayLogEntry;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DataLogEntry;
-import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.FloatArrayLogEntry;
 import edu.wpi.first.util.datalog.FloatLogEntry;
 
@@ -33,7 +27,7 @@ import edu.wpi.first.util.datalog.FloatLogEntry;
     LogSupplier[] suppliers;
     String name;
     String meta;
-    Publisher ntPublisher = null; 
+    Publisher ntPublisher[] = null; 
     float[] floatData;
     boolean[] booleanData;
     boolean isDouble = true;
@@ -70,31 +64,35 @@ import edu.wpi.first.util.datalog.FloatLogEntry;
       updateNetworkTable = (logLevel == 4 || logLevel == 3);
       isDouble = suplliers[0].isFloat();
       isArray = suplliers.length > 1;
+      if(updateNetworkTable) {
+        ntPublisher = new Publisher[suplliers.length];
+      }
       if(!isArray) {
         if(isDouble) { // Single Double
-            entry = new DoubleLogEntry(logManager.log, name, this.meta);
+            entry = new FloatLogEntry(logManager.log, name, this.meta);
             floatData = new float[] {suplliers[0].getFloat()};
             if(updateNetworkTable) {
                 DoubleTopic dt = this.logManager.table.getDoubleTopic(name);
-                ntPublisher = dt.publish();
+                ntPublisher[0] = dt.publish();
             }
         } else { // Single Boolean
             entry = new BooleanLogEntry(logManager.log, name, this.meta);
             booleanData = new boolean[] {suplliers[0].getBoolean()};
             if(updateNetworkTable) {
                 BooleanTopic bt = this.logManager.table.getBooleanTopic(name);
-                ntPublisher = bt.publish();
+                ntPublisher[0] = bt.publish();
             }
         }
       } else if(isDouble) { // double array
-        entry = new DoubleArrayLogEntry(logManager.log, name, this.meta);
+        entry = new FloatArrayLogEntry(logManager.log, name, this.meta);
         floatData = new float[suplliers.length];
         for(int i = 0; i < suplliers.length; i++) {
             floatData[i] = suplliers[i].getFloat();
         }
         if(updateNetworkTable) {
-            FloatArrayTopic dt = this.logManager.table.getFloatArrayTopic(name);
-            ntPublisher = dt.publish();
+            for(int i = 0; i < ntPublisher.length; i++) {
+                ntPublisher[i] = this.logManager.table.getFloatTopic(name + "/" + (i+1)).publish();
+            }
         }
       } else { // Boolean array
         entry = new BooleanArrayLogEntry(logManager.log, name, this.meta);
@@ -104,8 +102,9 @@ import edu.wpi.first.util.datalog.FloatLogEntry;
             booleanData[i] = suplliers[i].getBoolean();
         }
         if(updateNetworkTable) {
-            BooleanArrayTopic dt = this.logManager.table.getBooleanArrayTopic(name);
-            ntPublisher = dt.publish();
+            for(int i = 0; i < ntPublisher.length; i++) {
+                ntPublisher[i] = this.logManager.table.getBooleanTopic(name + "/" + (i+1)).publish();
+            }
         }
       }
       logEntries.add(this);
@@ -130,23 +129,27 @@ import edu.wpi.first.util.datalog.FloatLogEntry;
                 if(isArray) {
                     ((FloatArrayLogEntry)entry).append(floatData);
                     if(updateNetworkTable) {
-                        ((FloatArrayPublisher)ntPublisher).accept(floatData);
+                        for(int i = 0; i < ntPublisher.length; i++)
+                            ((FloatPublisher)ntPublisher[i]).accept(floatData[i]);
                     }
                 } else {
                     ((FloatLogEntry)entry).append(floatData[0]);
                     if(updateNetworkTable) {
-                        ((FloatPublisher)ntPublisher).accept(floatData[0]);
+                        for(int i = 0; i < ntPublisher.length; i++)
+                            ((FloatPublisher)ntPublisher[i]).accept(floatData[i]);
                     }
                 }
             } else if(isArray) {
                 ((BooleanArrayLogEntry)entry).append(booleanData);
                 if(updateNetworkTable) {
-                    ((BooleanArrayPublisher)ntPublisher).accept(booleanData);
-                }
+                    for(int i = 0; i < ntPublisher.length; i++)
+                        ((BooleanPublisher)ntPublisher[i]).accept(booleanData[i]);
+        }
             } else {
                 ((BooleanLogEntry)entry).append(booleanData[0]);
                 if(updateNetworkTable) {
-                    ((BooleanPublisher)ntPublisher).accept(booleanData[0]);
+                    for(int i = 0; i < ntPublisher.length; i++)
+                        ((BooleanPublisher)ntPublisher[i]).accept(booleanData[i]);
                 }
             }
         }

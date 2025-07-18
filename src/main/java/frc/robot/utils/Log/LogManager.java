@@ -15,7 +15,7 @@ import frc.robot.utils.ConsoleAlert;
 
 public class LogManager extends SubsystemBase {
 
-  public static LogManager logManager; // singelton reference
+  public static LogManager logManager = new LogManager(); // singelton reference
 
   DataLog log;
   private NetworkTableInstance ntInst = NetworkTableInstance.getDefault();
@@ -28,7 +28,6 @@ public class LogManager extends SubsystemBase {
 
   // Log managerconstructor
   public LogManager() {
-    logManager = this;
 
     DataLogManager.start();
     DataLogManager.logNetworkTables(false);

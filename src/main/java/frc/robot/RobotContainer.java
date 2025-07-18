@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.MotorExampleCommand;
+import frc.robot.subsystems.ModuleSubsystem;
 import frc.robot.subsystems.MotorExampleSubsytem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -18,8 +19,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final MotorExampleSubsytem motorExample = new MotorExampleSubsytem();
-  private final Command autoCommand = new MotorExampleCommand(motorExample);
+//  private final MotorExampleSubsytem motorExample = new MotorExampleSubsytem();
+//  private final Command autoCommand = new MotorExampleCommand(motorExample);
+  private final ModuleSubsystem module = new ModuleSubsystem();
 
   //  private final CommandXboxController controller = new CommandXboxController(0);
   
@@ -49,6 +51,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoCommand;
+    return null;
   }
 }

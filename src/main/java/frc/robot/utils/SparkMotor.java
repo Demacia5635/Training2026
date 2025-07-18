@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.utils.Log.LogManager;
-import frc.robot.utils.Log.MotorLogEntry;
 
 public class SparkMotor extends SparkMax implements Sendable {
 
@@ -23,6 +21,11 @@ public class SparkMotor extends SparkMax implements Sendable {
   ClosedLoopSlot slot = ClosedLoopSlot.kSlot0;
   ControlType controlType = ControlType.kDutyCycle;
 
+  LogManager.LogEntry dutyCycleEntry;
+  LogManager.LogEntry velocityEntry;
+  LogManager.LogEntry positionEntry;
+
+  
   String lastControlMode;
   double lastClosedLoopSP;
   double lastClosedLoopError;
@@ -67,7 +70,16 @@ public class SparkMotor extends SparkMax implements Sendable {
 
 
   private void addLog() {    
-    MotorLogEntry.add(this);
+    //MotorLogEntry.add(this);
+    LogManager.addEntry(name + "/Position", this::getCurrentPosition, 3);
+    LogManager.addEntry(name + "/Velocity", this::getCurrentVelocity, 3);
+    LogManager.addEntry(name + "/Voltage", this::getAppliedOutput, 3);
+    LogManager.addEntry(name + "/Current", this::getOutputCurrent, 3);
+
+    dutyCycleEntry = LogManager.getEntry(name + "/SetDutyCycle");
+    velocityEntry = LogManager.getEntry(name + "/SetVelocity");
+    positionEntry = LogManager.getEntry(name + "/SetPosition");
+
   }
 
   /**
@@ -224,10 +236,14 @@ public class SparkMotor extends SparkMax implements Sendable {
   }
 
   public double getCurrentPosition() {
-    return encoder.getPosition();
+    if(encoder != null)
+      return encoder.getPosition();
+    return 0;
   }
   public double getCurrentVelocity() {
-    return encoder.getVelocity();
+    if(encoder != null)
+      return encoder.getVelocity();
+    return 0;
   }
   public double getCurrentVoltage() {
     return getBusVoltage();
