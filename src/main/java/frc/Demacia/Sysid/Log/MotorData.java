@@ -39,7 +39,7 @@ public class MotorData {
                 }
             }
             data.add(new MotorTimeData(precords[1].getDouble(), records[0].getDouble(), precords[3].getDouble(), precords[2].getDouble(), time));  
-            System.out.println(" added - times = " + precords[1].getTimestamp() + " " + records[0].getTimestamp() + " " + precords[3].getTimestamp() + " " + precords[2].getTimestamp());
+            //System.out.println(" added - times = " + precords[1].getTimestamp() + " " + records[0].getTimestamp() + " " + precords[3].getTimestamp() + " " + precords[2].getTimestamp());
             records[0] = entries[0].data.next();
         }
         updateAcceleration();
