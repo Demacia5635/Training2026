@@ -2,19 +2,18 @@ package frc.Demacia.Sysid;
 import java.util.ArrayList;
 
 import edu.wpi.first.util.datalog.DataLogRecord;
-import frc.Demacia.Sysid.LogReader.entryHirerchy;
 
 public class MotorData {
-    entryHirerchy motor;
+    LogEentryHirerchy motor;
     ArrayList<MotorTimeData> data = new ArrayList<>();
-    entryHirerchy[] entries = new entryHirerchy[LogReader.MotorFields.length];
+    LogEentryHirerchy[] entries = new LogEentryHirerchy[LogReader.MotorFields.length];
     double maxVelocity = 0;
 
-    public MotorData(entryHirerchy motor) {
+    public MotorData(LogEentryHirerchy motor) {
         this.motor = motor;
         for(int i = 0; i < LogReader.MotorFields.length; i++) {
             String s = LogReader.MotorFields[i];
-            entryHirerchy e = motor.child(s);
+            LogEentryHirerchy e = motor.child(s);
             entries[i] = e;
         }
         createData();        
@@ -25,8 +24,8 @@ public class MotorData {
         DataLogRecord[] records = new DataLogRecord[LogReader.MotorFields.length];
         DataLogRecord[] precords = new DataLogRecord[LogReader.MotorFields.length];
         for(int i = 0; i < records.length; i++) {
-            entries[i].data.resetIterator();
-            records[i] = entries[i].data.next();
+            entries[i].entryData.resetIterator();
+            records[i] = entries[i].entryData.next();
             precords[i] = records[i];
         }
 
@@ -36,12 +35,12 @@ public class MotorData {
             for(int i = 1; i < records.length; i++) {
                 while(records[i] != null && records[i].getTimestamp() < time + 15) {
                     precords[i] = records[i];
-                    records[i] = entries[i].data.next();
+                    records[i] = entries[i].entryData.next();
                 }
             }
             data.add(new MotorTimeData(precords[1].getDouble(), records[0].getDouble(), precords[3].getDouble(), precords[2].getDouble(), time));  
             //System.out.println(" added - times = " + precords[1].getTimestamp() + " " + records[0].getTimestamp() + " " + precords[3].getTimestamp() + " " + precords[2].getTimestamp());
-            records[0] = entries[0].data.next();
+            records[0] = entries[0].entryData.next();
         }
         updateAcceleration();
     }

@@ -12,13 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class FileChooser extends JPanel implements ActionListener {
+public class FileChooserPanel extends JPanel implements ActionListener {
     JButton button;
     JTextField field;
     JFileChooser chooser;
     Consumer<File> consumer;
 
-    public FileChooser(Consumer<File> consumer) {
+    public FileChooserPanel(Consumer<File> consumer) {
         super(new FlowLayout(FlowLayout.LEFT, 10, 5));
         this.consumer = consumer;
         button = new JButton("File:");

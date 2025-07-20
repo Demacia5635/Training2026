@@ -7,8 +7,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 
-import frc.Demacia.Sysid.LogReader.entryHirerchy;
-
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,10 +19,10 @@ import java.util.function.Consumer;
 
 public class Sysid implements Consumer<File> {
     JFrame frame = new JFrame("Test1");
-    FileChooser fileChooser = new FileChooser(this);
-    JList<entryHirerchy> motorList = new JList<>();
+    FileChooserPanel fileChooser = new FileChooserPanel(this);
+    JList<LogEentryHirerchy> motorList = new JList<>();
     LogReader log;
-    SysidResult result = new SysidResult(this);
+    SysidResultPanel result = new SysidResultPanel(this);
     JTextArea msgArea = new JTextArea();
     JScrollPane msgPane = new JScrollPane(msgArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -75,15 +73,13 @@ public class Sysid implements Consumer<File> {
 
     }
 
-    public entryHirerchy getMotor() {
+    public LogEentryHirerchy getMotor() {
         return motorList.getSelectedValue();
     }
-
 
     public static void main(String[] args) {
         new Sysid();
         Sysid app = new Sysid();
         app.show();        
     }
-
 }

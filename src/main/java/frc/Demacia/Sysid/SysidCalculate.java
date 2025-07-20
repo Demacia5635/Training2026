@@ -7,8 +7,16 @@ import org.ejml.simple.SimpleMatrix;
 import frc.Demacia.Sysid.MotorData.MotorTimeData;
 
 public class SysidCalculate {
+
+    public static enum VelocityRange { SLOW, MID, HIGH};
+    public static enum KTypes { KS, KV, KA, KGElevator, KGArm, KV2, KSqrt};
+
     double[] vRange;
-    double[][] result;
+    ArrayList<ArrayList<MotorTimeData>> data = new ArrayList<>();
+    double[] maxError = {0,0,0};
+    double[] avgError = {0,0,0};
+    double[][] k = new double[KTypes.values().length][VelocityRange.values().length];
+    
     MotorData motor;
     boolean kgElevator;
     boolean kgArm;
@@ -48,19 +56,17 @@ public class SysidCalculate {
         }
     }
 
-    public void calculate() {
+    private void calculate() {
         double maxV = motor.maxVelocity();
         vRange = new double[] { maxV*0.3, maxV*0.7, maxV};
-        @SuppressWarnings("unchecked")
-        ArrayList<MotorTimeData>[] data = new ArrayList[3];
         for(int i = 0; i < 3; i++) {
-            data[i] = new ArrayList<>();
+            data.add(new ArrayList<>());
         }
         // fill the array of data - filterring data based on minimum voltage and velocity
         for(MotorTimeData d : motor.data()) {
             int range = range(d);
             if(range >= 0) {
-                data[range].add(d);
+                data.get(range).add(d);
             }
         }
         int col = 3;
@@ -72,14 +78,13 @@ public class SysidCalculate {
             col++;
         if(ksqrt)
             col++;
-        result = new double[3][10];
         for(int i = 0; i < 3; i++) { // for each range
-            if(data[i].size() > 50) { // only if have enough data
+            if(data.get(i).size() > 50) { // only if have enough data
                 // fill the data and volts matrix
-                SimpleMatrix mat = new SimpleMatrix(data[i].size(), col);
-                SimpleMatrix volt = new SimpleMatrix(data[i].size(), 1);
-                for(int row  = 0; row < data[i].size(); row++) {
-                    MotorTimeData d = data[i].get(row);
+                SimpleMatrix mat = new SimpleMatrix(data.get(i).size(), col);
+                SimpleMatrix volt = new SimpleMatrix(data.get(i).size(), 1);
+                for(int row  = 0; row < data.get(i).size(); row++) {
+                    MotorTimeData d = data.get(i).get(row);
                     int c = 0;
                     mat.set(row, c++, Math.signum(d.velocity)); // ks
                     mat.set(row, c++, d.velocity); // kv
@@ -103,47 +108,52 @@ public class SysidCalculate {
                 // calculate error
                 SimpleMatrix predict = mat.mult(res);
                 SimpleMatrix error = volt.minus(predict);
-                double maxError = 0;
+                double maxErr = 0;
                 double sumError = 0;
                 for(int e = 0; e < error.getNumRows(); e++) {
-                    MotorTimeData md = data[i].get(e);
+                    MotorTimeData md = data.get(i).get(e);
                     double val = Math.abs(error.get(e, 0) / md.voltage);
-                    if(val > maxError)
-                        maxError = val;
+                    if(val > maxErr)
+                        maxErr = val;
                     sumError += val;
                 }
-                double avgError = sumError / data[i].size();
+                double avgErr = sumError / data.get(i).size();
                 // update result
                 int c = 0;
-                result[i][0] = res.get(c++,0);
-                result[i][1] = res.get(c++,0);
-                result[i][2] = res.get(c++,0);
-                result[i][3] = kgElevator ? res.get(c++,0) : 0;
-                result[i][4] = kgArm ? res.get(c++,0) : 0;
-                result[i][5] = kv2 ? res.get(c++,0) : 0;
-                result[i][6] = ksqrt ? res.get(c++,0) : 0;
-                result[i][7] = maxError;
-                result[i][8] = avgError;
-                result[i][9] = data[i].size();
+                k[KTypes.KS.ordinal()][i] = res.get(c++,0);
+                k[KTypes.KV.ordinal()][i] = res.get(c++,0);
+                k[KTypes.KA.ordinal()][i] = res.get(c++,0);
+                k[KTypes.KGElevator.ordinal()][i] = kgElevator ? res.get(c++,0) : 0;
+                k[KTypes.KGArm.ordinal()][i] = kgArm ? res.get(c++,0) : 0;
+                k[KTypes.KV2.ordinal()][i] = kv2 ? res.get(c++,0) : 0;
+                k[KTypes.KSqrt.ordinal()][i] = ksqrt ? res.get(c++,0) : 0;
+                maxError[i] = maxErr;
+                avgError[i] = avgErr;
                 // print the worst cases
                 for(int e = 0; e < error.getNumRows(); e++) {
-                    MotorTimeData md = data[i].get(e);
+                    MotorTimeData md = data.get(i).get(e);
                     double val = Math.abs(error.get(e, 0) / md.voltage);
-                    if(val > avgError * 5) {
+                    if(val > avgErr * 5) {
                         Sysid.msg(String.format("error %4.2f%% for %s", val, md.toString()));
                     }
                 }
-
-            } else {
-                for(int k = 0; k < 9; k++) {
-                    result[i][k] = 0;
-                }
-                result[i][9] = data[i].size();
             }
         }
     }
 
-    public double[] getRes(int range) {
-        return result[range];
+    public double getRange(VelocityRange range) {
+        return vRange[range.ordinal()];
+    }
+    public int getCount(VelocityRange range) {
+        return data.get(range.ordinal()).size();
+    }
+    public double getMaxError(VelocityRange range) {
+        return maxError[range.ordinal()];
+    }
+    public double getAverageError(VelocityRange range) {
+        return avgError[range.ordinal()];
+    }
+    public double getK(KTypes type, VelocityRange range) {
+        return k[type.ordinal()][range.ordinal()];
     }
 }
