@@ -9,8 +9,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import frc.Demacia.Sysid.Log.MotorData;
-import frc.Demacia.Sysid.Log.LogReader.entryHirerchy;
+import frc.Demacia.Sysid.LogReader.entryHirerchy;
 
 public class SysidResult extends JPanel {
     public static final String[] K_NAMES = {"kS", "kV", "kA", "kG-Elevator", "kG-Arm", "kV2", "kSqrt"};
@@ -87,8 +86,8 @@ public class SysidResult extends JPanel {
 
                     for(int i = 0; i < 3; i++) {
                         countLabels[i+1].setText(Integer.toString((int)res[i][9]));
-                        avgErrorLabels[i+1].setText(String.format("%4.3f", res[i][8]));
-                        maxErrorLabels[i+1].setText(String.format("%4.3f", res[i][7]));
+                        avgErrorLabels[i+1].setText(String.format("%4.2f%%", res[i][8]));
+                        maxErrorLabels[i+1].setText(String.format("%4.2f%%", res[i][7]));
                         for(int j = 0; j < nK; j++) {
                             k[j][i].setText(String.format("%7.5f", res[i][j]));
                         }

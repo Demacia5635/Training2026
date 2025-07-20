@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 import org.ejml.simple.SimpleMatrix;
 
-import frc.Demacia.Sysid.Log.MotorData;
-import frc.Demacia.Sysid.Log.MotorData.MotorTimeData;
+import frc.Demacia.Sysid.MotorData.MotorTimeData;
 
 public class SysidCalculate {
     double[] vRange;

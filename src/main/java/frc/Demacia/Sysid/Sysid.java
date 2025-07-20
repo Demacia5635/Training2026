@@ -7,8 +7,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 
-import frc.Demacia.Sysid.Log.LogReader;
-import frc.Demacia.Sysid.Log.LogReader.entryHirerchy;
+import frc.Demacia.Sysid.LogReader.entryHirerchy;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;

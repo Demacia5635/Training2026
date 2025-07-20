@@ -1,7 +1,8 @@
-package frc.Demacia.Sysid.Log;
+package frc.Demacia.Sysid;
 import java.util.ArrayList;
 
-import frc.Demacia.Sysid.Log.LogReader.entryHirerchy;
+import edu.wpi.first.util.datalog.DataLogRecord;
+import frc.Demacia.Sysid.LogReader.entryHirerchy;
 
 public class MotorData {
     entryHirerchy motor;

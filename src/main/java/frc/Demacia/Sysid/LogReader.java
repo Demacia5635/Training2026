@@ -1,16 +1,18 @@
-package frc.Demacia.Sysid.Log;
+package frc.Demacia.Sysid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Vector;
 
-import frc.Demacia.Sysid.Log.DataLogRecord.StartRecordData;
+import edu.wpi.first.util.datalog.DataLogRecord;
+import edu.wpi.first.util.datalog.DataLogRecord.StartRecordData;
+
 
 
 public class LogReader {
 
-    private DataLogReader reader;
+    private edu.wpi.first.util.datalog.DataLogReader reader;
     private String file;
     DataEntry[] entries = new DataEntry[1000];
     entryHirerchy top = new entryHirerchy("TOP");
@@ -21,7 +23,7 @@ public class LogReader {
         this.file = file;
         Arrays.fill(entries, null);
         try {
-            reader = new DataLogReader(this.file);
+            reader = new edu.wpi.first.util.datalog.DataLogReader(this.file);
         } catch (IOException e) {
             System.err.println(" Can not open Log File " + file + " error:" + e.getMessage());
             throw e;
@@ -30,7 +32,7 @@ public class LogReader {
         addHirerchy();
     }
 
-    private void process(DataLogRecord record) {
+    private void process(edu.wpi.first.util.datalog.DataLogRecord record) {
         if(record.isStart()) {
             var data = record.getStartData();
             new DataEntry(data);
@@ -188,7 +190,7 @@ public class LogReader {
             entries[start.entry] = this;
         }
 
-        void add(DataLogRecord record) {
+        void add(edu.wpi.first.util.datalog.DataLogRecord record) {
             data.add(record);
         }
 
