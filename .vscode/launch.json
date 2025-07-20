@@ -6,6 +6,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Sysid",
+      "request": "launch",
+      "mainClass": "frc.Demacia.Sysid.Sysid",
+      "projectName": "Training2026"
+    },
+    {
+      "type": "java",
+      "name": "App1",
+      "request": "launch",
+      "mainClass": "frc.Demacia.Sysid.App1",
+      "projectName": "Training2026"
+    },
+    {
+      "type": "java",
       "name": "LogReader",
       "request": "launch",
       "mainClass": "frc.robot.utils.Log.LogReader",
