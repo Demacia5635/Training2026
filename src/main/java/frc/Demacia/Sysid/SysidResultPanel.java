@@ -3,6 +3,7 @@ package frc.Demacia.Sysid;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EnumSet;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -13,8 +14,7 @@ import frc.Demacia.Sysid.SysidCalculate.KTypes;
 import frc.Demacia.Sysid.SysidCalculate.VelocityRange;
 
 public class SysidResultPanel extends JPanel {
-    public static final String[] K_NAMES = {"kS", "kV", "kA", "kG-Elevator", "kG-Arm", "kV2", "kSqrt"};
-    public static int nK = K_NAMES.length;
+    public static int nK = KTypes.values().length;
     JCheckBox[] checkBoxes;
     JLabel[][] k;
     JButton applyButton, resetButton;
@@ -43,7 +43,7 @@ public class SysidResultPanel extends JPanel {
             l.setAlignmentX(1);
             add(l);
         }
-        checkBoxes = new JCheckBox[K_NAMES.length];
+        checkBoxes = new JCheckBox[nK];
         k = new JLabel[nK][3];
         for(int i = 0; i < nK; i++) {
             for(int j = 0; j < 3; j++) {
@@ -52,8 +52,9 @@ public class SysidResultPanel extends JPanel {
             }
         }
         
-        for (int i = 0; i < checkBoxes.length; i++) {
-            checkBoxes[i] = new JCheckBox(K_NAMES[i]);
+        for (KTypes kType : KTypes.values()) {
+            int i = kType.ordinal();
+            checkBoxes[i] = new JCheckBox(kType.name());
             if(i < 3) {
                 checkBoxes[i].setEnabled(false);
                 checkBoxes[i].setSelected(true);
@@ -77,24 +78,35 @@ public class SysidResultPanel extends JPanel {
                 LogEentryHirerchy motor = app.getMotor();
                 if(motor != null) {
                     MotorData motorData = motor.getMotorData();
-                    SysidCalculate calculate = new SysidCalculate(motorData, checkBoxes[3].isSelected(), checkBoxes[4].isSelected(), checkBoxes[5].isSelected(), checkBoxes[6].isSelected());
+                    SysidCalculate calculate = new SysidCalculate(motorData, getSelectedTypes());
                     velLabels[1].setText(String.format("0 - %4.2f",calculate.getRange(VelocityRange.SLOW)));
                     velLabels[2].setText(String.format("%4.2f - %4.2f",calculate.getRange(VelocityRange.SLOW),calculate.getRange(VelocityRange.MID)));
                     velLabels[3].setText(String.format("%4.2f - %4.2f",calculate.getRange(VelocityRange.MID),calculate.getRange(VelocityRange.HIGH)));
 
                     for(VelocityRange range: VelocityRange.values()) {
-                        int i = range.ordinal() + 1;
-                        countLabels[i].setText(Integer.toString(calculate.getCount(range)));
-                        avgErrorLabels[i].setText(String.format("%4.2f%%", calculate.getAverageError(range)));
-                        maxErrorLabels[i].setText(String.format("%4.2f%%", calculate.getMaxError(range)));
-                        i--;
+                        int i = range.ordinal();
                         for(KTypes type : KTypes.values()) {
                             k[type.ordinal()][i].setText(String.format("%7.5f", calculate.getK(type, range)));
                         }
+                        i++; // errors and count have a title column - so data column start at 1
+                        countLabels[i].setText(Integer.toString(calculate.getCount(range)));
+                        avgErrorLabels[i].setText(String.format("%4.2f%%", calculate.getAverageError(range)));
+                        maxErrorLabels[i].setText(String.format("%4.2f%%", calculate.getMaxError(range)));
                     }
                     
                 }
             }
         });
+    }
+
+    private EnumSet<KTypes> getSelectedTypes() {
+        EnumSet<KTypes> set = EnumSet.noneOf(KTypes.class);
+        KTypes[] all = KTypes.values();
+        for(int i = 0; i < checkBoxes.length; i++) {
+            if(checkBoxes[i].isSelected()) {
+                set.add(all[i]);
+            }
+        }
+        return set;
     }
 }
