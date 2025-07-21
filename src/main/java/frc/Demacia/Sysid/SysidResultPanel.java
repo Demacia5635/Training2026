@@ -17,7 +17,7 @@ public class SysidResultPanel extends JPanel {
     public static int nK = KTypes.values().length;
     JCheckBox[] checkBoxes;
     JLabel[][] k;
-    JButton applyButton, resetButton;
+    JButton applyButton;
     JLabel[] velLabels = {new JLabel("Velocity Range"), new JLabel("     0%   -   30%"), new JLabel("  30%    -  70%"), new JLabel("     70% - 100%")};
     JLabel[] countLabels = {new JLabel("Number of records"), new JLabel("             0"), new JLabel("            0"), new JLabel("                   0")};
     JLabel[] avgErrorLabels = {new JLabel("Average Error %"), new JLabel("             0"), new JLabel("            0"), new JLabel("                   0")};
@@ -68,7 +68,7 @@ public class SysidResultPanel extends JPanel {
         }
 
         // Add buttons
-        applyButton = new JButton("Apply");
+        applyButton = new JButton("Calculate");
         add(applyButton);
 
         // Add button action listeners
@@ -93,7 +93,8 @@ public class SysidResultPanel extends JPanel {
                         avgErrorLabels[i].setText(String.format("%4.2f%%", calculate.getAverageError(range)));
                         maxErrorLabels[i].setText(String.format("%4.2f%%", calculate.getMaxError(range)));
                     }
-                    
+                } else {
+                    Sysid.msg("No motor selected");
                 }
             }
         });

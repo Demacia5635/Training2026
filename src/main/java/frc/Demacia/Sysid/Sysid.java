@@ -18,13 +18,13 @@ import java.util.function.Consumer;
 
 
 public class Sysid implements Consumer<File> {
-    JFrame frame = new JFrame("Test1");
+    JFrame frame = new JFrame("Sysid");
     FileChooserPanel fileChooser = new FileChooserPanel(this);
     JList<LogEentryHirerchy> motorList = new JList<>();
-    LogReader log;
     SysidResultPanel result = new SysidResultPanel(this);
     JTextArea msgArea = new JTextArea();
     JScrollPane msgPane = new JScrollPane(msgArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    LogReader log;
 
     private static Sysid sysid = null;
 
@@ -59,15 +59,15 @@ public class Sysid implements Consumer<File> {
     }
 
     @Override
-    public void accept(File t) {
-        System.out.println(" file set to " + t);
+    public void accept(File file) {
+        System.out.println(" file set to " + file);
         try {
-            log = new LogReader(t.getAbsolutePath());
+            log = new LogReader(file.getAbsolutePath());
             var motors = log.motors();
             motorList.setListData(motors);
-            msg("file " + t.getName() + " loaded");
+            msg("file " + file.getName() + " loaded");
         } catch (IOException e) {
-            msg(" IO error - " + e);
+            msg(" IO error - for file " + file + " error=" + e);
             fileChooser.field.setText("");
         }
 
