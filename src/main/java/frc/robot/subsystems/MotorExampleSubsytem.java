@@ -1,6 +1,12 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix6.sim.TalonFXSimState;
+
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.SparkMotor;
@@ -10,6 +16,7 @@ public class MotorExampleSubsytem extends SubsystemBase {
     // Define the motor 
     TalonMotor talonMotor;
     SparkMotor sparkMotor;
+
     
     // Constructor
     public MotorExampleSubsytem() {

@@ -6,7 +6,7 @@ import edu.wpi.first.util.datalog.DataLogRecord;
 public class MotorData {
     LogEentryHirerchy motor;
     ArrayList<MotorTimeData> data = new ArrayList<>();
-    LogEentryHirerchy[] entries = new LogEentryHirerchy[LogReader.MotorFields.length];
+    LogEentryHirerchy[] entries = new LogEentryHirerchy[LogReader.MotorFields.length + 1];
     double maxVelocity = 0;
 
     public MotorData(LogEentryHirerchy motor) {
@@ -21,12 +21,17 @@ public class MotorData {
 
 
     private void createData() {
-        DataLogRecord[] records = new DataLogRecord[LogReader.MotorFields.length];
-        DataLogRecord[] precords = new DataLogRecord[LogReader.MotorFields.length];
+        DataLogRecord[] records = new DataLogRecord[LogReader.MotorFields.length+1];
+        DataLogRecord[] precords = new DataLogRecord[LogReader.MotorFields.length+1];
         for(int i = 0; i < records.length; i++) {
-            entries[i].entryData.resetIterator();
-            records[i] = entries[i].entryData.next();
-            precords[i] = records[i];
+            if(entries[i] != null) {
+                entries[i].entryData.resetIterator();
+                records[i] = entries[i].entryData.next();
+                precords[i] = records[i];
+            } else {
+                records[i] = null;
+                precords[i] = null;
+            }
         }
 
         while(records[0] != null) {
@@ -38,7 +43,7 @@ public class MotorData {
                     records[i] = entries[i].entryData.next();
                 }
             }
-            data.add(new MotorTimeData(precords[1].getDouble(), records[0].getDouble(), precords[3].getDouble(), precords[2].getDouble(), time));  
+            data.add(new MotorTimeData(precords[1].getDouble(), records[0].getDouble(), precords[3] != null? precords[3].getDouble():0, precords[2].getDouble(), time));  
             //System.out.println(" added - times = " + precords[1].getTimestamp() + " " + records[0].getTimestamp() + " " + precords[3].getTimestamp() + " " + precords[2].getTimestamp());
             records[0] = entries[0].entryData.next();
         }

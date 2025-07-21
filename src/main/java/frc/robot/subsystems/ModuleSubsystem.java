@@ -1,9 +1,16 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.sim.TalonFXSimState;
+import com.revrobotics.sim.SparkMaxSim;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,6 +28,12 @@ public class ModuleSubsystem extends SubsystemBase {
     PIDController steerPID = new PIDController(STEER_KP,STEER_KI, STEER_KD);
     PIDController drivePID = new PIDController(DRIVE_KP, DRIVE_KI, DRIVE_KD);
 
+    // for simulation
+    SparkMaxSim steerSim;
+    SparkMaxSim driveSim;
+    DCMotorSim steerDCMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.01, STEER_GERA_RATIO), DCMotor.getNEO(1));
+    DCMotorSim driveDCMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.03, DRIVE_GERA_RATIO), DCMotor.getNEO(1));
+
     public ModuleSubsystem() {
         super();
         steerMotor = new SparkMotor(new SparkConfig(STEER_ID,"SteerMotor")
@@ -34,6 +47,9 @@ public class ModuleSubsystem extends SubsystemBase {
                 .withInvert(DRIVE_INVERTED)
                 .withRampTime(DRIVE_RAMP));
         absEncoder = new CANcoder(CANBCODER_ID);
+
+        steerSim = new SparkMaxSim(steerMotor, DCMotor.getNEO(1));
+        driveSim = new SparkMaxSim(driveMotor, DCMotor.getNEO(1));
 
         calibrateSteer();
         SmartDashboard.putData("Module", this);
@@ -111,6 +127,17 @@ public class ModuleSubsystem extends SubsystemBase {
         SmartDashboard.putData("Set Velocity", new RunCommand(()->setDriveVelocity(SmartDashboard.getNumber("Set Drive Velocity", 0)), this));
     }
 
+    @Override
+    public void simulationPeriodic() {
+        super.simulationPeriodic();
+        steerDCMotorSim.setInput(steerSim.getAppliedOutput()*12 );
+        driveDCMotorSim.setInput(driveSim.getAppliedOutput()*12);
+        steerDCMotorSim.update(0.02);
+        driveDCMotorSim.update(0.02);
+        steerSim.iterate(steerDCMotorSim.getAngularVelocityRadPerSec(),12, 0.02);
+        driveSim.iterate(driveDCMotorSim.getAngularVelocityRadPerSec(),12, 0.02);
+
+    }
 
 
 }
