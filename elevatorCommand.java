@@ -1,7 +1,10 @@
+import.Math.random
 public class elevatorCommand {
     elevatorSubsystem elevator;
+    private LedsSubsystem led;
     public elevatorCommand(elevatorSubsystem elevator){
         this.elevator=elevator;
+        this.led=led;
     }
     public void Up(){
         int count = 0;
@@ -14,6 +17,9 @@ public class elevatorCommand {
             System.out.println("machzorim: "+count);
             System.out.println("time: "+ time);
             System.out.println("hight: "+ elevator.getCurrentHeight());
+            if (count%3 == 0){
+                led.setColor(Math.random()*255,Math.random()*255,Math.random()*255)
+            }
         }
     }
     public void Down(){
@@ -27,6 +33,7 @@ public class elevatorCommand {
             System.out.println("machzorim: "+count);
             System.out.println("time: "+ time);
             System.out.println("hight: "+ elevator.getCurrentHeight());
+
         }
     }
     public void Wait() throws InterruptedException{
