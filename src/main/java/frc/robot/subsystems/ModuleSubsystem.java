@@ -41,12 +41,12 @@ public class ModuleSubsystem extends SubsystemBase {
                 .withInvert(STEER_INVERTED)
                 .withRampTime(STEER_RAMP)
                 .withVolts(MAX_STEER_VOLTS, 0)
-                .withMotorRatio(STEER_GERA_RATIO).withRadiansMotor());
+                .withDegreesMotor(STEER_GERA_RATIO));
         driveMotor = new SparkMotor(new SparkConfig(DRIVE_ID,"DriveMotor")
                 .withBrake(true)
                 .withInvert(DRIVE_INVERTED)
                 .withRampTime(DRIVE_RAMP)
-                .withMotorRatio(DRIVE_GERA_RATIO).withMeterMotor(WHEEL_CIRCUMFERENCE));
+                .withMeterMotor(DRIVE_GERA_RATIO,WHEEL_CIRCUMFERENCE));
         absEncoder = new CANcoder(CANBCODER_ID);
 
         steerSim = new SparkMaxSim(steerMotor, DCMotor.getNEO(1));

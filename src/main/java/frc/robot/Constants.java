@@ -32,9 +32,8 @@ public final class Constants {
         .withBrake(true)
         .withCurrent(20)
         .withInvert(false)
-        .withMotorRatio(8.4)
         .withPID(2,   0.2,   0, 0.1)
-        .withRadiansMotor()
+        .withRadiansMotor(8.4)
         .withVelocity(20, 0, 30)
         .withRampTime(0.2)
         .withVolts(8, 0);

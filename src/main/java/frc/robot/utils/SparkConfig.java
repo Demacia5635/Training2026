@@ -128,18 +128,17 @@ public class SparkConfig {
      * @param ratio - motor to mechanism ratio
      * @return SparkConfig
      */
-    public SparkConfig withMotorRatio(double ratio) {
-        this.motorRatio *= ratio;
+    public SparkConfig withMeterMotor(double gearRatio, double circonference) {
+        this.motorRatio = gearRatio / circonference;
         return this;
     }
 
-    public SparkConfig withMeterMotor(double circonference) {
-        this.motorRatio *= 1 / circonference;
+    public SparkConfig withRadiansMotor(double gearRatio) {
+        this.motorRatio = gearRatio / (Math.PI * 2);
         return this;
     }
-
-    public SparkConfig withRadiansMotor() {
-        this.motorRatio *= 1 / (Math.PI * 2);
+    public SparkConfig withDegreesMotor(double gearRatio) {
+        this.motorRatio = gearRatio / 360;
         return this;
     }
 

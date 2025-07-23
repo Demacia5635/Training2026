@@ -256,7 +256,7 @@ public class TalonMotor extends TalonFX {
     }
 
     private double positionFeedForward(double positin) {
-        return Math.sin(positin * config.posToRad) * config.kSin;
+        return Math.cos(positin * config.posToRad) * config.kSin;
     }
 
     @SuppressWarnings("rawtypes")
