@@ -65,6 +65,7 @@ public class SparkMotor extends SparkMax implements Sendable {
     if(config.maxVelocity != 0) {
       cfg.closedLoop.maxMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration);
     }
+    getEncoder();
      this.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
@@ -73,7 +74,7 @@ public class SparkMotor extends SparkMax implements Sendable {
     //MotorLogEntry.add(this);
     LogManager.addEntry(name + "/Position", this::getCurrentPosition, 3);
     LogManager.addEntry(name + "/Velocity", this::getCurrentVelocity, 3);
-    LogManager.addEntry(name + "/Voltage", this::getAppliedOutput, 3);
+    LogManager.addEntry(name + "/Voltage", this::getCurrentVoltage, 3);
     LogManager.addEntry(name + "/Current", this::getOutputCurrent, 3);
 
     dutyCycleEntry = LogManager.getEntry(name + "/SetDutyCycle");
@@ -236,17 +237,13 @@ public class SparkMotor extends SparkMax implements Sendable {
   }
 
   public double getCurrentPosition() {
-    if(encoder != null)
-      return encoder.getPosition();
-    return 0;
+    return encoder.getPosition();
   }
   public double getCurrentVelocity() {
-    if(encoder != null)
-      return encoder.getVelocity();
-    return 0;
+    return encoder.getVelocity();
   }
   public double getCurrentVoltage() {
-    return getBusVoltage();
+    return getAppliedOutput() * 12;
   }
   
 

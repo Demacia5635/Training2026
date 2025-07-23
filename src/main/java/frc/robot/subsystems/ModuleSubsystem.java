@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.sim.TalonFXSimState;
 import com.revrobotics.sim.SparkMaxSim;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -9,9 +8,9 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.SparkConfig;
@@ -31,8 +30,8 @@ public class ModuleSubsystem extends SubsystemBase {
     // for simulation
     SparkMaxSim steerSim;
     SparkMaxSim driveSim;
-    DCMotorSim steerDCMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.01, STEER_GERA_RATIO), DCMotor.getNEO(1));
-    DCMotorSim driveDCMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.03, DRIVE_GERA_RATIO), DCMotor.getNEO(1));
+    DCMotorSim steerDCMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.05, STEER_GERA_RATIO * Math.PI), DCMotor.getNEO(1));
+    DCMotorSim driveDCMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 2, DRIVE_GERA_RATIO*WHEEL_CIRCUMFERENCE), DCMotor.getNEO(1));
 
     public ModuleSubsystem() {
         super();
@@ -41,11 +40,13 @@ public class ModuleSubsystem extends SubsystemBase {
                 .withCurrent(MAX_STEER_AMPS)
                 .withInvert(STEER_INVERTED)
                 .withRampTime(STEER_RAMP)
-                .withVolts(MAX_STEER_VOLTS, 0));
+                .withVolts(MAX_STEER_VOLTS, 0)
+                .withMotorRatio(STEER_GERA_RATIO).withRadiansMotor());
         driveMotor = new SparkMotor(new SparkConfig(DRIVE_ID,"DriveMotor")
                 .withBrake(true)
                 .withInvert(DRIVE_INVERTED)
-                .withRampTime(DRIVE_RAMP));
+                .withRampTime(DRIVE_RAMP)
+                .withMotorRatio(DRIVE_GERA_RATIO).withMeterMotor(WHEEL_CIRCUMFERENCE));
         absEncoder = new CANcoder(CANBCODER_ID);
 
         steerSim = new SparkMaxSim(steerMotor, DCMotor.getNEO(1));
@@ -56,28 +57,28 @@ public class ModuleSubsystem extends SubsystemBase {
     }
 
     public double getSteerPower() {
-        return steerMotor.getAppliedOutput();
+        return steerMotor.getCurrentVoltage();
     }
     public double getSteerAngle() {
-        return steerMotor.getEncoder().getPosition() * 360 / STEER_GERA_RATIO;
+        return steerMotor.getCurrentPosition();
     }
     public double getSteerVelocity() {
-        return steerMotor.getEncoder().getVelocity() * 360 / STEER_GERA_RATIO / 60;
+        return steerMotor.getCurrentVelocity();
     }
     public void setSteerPower(double power) {
-        steerMotor.set(power);
+        steerMotor.setDuty(power);
     }
     public double getDrivePower() {
-        return driveMotor.getAppliedOutput();
+        return driveMotor.getCurrentVoltage();
     }
     public double getDriveAngle() {
-        return driveMotor.getEncoder().getPosition() / DRIVE_GERA_RATIO * WHEEL_CIRCUMFERENCE;
+        return driveMotor.getCurrentPosition();
     }
     public double getDriveVelocity() {
-        return driveMotor.getEncoder().getVelocity() / DRIVE_GERA_RATIO / 60 * WHEEL_CIRCUMFERENCE;
+        return driveMotor.getCurrentVelocity();
     }
     public void setDrivePower(double power) {
-        driveMotor.set(power);
+        driveMotor.setDuty(power);
     }
 
     public double getAbsAngle() {
@@ -109,12 +110,6 @@ public class ModuleSubsystem extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
-        builder.addDoubleProperty("Steer Power", this::getSteerPower, null);
-        builder.addDoubleProperty("Steer Angle", this::getSteerAngle, null);
-        builder.addDoubleProperty("Steer Velocity", this::getSteerVelocity, null);
-        builder.addDoubleProperty("Drive Power", this::getDrivePower, null);
-        builder.addDoubleProperty("Drive Position", this::getDriveAngle, null);
-        builder.addDoubleProperty("Drive Velocity", this::getDriveVelocity, null);
         builder.addDoubleProperty("Abs Angle", this::getAbsAngle, null);
 
         SmartDashboard.putNumber("Set Steer Power", 0);
@@ -125,6 +120,7 @@ public class ModuleSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Set Drive Velocity", 0);
         SmartDashboard.putData("Set Angle", new RunCommand(()->setSteerAngle(SmartDashboard.getNumber("Set Steer Angle", 0)), this));
         SmartDashboard.putData("Set Velocity", new RunCommand(()->setDriveVelocity(SmartDashboard.getNumber("Set Drive Velocity", 0)), this));
+        SmartDashboard.putData("Stop", new InstantCommand(()->{setSteerPower(0); setDrivePower(0);}, this));
     }
 
     @Override
