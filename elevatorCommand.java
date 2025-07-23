@@ -26,6 +26,7 @@ public class elevatorCommand {
         int count = 0;
         double time = 0;
         elevator.setForce(-1);
+        led.setColor(Math.random()*255,Math.random()*255,Math.random()*255)
         while(elevator.getCurrentHeight()>=0){
             elevator.currentHeightAfter002sec();
             count++;
