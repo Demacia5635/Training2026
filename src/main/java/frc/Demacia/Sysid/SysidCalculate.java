@@ -17,6 +17,7 @@ public class SysidCalculate {
     double[] maxError = {0,0,0};
     double[] avgError = {0,0,0};
     double[][] k = new double[KTypes.values().length][VelocityRange.values().length];
+    double[] kp = {0,0,0};
     
     MotorData motorData;
     EnumSet<KTypes> kTypes;
@@ -126,6 +127,7 @@ public class SysidCalculate {
                 }
                 maxError[i] = maxErr;
                 avgError[i] = avgErr;
+                kp[i] = CalculateFeedbackGains.calculateFeedbackGains(k[KTypes.KV.ordinal()][i], k[KTypes.KA.ordinal()][i]);
                 // print the worst cases
                 for(int e = 0; e < error.getNumRows(); e++) {
                     MotorTimeData md = dataArray.get(e);
@@ -152,5 +154,8 @@ public class SysidCalculate {
     }
     public double getK(KTypes type, VelocityRange range) {
         return k[type.ordinal()][range.ordinal()];
+    }
+    public double getKP(VelocityRange range) {
+        return kp[range.ordinal()];
     }
 }

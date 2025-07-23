@@ -22,10 +22,11 @@ public class SysidResultPanel extends JPanel {
     JLabel[] countLabels = {new JLabel("Number of records"), new JLabel("             0"), new JLabel("            0"), new JLabel("                   0")};
     JLabel[] avgErrorLabels = {new JLabel("Average Error %"), new JLabel("             0"), new JLabel("            0"), new JLabel("                   0")};
     JLabel[] maxErrorLabels = {new JLabel("Max Error %"), new JLabel("             0"), new JLabel("            0"), new JLabel("                   0")};
+    JLabel[] kp = {new JLabel("KP"), new JLabel("0"), new JLabel("0"), new JLabel("0")};
     Sysid app;
 
     public SysidResultPanel(Sysid app) {
-        super(new GridLayout(nK + 6, 4, 5, 5)); // Adjusted layout to fit new components
+        super(new GridLayout(nK + 7, 4, 5, 5)); // Adjusted layout to fit new components
         this.app = app;
         for(JLabel l : velLabels) {
             l.setAlignmentX(1);
@@ -66,6 +67,9 @@ public class SysidResultPanel extends JPanel {
                 add(k[i][j]);
             }
         }
+        for(JLabel kpLabel : kp) {
+            add(kpLabel);
+        }
 
         // Add buttons
         applyButton = new JButton("Calculate");
@@ -92,6 +96,7 @@ public class SysidResultPanel extends JPanel {
                         countLabels[i].setText(Integer.toString(calculate.getCount(range)));
                         avgErrorLabels[i].setText(String.format("%4.2f%%", calculate.getAverageError(range)));
                         maxErrorLabels[i].setText(String.format("%4.2f%%", calculate.getMaxError(range)));
+                        kp[i].setText(String.format("%4.2f", calculate.getKP(range)));
                     }
                 } else {
                     Sysid.msg("No motor selected");
