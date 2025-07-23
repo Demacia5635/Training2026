@@ -6,7 +6,7 @@ public class primeNumChecker {
         try {
             System.out.print("Enter a non-zero positive integer: ");
             int number = scanner.nextInt();
-            boolean isnotprimeassum = true;
+            boolean isprimeassum = false;
 
             if (number == 0) {
                 System.out.println("The number must be a non-zero positive integer.");
@@ -28,12 +28,12 @@ public class primeNumChecker {
                     System.out.print(divisors[i] + (i < divisorCount - 1 ? ", " : "\n"));
                 }
                 for(int i = 2; i<= number; i++) {
-                    if(number % i == 0 && isnotprimeassum == true) {
+                    if(number % i == 0 && !isprimeassum) {
                         if(i == number) {
                             System.out.println("The number " + number + " is prime.");
                         } else {
                             System.out.println("The number " + number + " is not prime.");
-                            isnotprimeassum = false;
+                            isprimeassum = true;
                         }
                     }
                 }
