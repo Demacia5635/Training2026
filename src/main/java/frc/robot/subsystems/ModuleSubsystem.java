@@ -40,7 +40,7 @@ public class ModuleSubsystem extends SubsystemBase {
                 .withCurrent(MAX_STEER_AMPS)
                 .withInvert(STEER_INVERTED)
                 .withRampTime(STEER_RAMP)
-                .withVolts(MAX_STEER_VOLTS, 0)
+                .withVolts(MAX_STEER_VOLTS, -MAX_STEER_VOLTS)
                 .withDegreesMotor(STEER_GERA_RATIO));
         driveMotor = new SparkMotor(new SparkConfig(DRIVE_ID,"DriveMotor")
                 .withBrake(true)
@@ -49,10 +49,13 @@ public class ModuleSubsystem extends SubsystemBase {
                 .withMeterMotor(DRIVE_GERA_RATIO,WHEEL_CIRCUMFERENCE));
         absEncoder = new CANcoder(CANBCODER_ID);
 
+        // for simulation
         steerSim = new SparkMaxSim(steerMotor, DCMotor.getNEO(1));
         driveSim = new SparkMaxSim(driveMotor, DCMotor.getNEO(1));
 
+        // set steer direction
         calibrateSteer();
+
         SmartDashboard.putData("Module", this);
     }
 
@@ -87,7 +90,7 @@ public class ModuleSubsystem extends SubsystemBase {
 
     private void calibrateSteer() {
         double angle = getAbsAngle() - ABS_ENCODER_OFFSET;
-        steerMotor.getEncoder().setPosition(angle / 360 * STEER_GERA_RATIO);
+        steerMotor.getEncoder().setPosition(angle);
     }
 
     public void setDriveVelocity(double velocity) {

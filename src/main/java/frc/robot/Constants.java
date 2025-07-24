@@ -22,12 +22,11 @@ public final class Constants {
           .withBrake(true)
           .withCurrent(20,20,0)
           .withInvert(true)
-          .withMeterMotor(4*0.0254)
+          .withMeterMotor(12.7, 4*0.0254)
           .withMotionMagic(3, 6, 10)
-          .withMotorRatio(12.7)
           .withPID(1, 0, 0, 0.12, 3.7, 1.2, 0)
           .withRampTime(0.3)
-          .withVolts(6, 0);
+          .withVolts(6, -6);
     public static final SparkConfig SPARKMOTOR_CONFIG = new SparkConfig(8, "spark example motor")
         .withBrake(true)
         .withCurrent(20)
@@ -36,7 +35,7 @@ public final class Constants {
         .withRadiansMotor(8.4)
         .withVelocity(20, 0, 30)
         .withRampTime(0.2)
-        .withVolts(8, 0);
+        .withVolts(8, -8);
   }
 
   public static class ModuleConstants {

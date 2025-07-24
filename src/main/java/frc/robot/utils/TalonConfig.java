@@ -126,18 +126,17 @@ public class TalonConfig {
      * @param ratio - motor to mechanism ratio
      * @return TalonConfig
      */
-    public TalonConfig withMotorRatio(double ratio) {
-        this.motorRatio *= ratio;
+    public TalonConfig withMeterMotor(double gearRatio, double circonference) {
+        this.motorRatio *= gearRatio / circonference;
         return this;
     }
 
-    public TalonConfig withMeterMotor(double circonference) {
-        this.motorRatio *= 1 / circonference;
+    public TalonConfig withRadiansMotor(double gearRatio) {
+        this.motorRatio *= gearRatio / (Math.PI * 2);
         return this;
     }
-
-    public TalonConfig withRadiansMotor() {
-        this.motorRatio *= 1 / (Math.PI * 2);
+    public TalonConfig withDegreesMotor(double gearRatio) {
+        this.motorRatio *= gearRatio / 360;
         return this;
     }
 

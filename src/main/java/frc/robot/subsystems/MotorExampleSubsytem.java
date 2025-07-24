@@ -56,5 +56,9 @@ public class MotorExampleSubsytem extends SubsystemBase {
         return sparkMotor.getCurrentVoltage();
     }
 
+    @Override
+    public void periodic() {
+        super.periodic();
+    }
 
 }   
