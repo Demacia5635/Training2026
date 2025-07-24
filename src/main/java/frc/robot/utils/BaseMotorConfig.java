@@ -204,7 +204,6 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
      * @param kv
      * @return TalonConfig
      */
-    @SuppressWarnings("unchecked")
     public T withPID(double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
         return (T)withPID(1, kp, ki, kd, ks, kv, ka, kg);
     }
@@ -271,7 +270,6 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
      * @param kf
      * @return TalonConfig
      */
-    @SuppressWarnings("unchecked")
     public T withPID(double kp, double ki, double kd, double kf) {
         return (T)withPID(id, kp, ki, kf);
     }
