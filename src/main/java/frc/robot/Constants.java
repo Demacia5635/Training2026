@@ -14,8 +14,8 @@ package frc.robot;
  */
 public final class Constants {
   public static class MyFirstSubsystemConstants {
-    public static final int MotorId = 7;
-    public static final boolean MotorInverted = true;
+    public static final int MOTOR_ID = 7;
+    public static final String MOTOR_CAN = "rio";
   }
 
   public static class OperatorConstants {

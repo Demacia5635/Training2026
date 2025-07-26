@@ -1,10 +1,6 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
-
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -16,9 +12,7 @@ public class MyFirstSubsystem extends SubsystemBase {
     // Constructor
     public MyFirstSubsystem() {
         super();
-        motor = new TalonFX(Constants.MyFirstSubsystemConstants.MotorId, "CANivore");
-        motor.setInverted(Constants.MyFirstSubsystemConstants.MotorInverted);
-        SmartDashboard.putData("Subsystem 1", this);
+        motor = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
     }
 
     // Method to set the motor speed
@@ -29,18 +23,4 @@ public class MyFirstSubsystem extends SubsystemBase {
     public void stop() {
         setPower(0);
     }
-
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        super.initSendable(builder);
-        builder.addDoubleProperty("power", ()->motor.get(), null);
-        builder.addDoubleProperty("v", ()->v, null);
-    }
-
-    @Override
-    public void periodic() {
-        // TODO Auto-generated method stub
-        super.periodic();
-    }
-
 }   
