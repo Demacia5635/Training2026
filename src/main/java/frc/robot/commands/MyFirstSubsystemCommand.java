@@ -6,8 +6,8 @@ import frc.robot.subsystems.MyFirstSubsystem;
 
 public class MyFirstSubsystemCommand extends Command {
     private final MyFirstSubsystem subsystem;
-    private final double power;
-    private final double duration;
+    private  double power = 0.5;;
+    private  double duration = 5.0;
     private double startTime;
 
     /** Activate motor for a duration*/
