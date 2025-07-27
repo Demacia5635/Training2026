@@ -4,11 +4,12 @@
 
 package frc.robot;
 
-import frc.robot.commands.MyFirstSubsystemCommand;
-import frc.robot.subsystems.MyFirstSubsystem;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.time;
+import frc.robot.subsystems.Motor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -17,9 +18,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  Motor subsystem = new Motor();
+  time command = new time(0.4, 2.0, subsystem);
   // The robot's subsystems and commands are defined here...
-  private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
-  private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, 0.4, 10.0);
+  
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -36,7 +38,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    //controller.a().onTrue(new MyFirstSubsystemCommand(subsystem, 0.5, 2.0));
+    //controller.a().onTrue(new MyFirstSubsystemCommand(subsystem, 0.4, 2 .0));
   }
 
   /**
@@ -47,6 +49,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return autoCommand;
+    return command;
   }
 }

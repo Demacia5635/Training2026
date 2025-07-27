@@ -17,6 +17,7 @@ public final class Constants {
     public static final int MotorId = 7;
     public static final boolean MotorInverted = true;
   }
+  public static int MotorId = 1mo;
 
   public static class OperatorConstants {
     public static final int DriverControllerPort = 0;
