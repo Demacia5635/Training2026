@@ -79,13 +79,12 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
     /**
      * Set voltage limits
      * @param maxVolt maximum voltage
-     * @param minVolt minimum voltage
      * @return this config for chaining
      */
     @SuppressWarnings("unchecked")
-    public T withVolts(double maxVolt, double minVolt) {
+    public T withVolts(double maxVolt) {
         this.maxVolt = maxVolt;
-        this.minVolt = minVolt;
+        this.minVolt = -maxVolt;
         return (T) this;
     }
 
