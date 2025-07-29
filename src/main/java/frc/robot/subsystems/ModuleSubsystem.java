@@ -13,8 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.SparkConfig;
-import frc.robot.utils.SparkMotor;
+import frc.Demacia.utils.SparkConfig;
+import frc.Demacia.utils.SparkMotor;
+
 import static frc.robot.Constants.ModuleConstants.*;
 
 public class ModuleSubsystem extends SubsystemBase {

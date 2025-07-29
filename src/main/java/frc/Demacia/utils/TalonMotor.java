@@ -1,4 +1,4 @@
-package frc.robot.utils;
+package frc.Demacia.utils;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
@@ -21,12 +21,15 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.utils.Log.LogManager;
-import frc.robot.utils.Log.MotorLogEntry;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.Demacia.utils.Log.LogManager;
+import frc.Demacia.utils.Log.MotorLogEntry;
 
 public class TalonMotor extends TalonFX {
 
@@ -516,5 +519,9 @@ public class TalonMotor extends TalonFX {
 
     public String name() {
         return name;
+    }
+
+    public Command getManualPowerCommand(XboxController controller, boolean useLeftJS, double max, Subsystem subsystem) {
+        return new RunCommand(()->setDuty(XboxUtils.getJSvalue(controller, useLeftJS)*max), subsystem);
     }
 }

@@ -1,7 +1,7 @@
-package frc.robot.utils.Log;
+package frc.Demacia.utils.Log;
 
-import frc.robot.utils.SparkMotor;
-import frc.robot.utils.TalonMotor;
+import frc.Demacia.utils.SparkMotor;
+import frc.Demacia.utils.TalonMotor;
 
 public class MotorLogEntry {
 

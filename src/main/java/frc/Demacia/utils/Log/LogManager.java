@@ -1,6 +1,6 @@
-package frc.robot.utils.Log;
+package frc.Demacia.utils.Log;
 
-import static frc.robot.utils.constants.UtilsContants.*;
+import static frc.Demacia.utils.constants.UtilsContants.*;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.ConsoleAlert;
+import frc.Demacia.utils.ConsoleAlert;
 
 public class LogManager extends SubsystemBase {
 

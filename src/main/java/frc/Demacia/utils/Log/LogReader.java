@@ -1,4 +1,4 @@
-package frc.robot.utils.Log;
+package frc.Demacia.utils.Log;
 
 import java.io.IOException;
 
