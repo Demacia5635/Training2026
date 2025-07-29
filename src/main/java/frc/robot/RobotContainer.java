@@ -19,7 +19,8 @@ import frc.robot.subsystems.Motor;
  */
 public class RobotContainer {
   Motor subsystem = new Motor();
-  time command = new time(0.4, 2.0, subsystem);
+  time command = new time(0.4, 4.0, subsystem);
+
   // The robot's subsystems and commands are defined here...
   
   

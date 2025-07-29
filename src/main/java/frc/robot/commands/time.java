@@ -11,16 +11,16 @@ import frc.robot.subsystems.Motor;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class time extends Command {
   /** Creates a new time. */
-  private Motor motor;
+  private Motor motors;
   private double speed;
   private double time;
   private double startTime;
-  public time(double speed ,double time ,Motor motor) {
-    this.motor = motor;
+  public time(double speed ,double time ,Motor motors) {
+    this.motors = motors;
     // Use addRequirements() here to declare subsystem dependencies.
     this.speed = speed;
     this.time = time;
-    addRequirements(motor);
+    addRequirements(motors);
   }
 
   // Called when the command is initially scheduled.
@@ -33,14 +33,16 @@ public class time extends Command {
   @Override
   public void execute() {
 
-    motor.setPwoer(speed);
+    motors.setPwoer2(speed);
+    motors.setPwoer(speed);
   }
  
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // Stop the motor when the command ends
-    motor.setPwoer(0);
+    // Stop the motors when the command ends
+    motors.setPwoer(0);
+    motors.setPwoer2(0);
 
   }
 
