@@ -40,7 +40,7 @@ public class ModuleSubsystem extends SubsystemBase {
                 .withCurrent(MAX_STEER_AMPS)
                 .withInvert(STEER_INVERTED)
                 .withRampTime(STEER_RAMP)
-                .withVolts(MAX_STEER_VOLTS, -MAX_STEER_VOLTS)
+                .withVolts(MAX_STEER_VOLTS)
                 .withDegreesMotor(STEER_GERA_RATIO));
         driveMotor = new SparkMotor(new SparkConfig(DRIVE_ID,"DriveMotor")
                 .withBrake(true)
