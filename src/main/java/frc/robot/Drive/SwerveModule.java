@@ -19,6 +19,7 @@ public class SwerveModule {
     StatusSignal<Angle> absEncoderSignal;
     SwerveModuleState state = new SwerveModuleState();
     SwerveModulePosition position = new SwerveModulePosition();
+    double lastSteerPosition = 0;
 
     private static final double STEER_TO_DISTANCE_RATIO = 0.1;
 
@@ -29,6 +30,8 @@ public class SwerveModule {
         absEncoder = new CANcoder(config.cancoderId);
         absEncoderSignal = absEncoder.getAbsolutePosition();
         setSteerOffset();
+        refreshPosition();
+        refreshState();
     }
 
     public void setSteerOffset() {
@@ -39,15 +42,17 @@ public class SwerveModule {
         return absEncoderSignal.refresh().getValue().in(Radians);
     }
 
-    public SwerveModuleState getState() {
+    public SwerveModuleState refreshState() {
         state.angle = new Rotation2d(steer.getCurrentPosition());
         state.speedMetersPerSecond = drive.getCurrentVelocity();
         return state;
     }
 
-    public SwerveModulePosition getPosition() {
-        position.angle = new Rotation2d(steer.getCurrentPosition());
-        position.distanceMeters = drive.getCurrentPosition() + steer.getCurrentPosition() * STEER_TO_DISTANCE_RATIO;
+    public SwerveModulePosition refreshPosition() {
+        double steerPosition = steer.getCurrentPosition();
+        position.angle = new Rotation2d((lastSteerPosition + steerPosition)/2);
+        lastSteerPosition = steerPosition;
+        position.distanceMeters = drive.getCurrentPosition() + steerPosition * STEER_TO_DISTANCE_RATIO;
         return position;
     }
 

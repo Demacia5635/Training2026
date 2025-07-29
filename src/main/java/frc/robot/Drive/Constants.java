@@ -17,6 +17,18 @@ public class Constants {
 
     public static CANBus CANBUS = new CANBus("CANivre");
 
+    public static final int GYRO_ID = 13;
+
+    public static double CYCLE_TIME = 0.02;
+
+    public static final double MAX_SPEED = 3.7;
+    public static final double MAX_OMEGA = 6;
+    public static final double MAX_X_ACCELERATION = 7;
+    public static final double MAX_X_VELOCITY_CHANGE = MAX_X_ACCELERATION * CYCLE_TIME;
+    public static final double MAX_Y_ACCELERATION = 5;
+    public static final double MAX_Y_VELOCITY_CHANGE = MAX_Y_ACCELERATION * CYCLE_TIME;
+
+
     public static ModuleConfig[] CONFIGS = {
         new ModuleConfig(1, 2, 3, X_POSITION, Y_POSITION, 22.6),
         new ModuleConfig(4, 5, 6, X_POSITION, -Y_POSITION, 35.7),
