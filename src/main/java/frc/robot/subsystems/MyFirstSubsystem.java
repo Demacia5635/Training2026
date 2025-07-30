@@ -7,9 +7,9 @@ import frc.robot.Constants;
 public class MyFirstSubsystem extends SubsystemBase {
     // Define the motor 
     TalonFX motor;
-    double v = 0.0; 
+     
     TalonFX motor2;
-    double v2 = 0.0;
+    
 
     // Constructor
     public MyFirstSubsystem() {
