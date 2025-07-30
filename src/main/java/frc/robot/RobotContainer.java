@@ -8,7 +8,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Steer90Deg;
 import frc.robot.commands.time;
+import frc.robot.subsystems.Modle;
 import frc.robot.subsystems.Motor;
 
 /**
@@ -20,7 +22,8 @@ import frc.robot.subsystems.Motor;
 public class RobotContainer {
   Motor subsystem = new Motor();
   time command = new time(0.4, 4.0, subsystem);
-
+  Modle subModule = new Modle();
+  Steer90Deg steerCommand = new Steer90Deg(0.4, 90, subModule);
   // The robot's subsystems and commands are defined here...
   
   
@@ -50,6 +53,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return command;
+    return new Steer90Deg(0.4, 90, subModule);
   }
 }
