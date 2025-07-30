@@ -7,12 +7,16 @@ import frc.robot.Constants;
 public class MyFirstSubsystem extends SubsystemBase {
     // Define the motor 
     TalonFX motor;
-    double v = 0.0; 
+    // define gearRatio
+    double gearRatio=12.8;
 
     // Constructor
     public MyFirstSubsystem() {
         super();
-        motor = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
+        //    public static final int MOTOR_ID = 10;
+        // public static final String MOTOR_CAN = "rio";
+        motor = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR_ID, 
+        Constants.MyFirstSubsystemConstants.MOTOR_CAN);
     }
 
     // Method to set the motor speed
@@ -22,5 +26,9 @@ public class MyFirstSubsystem extends SubsystemBase {
     // Method to stop the motor
     public void stop() {
         setPower(0);
+    }
+    // get motor position
+    public double getPosition() {
+        return motor.getPosition().getValueAsDouble()*360/gearRatio;
     }
 }   
