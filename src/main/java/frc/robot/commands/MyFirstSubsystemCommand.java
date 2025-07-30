@@ -6,14 +6,16 @@ import frc.robot.subsystems.MyFirstSubsystem;
 
 public class MyFirstSubsystemCommand extends Command {
     private final MyFirstSubsystem subsystem;
+    private final double power2;
     private final double power;
     private final double duration;
     private double startTime;
 
     /** Activate motor for a duration*/
-    public MyFirstSubsystemCommand (MyFirstSubsystem  subsystem, double power, double duration) {
+    public MyFirstSubsystemCommand (MyFirstSubsystem  subsystem, double power,double power2, double duration) {
       this.subsystem = subsystem;
       this.power = power;
+      this.power2 = power2;
       this.duration = duration;
       addRequirements(subsystem);
     }
@@ -24,7 +26,7 @@ public class MyFirstSubsystemCommand extends Command {
     }
     @Override
     public void execute() {
-      subsystem.setPower(power);
+      subsystem.setPower(power, power2);
     }
     @Override
     public void end(boolean interrupted) {
