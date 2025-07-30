@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.MyFirstSubsystem;
@@ -25,9 +26,7 @@ public class MyFirstSubsystemCommand extends Command {
     }
     @Override
 
-    public void execute() {
-      subsystem.setPower(power);
-      subsystem.setPower2(power2);
+    public void execute() {    
     }
     @Override
     public void end(boolean interrupted) {
