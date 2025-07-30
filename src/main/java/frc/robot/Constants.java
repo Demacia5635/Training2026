@@ -14,11 +14,30 @@ package frc.robot;
  */
 public final class Constants {
   public static class MyFirstSubsystemConstants {
-    public static final int MOTOR_ID = 7;
+    public static final int MOTOR_IDX = 10;
+    public static final double driveRatio = 8.14;
+    public static final int MOTOR_IDY = 11;
     public static final String MOTOR_CAN = "rio";
+    public static final double steerration = 12.8;
+
+
+
+    public static double ToDegrees(double spins){
+      return spins*steerration*360;
+  
+    } 
+    public static double ToMeter(double spins){
+      return spins*Math.PI*driveRatio*2;
+}
   }
+
+
 
   public static class OperatorConstants {
     public static final int DriverControllerPort = 0;
   }
+
+  public static final String CommandToMove = null;
+public static double steerration;
+public static double driveRatio;
 }

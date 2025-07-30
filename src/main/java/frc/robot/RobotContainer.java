@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import frc.robot.commands.CommandToMove;
 import frc.robot.commands.MyFirstSubsystemCommand;
+import frc.robot.subsystems.MoveSubsystem;
 import frc.robot.subsystems.MyFirstSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -19,7 +22,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
-  private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, 0.4, 10.0);
+  private final MoveSubsystem subsystemMove = new MoveSubsystem();
+  private final Command MoveTo90D = new MyFirstSubsystemCommand(subsystem, 1.0,90.0);
+  private final Command MoveTo135D = new MyFirstSubsystemCommand(subsystem, 1.0,135.0);
+  private final Command moveto0D = new MyFirstSubsystemCommand(subsystem, 1.0,0.0);
+  private final Command moveto1m = new CommandToMove(subsystemMove, 1.0, 1.0);
+  private final Command movetoMinus1m = new CommandToMove(subsystemMove, 1.0,-1.0);
+  private final Command wait5s = new WaitCommand(5);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -47,6 +56,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return autoCommand;
+    return MoveTo90D.andThen(moveto1m.alongWith(MoveTo135D).andThen(moveto0D.alongWith(movetoMinus1m)));
+    // return MoveTo90D.andThen(wait5s).andThen(MoveTo135D).andThen(moveto0D);
   }
 }

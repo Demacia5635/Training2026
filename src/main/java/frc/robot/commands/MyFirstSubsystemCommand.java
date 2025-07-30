@@ -1,26 +1,26 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
+import static edu.wpi.first.units.Units.Degrees;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.MyFirstSubsystem;
+import frc.robot.Constants;
 
 public class MyFirstSubsystemCommand extends Command {
     private final MyFirstSubsystem subsystem;
+    private final double degree;
     private final double power;
-    private final double duration;
-    private double startTime;
 
     /** Activate motor for a duration*/
-    public MyFirstSubsystemCommand (MyFirstSubsystem  subsystem, double power, double duration) {
+    public MyFirstSubsystemCommand (MyFirstSubsystem  subsystem, double power,double degree) {
       this.subsystem = subsystem;
       this.power = power;
-      this.duration = duration;
+      this.degree=degree;
       addRequirements(subsystem);
     }
     @Override
     public void initialize() {
-      startTime = Timer.getFPGATimestamp();
-      System.out.println("Command strted at: " + startTime + " seconds for " + duration + " seconds with power: " + power);
     }
     @Override
     public void execute() {
@@ -29,11 +29,10 @@ public class MyFirstSubsystemCommand extends Command {
     @Override
     public void end(boolean interrupted) {
       subsystem.stop();
-      System.out.println("Command ended at: " + Timer.getFPGATimestamp() + " seconds");
     }
     @Override
     public boolean isFinished() {
-      return duration > 0 && Timer.getFPGATimestamp() > duration + startTime;
+      return (Constants.MyFirstSubsystemConstants.ToDegrees(SmartDashboard.getNumber("motor y pos(m)", degree)))>=degree;
     }
 
   }
