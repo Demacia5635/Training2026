@@ -20,14 +20,16 @@ public class GoToAngle extends Command {
         double error = target - currnt;
         double power;
         SmartDashboard.putNumber("Error", error);
+        SmartDashboard.putNumber("angle", currnt);
         if (Math.abs(error) < 3){
             power = 0;
         }
         else {
-            power = 0.2*Math.signum(error);
+            power = 0.05*Math.signum(error);
         }
         SmartDashboard.putNumber("Power", power);
         subsystem.setPower(power);
 
     }
+    
 }

@@ -24,7 +24,6 @@ public class MyFirstSubsystem extends SubsystemBase {
     public MyFirstSubsystem() {
         super();
         motor = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
-        motor2 = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR_ID2, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
         SmartDashboard.putData("Subsystem1", this);
         SmartDashboard.putData("GoToAngle", new GoToAngle(this));
     }
@@ -42,8 +41,8 @@ public class MyFirstSubsystem extends SubsystemBase {
         setPower2(0);
     }
     public double getPosition2() {
-     double motorposition = motor2.getPosition().getValueAsDouble();
-     return (motorposition/OperatorConstants .gearRatio)*360;
+     double motorposition = motor.getPosition().getValueAsDouble();
+     return ((motorposition/OperatorConstants .gearRatio)*360);
     }
 
     @Override
