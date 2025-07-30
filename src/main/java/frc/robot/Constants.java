@@ -18,9 +18,9 @@ public final class Constants {
     public static final boolean MotorInverted = true;
   }
   public static int MotorId = 10;
-  public static final int steirMotorId = 10;
-  public static int Motor2Id = 11;
-  public static final double gearRatio = 12.8;
+  public static final int steerMotorId = 10;
+  public static int DriveMotorID = 11;
+  public static final double SteerGearRatio = 12.8;
   public static final double rotationsPerDegree = 1.0 / 360.0;
 
   

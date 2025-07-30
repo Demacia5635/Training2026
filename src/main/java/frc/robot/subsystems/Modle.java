@@ -12,32 +12,43 @@ import frc.robot.Constants;
 
 public class Modle extends SubsystemBase {
   private TalonFX steerMotor;
+  private TalonFX driveMotor;
   /** Creates a new Modle. */
   public Modle() {
 
-    steerMotor = new TalonFX(Constants.steirMotorId); // Replace 1 with the actual CAN ID of your motor
+    steerMotor = new TalonFX(Constants.steerMotorId); // Replace 1 with the actual CAN ID of your motor
+    driveMotor = new TalonFX(Constants.steerMotorId); // Replace 1 with the actual CAN ID of your motor
   }
-  public void setPower(double power) {
+  public void setSteerPower(double power) {
     // Set the motor power
     steerMotor.set(power); // Assuming power is between -1.0 and 1.0
   }
-  public double getPosition() {
+  public double getSteerPosition() {
     // Get the current position of the motor
-    return steerMotor.getPosition().getValueAsDouble()/12.8*360; // Assuming this returns the position in degrees or rotations
+    return steerMotor.getPosition().getValueAsDouble()/Constants.SteerGearRatio*360; // Assuming this returns the position in degrees or rotations
   }
   
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("angle", getPosition());
+    SmartDashboard.putNumber("angle", getSteerPosition());
+    SmartDashboard.putNumber("distans", getSteerPosition());
     // This method will be called once per scheduler run
 
   }
 
-  public void motor(double power){
-    steerMotor.set(power);
-  
+  public void setdrivePower(double power) {
+    // Set the motor power
+    driveMotor.set(power); // Assuming power is between -1.0 and 1.0
   }
+  public double getdrivePosition() {
+    // Get the current position of the motor
+    return driveMotor.getPosition().getValueAsDouble()/8.4*0.1016; // Assuming this returns the position in degrees or rotations
+  }
+  
+  
    
+    // This method will be called once per scheduler run
+
   
 
 }

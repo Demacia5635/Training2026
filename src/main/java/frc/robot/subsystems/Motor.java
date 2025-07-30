@@ -17,7 +17,7 @@ public class Motor extends SubsystemBase {
 
   public Motor() {
     motor = new TalonFX(Constants.MotorId); 
-    motor2 = new TalonFX(Constants.Motor2Id); 
+    motor2 = new TalonFX(Constants.DriveMotorID); 
 // Replace 1 with the actual CAN ID of your motor
   }
   public void setPwoer(double power) {

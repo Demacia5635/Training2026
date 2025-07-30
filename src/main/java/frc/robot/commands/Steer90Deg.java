@@ -30,12 +30,12 @@ public class Steer90Deg extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (angle< modle.getPosition()) {
-      modle.setPower(power);
+    if (angle< modle.getSteerPosition()) {
+      modle.setSteerPower(power);
       
      } // Logic to steer the robot towards the target angle
      else{
-      modle.setPower(-power);
+      modle.setSteerPower(-power);
      }  
   }
 
@@ -46,7 +46,7 @@ public class Steer90Deg extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(angle - modle.getPosition()) < 10; // Command is finished when within 1 degree of target angle
+    return Math.abs(angle - modle.getSteerPosition()) < 10; // Command is finished when within 1 degree of target angle
    
     
   }
