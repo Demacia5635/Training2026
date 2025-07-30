@@ -44,18 +44,29 @@ public class MyFirstSubsystem extends SubsystemBase {
      stopSteer();
     }
 
-    public void Movetoangle(TalonFX motor, double gearRatioforSaidMotor, double angle) {
-        if(360*motor.getPosition().getValueAsDouble()/gearRatioforSaidMotor < angle) {
-        setPower(Constants.MyFirstSubsystemConstants.SET_POWER, motor);
+    public void DriveMovetoangle(double angle) {
+        if(360*drive.getPosition().getValueAsDouble()/Constants.MyFirstSubsystemConstants.GEAR_RATIO1 < angle) {
+        setPower(Constants.MyFirstSubsystemConstants.SET_POWER, drive);
         WaitUntilCommand(BoardValue() >= angle);
         return;
-        }else if(360*motor.getPosition().getValueAsDouble()/gearRatioforSaidMotor > angle){
-        setPower(-Constants.MyFirstSubsystemConstants.SET_POWER, motor);
+        }else if(360*drive.getPosition().getValueAsDouble()/Constants.MyFirstSubsystemConstants.GEAR_RATIO1 > angle){
+        setPower(-Constants.MyFirstSubsystemConstants.SET_POWER, drive);
         WaitUntilCommand(BoardValue() <= angle);
         return;
         }else{
-            return;
+        return;
         }
+    }
+        public void SteerMovetoangle(double angle) {
+            if(360*steer.getPosition().getValueAsDouble()/Constants.MyFirstSubsystemConstants.GEAR_RATIO2 < angle) {
+            setPower(Constants.MyFirstSubsystemConstants.SET_POWER, steer);
+            WaitUntilCommand(BoardValue() >= angle);
+            return;
+            }else if(360*steer.getPosition().getValueAsDouble()/Constants.MyFirstSubsystemConstants.GEAR_RATIO2 > angle){
+            setPower(-Constants.MyFirstSubsystemConstants.SET_POWER, steer);
+            }else{
+            return;
+            }
         
         }
             private void WaitUntilCommand(boolean b) {

@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.MyFirstSubsystemCommand;
 import frc.robot.subsystems.MyFirstSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,8 +17,23 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  // The robot's subsystems and commands are defined here...priv
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
+  private Command susiesIdea = new Command() {
+    public void initialize() {
+      subsystem.SteerMovetoangle(90);
+      return new ParallelCommandGroup(
+        new DriveMovetoangle(1/Math.PI*Constants.MyFirstSubsystemConstants.WHEEL_DIA_METRES);
+        new SteerMovetoangle(135);
+      );
+      return new ParallelCommandGroup(
+
+      );
+
+    };
+    
+  };
+  
   private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, Constants.MyFirstSubsystemConstants.SET_POWER, 10.0);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -47,6 +62,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return autoCommand;
+    return susiesIdea;
   }
 }

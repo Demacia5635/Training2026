@@ -20,6 +20,7 @@ public final class Constants {
     public static final double GEAR_RATIO1 = 12.8;
     public static final double GEAR_RATIO2 = 8.14;
     public static final double SET_POWER = 0.3;
+    public static final double WHEEL_DIA_METRES = 0.1016;
   }
 
   public static class OperatorConstants {

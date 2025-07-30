@@ -36,6 +36,7 @@ public class MyFirstSubsystemCommand extends Command {
     public boolean isFinished() {
       return duration > 0 && Timer.getFPGATimestamp() > duration + startTime;
     }
+    
 
   }
   
