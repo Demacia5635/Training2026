@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.MoveToAngle;
 import frc.robot.commands.MyFirstSubsystemCommand;
 import frc.robot.subsystems.MyFirstSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,8 +21,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
   private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, 0.4,0.3,  10.0);
-  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  MoveToAngle cmd = new MoveToAngle(subsystem);
   public RobotContainer() {
     configureBindings();
   }
@@ -47,5 +48,5 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return autoCommand;  }
+    return cmd;  }
 }

@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -9,12 +12,14 @@ public class MyFirstSubsystem extends SubsystemBase {
     TalonFX motor;
     TalonFX motor2;
     double v = 0.0; 
+    double angle=0;
 
     // Constructor
     public MyFirstSubsystem() {
         super();
         motor = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
         motor2 = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR_ID2, Constants.MyFirstSubsystemConstants.MOTOR_CAN2);
+        SmartDashboard.putData("Subsystem1", this);
     }
 
     // Method to set the motor speed
@@ -25,5 +30,26 @@ public class MyFirstSubsystem extends SubsystemBase {
     // Method to stop the motor
     public void stop() {
         setPower(0,0);
+    } 
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        super.initSendable(builder);
+        builder.addDoubleProperty("pos", this::getPosition, null);
+        builder.addDoubleProperty("angle", this::getAngle, this::setAngle);
+    }
+    public double getPosition(){
+        return motor.getPosition().getValueAsDouble()/12.8*360%360;
+    }
+    public double getAngle(){
+        return angle;
+    }
+    public void setAngle(double angle){
+        this.angle = angle;
+    }
+    @Override
+    public void periodic() {
+        SmartDashboard.putData(this);
+        
     }
 }   
