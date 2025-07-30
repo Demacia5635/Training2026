@@ -2,11 +2,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.MyFirstSubsystem;
 
 public class MyFirstSubsystemCommand extends Command {
     private final MyFirstSubsystem subsystem;
-    private  double power = 0.5;;
+    private  double power = Constants.MyFirstSubsystemConstants.SET_POWER;
     private  double duration = 5.0;
     private double startTime;
 
@@ -24,11 +25,11 @@ public class MyFirstSubsystemCommand extends Command {
     }
     @Override
     public void execute() {
-      subsystem.setPower(power);
+      subsystem.drivesetPower(power);
     }
     @Override
     public void end(boolean interrupted) {
-      subsystem.stop();
+      subsystem.stopAll();
       System.out.println("Command ended at: " + Timer.getFPGATimestamp() + " seconds");
     }
     @Override
