@@ -17,6 +17,9 @@ public final class Constants {
     public static final int MOTOR_ID = 10;
     public static final int MOTOR_ID2 = 11;
     public static final String MOTOR_CAN = "rio";
+    public static final double GEAR_RATIO1 = 12.8;
+    public static final double GEAR_RATIO2 = 8.14;
+    public static final double SET_POWER = 0.3;
   }
 
   public static class OperatorConstants {
