@@ -10,31 +10,38 @@ import frc.robot.Constants;
 
 public class MyFirstSubsystem extends SubsystemBase {
     // Define the motor 
-    TalonFX motor;
-    double v = 0.0; 
+    TalonFX motorx;
+    TalonFX motory;
+    double vx = 0.0; 
+    double vy = 0.0;
 
     // Constructor
     public MyFirstSubsystem() {
         super();
-        motor = new TalonFX(Constants.MyFirstSubsystemConstants.MotorId, "CANivore");
-        motor.setInverted(Constants.MyFirstSubsystemConstants.MotorInverted);
-        SmartDashboard.putData("Subsystem 1", this);
+        motory = new TalonFX(Constants.MyFirstSubsystemConstants.MotorIdy, "rio");
+        motorx = new TalonFX(Constants.MyFirstSubsystemConstants.MotorIdx, "rio");
     }
 
     // Method to set the motor speed
-    public void setPower(double power) {
-        motor.set(power);
+    public void setPowerx(double power) {
+        motorx.set(power);
+    }
+    public void setPowery(double power) {
+        motory.set(power);
     }
     // Method to stop the motor
     public void stop() {
-        setPower(0);
+        setPowerx(0);
+        setPowery(0);
     }
 
     @Override
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
-        builder.addDoubleProperty("power", ()->motor.get(), null);
-        builder.addDoubleProperty("v", ()->v, null);
+        builder.addDoubleProperty("powery", ()->motory.get(), null);
+        builder.addDoubleProperty("vy", ()->vy, null);
+        builder.addDoubleProperty("powerx", ()->motorx.get(), null);
+        builder.addDoubleProperty("vx", ()->vx, null);
     }
 
     @Override
