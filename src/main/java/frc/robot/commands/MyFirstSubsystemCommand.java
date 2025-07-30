@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.units.measure.Power;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.MyFirstSubsystem;
@@ -7,13 +8,16 @@ import frc.robot.subsystems.MyFirstSubsystem;
 public class MyFirstSubsystemCommand extends Command {
     private final MyFirstSubsystem subsystem;
     private final double power;
+    private final double power2;
     private final double duration;
     private double startTime;
+  
 
     /** Activate motor for a duration*/
-    public MyFirstSubsystemCommand (MyFirstSubsystem  subsystem, double power, double duration) {
+    public MyFirstSubsystemCommand (MyFirstSubsystem  subsystem, double power,  double power2, double duration) {
       this.subsystem = subsystem;
       this.power = power;
+      this.power2 = power2;
       this.duration = duration;
       addRequirements(subsystem);
     }
@@ -25,6 +29,16 @@ public class MyFirstSubsystemCommand extends Command {
     @Override
     public void execute() {
       subsystem.setPower(power);
+
+      if(Timer.getFPGATimestamp() > 5.0){
+        subsystem.setPower2(power2);
+        System.out.println("time: " + Timer.getFPGATimestamp());
+        
+      }
+      else{
+        subsystem.setPower2(0);
+      }
+
     }
     @Override
     public void end(boolean interrupted) {
@@ -35,6 +49,5 @@ public class MyFirstSubsystemCommand extends Command {
     public boolean isFinished() {
       return duration > 0 && Timer.getFPGATimestamp() > duration + startTime;
     }
-
   }
   
