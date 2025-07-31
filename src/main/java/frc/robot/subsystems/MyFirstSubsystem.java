@@ -32,14 +32,22 @@ public class MyFirstSubsystem extends SubsystemBase {
     public void stop() {
         setPower(0,0);
     } 
-
+    
     @Override
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
-        builder.addDoubleProperty("pos", this::getPosition, null);
-        builder.addDoubleProperty("angle", this::getAngle, this::setAngle);
-        builder.addDoubleProperty("DriveAngle", this::getMeter, null);
-        builder.addDoubleProperty("Length", this::getLength,this::setLength);
+        builder.addDoubleProperty("CurrentAngle", this::getPosition, null);
+        builder.addDoubleProperty("WantedAngle", this::getAngle, this::setAngle);
+        builder.addDoubleProperty("DriveMotorDistance", this::getMeter, null);
+        builder.addDoubleProperty("WantedLength", this::getLength,this::setLength);
+        builder.addDoubleProperty("DriveMotorVelocity", this::getDriveMotorVelocity, null);
+        builder.addDoubleProperty("SteerMotorVelocity", this::getSteerMotorVelocity, null);
+    }
+    public double getDriveMotorVelocity(){
+        return motor2.get()*12.8;
+    }
+    public double getSteerMotorVelocity(){
+        return motor.get()*12.8;
     }
     public double getMeter(){
         return motor.getPosition().getValueAsDouble()/8.4*0.1016*Math.PI;

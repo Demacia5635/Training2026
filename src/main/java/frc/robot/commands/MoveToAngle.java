@@ -23,7 +23,7 @@ public class MoveToAngle extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    angle = SmartDashboard.getNumber("angle", 0);
+    angle = SmartDashboard.getNumber("WantedAngle", 0);
     sub.setPower(0.1, 0);
   }
 

@@ -23,7 +23,7 @@ public class MoveDriveMotor1Meter extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    length = SmartDashboard.getNumber("Length", 0);
+    length = SmartDashboard.getNumber("WantedLength", 0);
     sub2.setPower(0, 0.1);
   }
 
