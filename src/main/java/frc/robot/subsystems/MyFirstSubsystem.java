@@ -12,7 +12,8 @@ public class MyFirstSubsystem extends SubsystemBase {
     TalonFX motor;
     TalonFX motor2;
     double v = 0.0; 
-    double angle=0;
+    double angle = 0;
+    double length = 0;
 
     // Constructor
     public MyFirstSubsystem() {
@@ -37,6 +38,17 @@ public class MyFirstSubsystem extends SubsystemBase {
         super.initSendable(builder);
         builder.addDoubleProperty("pos", this::getPosition, null);
         builder.addDoubleProperty("angle", this::getAngle, this::setAngle);
+        builder.addDoubleProperty("DriveAngle", this::getMeter, null);
+        builder.addDoubleProperty("Length", this::getLength,this::setLength);
+    }
+    public double getMeter(){
+        return motor.getPosition().getValueAsDouble()/8.4*0.1016*Math.PI;
+    }
+    public double getLength(){
+        return length;
+    }
+    public void setLength(double length){
+        this.length=length;
     }
     public double getPosition(){
         return motor.getPosition().getValueAsDouble()/12.8*360%360;

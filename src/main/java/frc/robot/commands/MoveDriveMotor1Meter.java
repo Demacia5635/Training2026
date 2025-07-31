@@ -9,45 +9,41 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.MyFirstSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class MoveToAngle extends Command {
+public class MoveDriveMotor1Meter extends Command {
   /** Creates a new MoveToAngle. */
-  MyFirstSubsystem sub;
-  double angle;
-  public MoveToAngle(MyFirstSubsystem sub) {
+  MyFirstSubsystem sub2;
+  double length;
+  public MoveDriveMotor1Meter(MyFirstSubsystem sub2) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.sub = sub;
+    this.sub2 = sub2;
     //this.angle = angle;
-    addRequirements(sub);
+    addRequirements(sub2);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    angle = SmartDashboard.getNumber("angle", 0);
-    sub.setPower(0.1, 0);
+    length = SmartDashboard.getNumber("Length", 0);
+    sub2.setPower(0, 0.1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(angle > sub.getPosition()){
-      sub.setPower(0.1,0);
+    if(length>sub2.getMeter()){
+      sub2.setPower(0,0.1);
     }
-    else{
-      sub.setPower(-0.1, 0);
-    }
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    sub.setPower(0, 0);
+    sub2.setPower(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(angle - sub.getPosition()) < 5;
+    return Math.abs(length - sub2.getMeter()) < 0.01;
   }
 }
