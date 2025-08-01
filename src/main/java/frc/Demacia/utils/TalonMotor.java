@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.Demacia.utils.Log.LogManager;
 import frc.Demacia.utils.Log.MotorLogEntry;
 
-public class TalonMotor extends TalonFX {
+public class TalonMotor extends TalonFX implements Motor {
 
     TalonConfig config;
     String name;
@@ -228,13 +228,13 @@ public class TalonMotor extends TalonFX {
      * @param feedForward wanted feed forward to add to the ks kv ka and kg defaults
      *                    to 0
      */
-    public void setMotionMagic(double position, double feedForward) {
+    public void setMotion(double position, double feedForward) {
         setControl(motionMagicVoltage.withPosition(position).withFeedForward(feedForward));
         // positionEntry.log(position);
     }
 
-    public void setMotionMagic(double position) {
-        setMotionMagic(position, 0);
+    public void setMotion(double position) {
+        setMotion(position, 0);
     }
 
     public void setPositionVoltage(double position, double feedForward) {
@@ -250,7 +250,7 @@ public class TalonMotor extends TalonFX {
         setVelocity(velocity, velocityFeedForward(velocity));
     }
 
-    public void setMotionMagicWithFeedForward(double velocity) {
+    public void setMotionWithFeedForward(double velocity) {
         setVelocity(velocity, positionFeedForward(velocity));
     }
 
@@ -521,7 +521,9 @@ public class TalonMotor extends TalonFX {
         return name;
     }
 
-    public Command getManualPowerCommand(XboxController controller, boolean useLeftJS, double max, Subsystem subsystem) {
-        return new RunCommand(()->setDuty(XboxUtils.getJSvalue(controller, useLeftJS)*max), subsystem);
+    public Command getManualPowerCommand(XboxController controller, boolean useLeftJS, double max,
+            Subsystem subsystem) {
+        return new RunCommand(() -> setDuty(XboxUtils.getJSvalue(controller, useLeftJS) * max), subsystem);
     }
+
 }
