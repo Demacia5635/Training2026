@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.Demacia.Geometry;
+package edu.wpi.first.math.geometry;
 
 import static edu.wpi.first.units.Units.Radians;
 
@@ -89,6 +89,13 @@ public class Rotation2d
   private double m_cos;
   private double m_sin;
 
+  /** Constructs a Rotation2d with a default angle of 0 degrees. */
+  public Rotation2d() {
+    m_value = 0.0;
+    m_cos = 1.0;
+    m_sin = 0.0;
+  }
+
   public Rotation2d set(double value) {
     m_value = value;
     m_cos = Math.cos(value);
@@ -112,13 +119,6 @@ public class Rotation2d
   }
 
 
-  /** Constructs a Rotation2d with a default angle of 0 degrees. */
-  public Rotation2d() {
-    m_value = 0.0;
-    m_cos = 1.0;
-    m_sin = 0.0;
-  }
-
   /**
    * Constructs a Rotation2d with the given radian value.
    *
@@ -136,7 +136,7 @@ public class Rotation2d
    * @param y The y component or sine of the rotation.
    */
   public Rotation2d(double x, double y) {
-    set(x,y);
+    set(x, y);
   }
 
   /**
@@ -223,9 +223,8 @@ public class Rotation2d
   public Rotation2d plus(Rotation2d other) {
     return rotateBy(other);
   }
-  public Rotation2d add(Rotation2d other) {
-    set(m_value + other.m_value);
-    return this;
+  public Rotation2d plusSelf(Rotation2d other) {
+    return set(m_value + other.m_value);
   }
 
   /**
@@ -240,9 +239,8 @@ public class Rotation2d
   public Rotation2d minus(Rotation2d other) {
     return rotateBy(other.unaryMinus());
   }
-  public Rotation2d substract(Rotation2d other) {
-    set(m_value - other.m_value);
-    return this;
+  public Rotation2d minusSelf(Rotation2d other) {
+    return set(m_value - other.m_value);
   }
 
   /**
@@ -255,8 +253,7 @@ public class Rotation2d
     return new Rotation2d(-m_value);
   }
   public Rotation2d unaryMinusSelf() {
-    set(-m_value);
-    return this;
+    return set(-m_value);
   }
 
   /**
@@ -268,9 +265,8 @@ public class Rotation2d
   public Rotation2d times(double scalar) {
     return new Rotation2d(m_value * scalar);
   }
-  public Rotation2d multiply(double scalar) {
-    set(m_value * scalar);
-    return this;
+  public Rotation2d timesSelf(double scalar) {
+    return set(m_value * scalar);
   }
 
   /**
@@ -282,9 +278,8 @@ public class Rotation2d
   public Rotation2d div(double scalar) {
     return times(1.0 / scalar);
   }
-  public Rotation2d divide(double scalar) {
-    multiply(1.0/scalar);
-    return this;
+  public Rotation2d divSelf(double scalar) {
+    return timesSelf(1.0 / scalar);
   }
 
   /**
@@ -305,9 +300,9 @@ public class Rotation2d
     return new Rotation2d(
         m_cos * other.m_cos - m_sin * other.m_sin, m_cos * other.m_sin + m_sin * other.m_cos);
   }
-  public Rotation2d rotate(Rotation2d other) {
-    set(m_value + other.m_value);
-    return this;
+  public Rotation2d rotateBySelf(Rotation2d other) {
+    return set(
+        m_cos * other.m_cos - m_sin * other.m_sin, m_cos * other.m_sin + m_sin * other.m_cos);
   }
 
   /**

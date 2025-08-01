@@ -6,6 +6,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Rotation2dTest",
+      "request": "launch",
+      "mainClass": "frc.Demacia.Geometry.Rotation2dTest",
+      "projectName": "Training2026"
+    },
+    {
+      "type": "java",
+      "name": "Rotation2d",
+      "request": "launch",
+      "mainClass": "frc.Demacia.Geometry.Rotation2d",
+      "projectName": "Training2026"
+    },
+    {
+      "type": "java",
       "name": "LogReader",
       "request": "launch",
       "mainClass": "frc.Demacia.Sysid.LogReader",
