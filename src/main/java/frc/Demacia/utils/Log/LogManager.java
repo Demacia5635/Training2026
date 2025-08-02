@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.Demacia.utils.ConsoleAlert;
 
 public class LogManager extends SubsystemBase {
 
