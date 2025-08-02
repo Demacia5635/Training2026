@@ -73,7 +73,6 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void setFieldHeading() {
         resetPose(pose.getTranslation(), Rotation2d.kZero);
-
     }
 
     public double getGyroHeading() {

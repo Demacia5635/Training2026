@@ -36,7 +36,7 @@ public class SwerveModule {
     }
 
     public void setSteerOffset() {
-        steer.setPositionVoltage(getAbsEncoder()-config.cancoderOffset);
+        steer.setEncoderPosition(getAbsEncoder()-config.cancoderOffset);
     }
 
     public double getAbsEncoder() {
