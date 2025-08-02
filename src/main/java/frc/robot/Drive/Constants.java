@@ -34,6 +34,9 @@ public class Constants {
             new ModuleConfig(7, 8, 9, -X_POSITION, Y_POSITION, 50.0),
             new ModuleConfig(10, 11, 12, -X_POSITION, -Y_POSITION, -22.6)
     };
+    public static final ModuleConfig[] CONFIGS1 = {
+        new ModuleConfig(1, 2, 3, X_POSITION, Y_POSITION, 22.6)
+    };
 
     public static final TalonConfig BASE_STEER_CONFIG = new TalonConfig(0, CANBUS, "BASE_STEER")
             .withBrake(true)
