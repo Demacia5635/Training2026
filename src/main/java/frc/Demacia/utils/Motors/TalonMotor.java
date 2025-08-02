@@ -526,5 +526,9 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     public Command getManualPowerCommand(XboxController controller, boolean useLeftJS, double max, Subsystem subsystem) {
         return new RunCommand(() -> setDuty(XboxUtils.getJSvalue(controller, JoystickSide.LeftY) * max), subsystem);
     }
-
+    @Override
+    public void setEncoderPosition(double position) {
+      setPosition(position);   
+    }
+  
 }
