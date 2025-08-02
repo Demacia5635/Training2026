@@ -7,7 +7,7 @@ import frc.Demacia.utils.Motors.TalonConfig;
 public class Constants {
 
     public static final double MK4i_STEER_RATIO = 150.0 / 7.0;
-    public static final double MK4_STEER_RATIO = 12 / 8;
+    public static final double MK4_STEER_RATIO = 12.8;
     public static final double L1_DRIVE_RATIO = 8.14;
     public static final double L2_DRIVE_RATIO = 6.75;
     public static final double WHEEL_DIAMETER = 4 * 0.0254;
@@ -41,7 +41,7 @@ public class Constants {
     public static final TalonConfig BASE_STEER_CONFIG = new TalonConfig(0, CANBUS, "BASE_STEER")
             .withBrake(true)
             .withCurrent(15)
-            .withRadiansMotor(MK4_STEER_RATIO)
+            .withDegreesMotor(MK4_STEER_RATIO)
             .withInvert(true)
             .withPID(0, 0, 0, 0, 0, 0, 0)
             .withRampTime(0.2)
