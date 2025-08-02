@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.Demacia.utils.XboxUtils;
+import frc.Demacia.utils.XboxUtils.JoystickSide;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -64,8 +65,8 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     private void drive() {
-        targetChassisSpeeds.vxMetersPerSecond = XboxUtils.getJSYvalue(controller.getHID(), true) * Constants.MAX_SPEED;
-        targetChassisSpeeds.vyMetersPerSecond = -XboxUtils.getJSXvalue(controller.getHID(), true) * Constants.MAX_SPEED;
+        targetChassisSpeeds.vxMetersPerSecond = XboxUtils.getJSvalue(controller, JoystickSide.RightY) * Constants.MAX_SPEED;
+        targetChassisSpeeds.vyMetersPerSecond = -XboxUtils.getJSvalue(controller, JoystickSide.RightX) * Constants.MAX_SPEED;
         targetChassisSpeeds.omegaRadiansPerSecond = XboxUtils.getNormalized(controller.getLeftTriggerAxis() - controller.getRightTriggerAxis()) * Constants.MAX_OMEGA;
         setSpeeds(targetChassisSpeeds);
     }
