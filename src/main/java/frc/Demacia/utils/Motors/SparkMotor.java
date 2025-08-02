@@ -17,7 +17,7 @@ import frc.Demacia.utils.Log.LogManager;
 import frc.Demacia.utils.Log.MotorLogEntry;
 import frc.robot.RobotContainer;
 
-public class SparkMotor extends SparkMax implements Sendable, Motor {
+public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
 
   private SparkConfig config;
   private String name;

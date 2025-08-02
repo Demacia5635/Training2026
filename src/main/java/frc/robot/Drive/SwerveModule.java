@@ -9,11 +9,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
+import frc.Demacia.utils.Motors.MotorInterface;
 import frc.Demacia.utils.Motors.TalonMotor;
 
 public class SwerveModule {
-    TalonMotor steer;
-    TalonMotor drive;
+    MotorInterface steer;
+    MotorInterface drive;
     CANcoder absEncoder;
     Constants.ModuleConfig config;
     StatusSignal<Angle> absEncoderSignal;
@@ -35,7 +36,7 @@ public class SwerveModule {
     }
 
     public void setSteerOffset() {
-        steer.setPosition(getAbsEncoder()-config.cancoderOffset);
+        steer.setPositionVoltage(getAbsEncoder()-config.cancoderOffset);
     }
 
     public double getAbsEncoder() {

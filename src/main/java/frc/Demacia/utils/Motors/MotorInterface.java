@@ -1,11 +1,12 @@
 package frc.Demacia.utils.Motors;
 
-public interface Motor {
+public interface MotorInterface {
     void changeSlot(int slot);
     void setNeutralMode(boolean isBrake);
     void setDuty(double power);
     void setVoltage(double voltage);
     void setVelocity(double velocity, double feedForward);
+    void setVelocity(double velocity);
     void setMotion(double position, double feedForward);
     void setMotion(double position);
     void setPositionVoltage(double position, double feedForward);

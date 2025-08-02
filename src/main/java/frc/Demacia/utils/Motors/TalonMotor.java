@@ -33,7 +33,7 @@ import frc.Demacia.utils.Log.LogManager;
 import frc.Demacia.utils.Log.MotorLogEntry;
 import frc.Demacia.utils.XboxUtils.JoystickSide;
 
-public class TalonMotor extends TalonFX implements Motor {
+public class TalonMotor extends TalonFX implements MotorInterface {
 
     TalonConfig config;
     String name;
