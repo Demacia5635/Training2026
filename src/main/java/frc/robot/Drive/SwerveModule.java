@@ -87,4 +87,9 @@ public class SwerveModule {
         drive.setVelocity(velocity);
     }
 
+    public void configPID() {
+        steer.configPidFf(0);
+        drive.configPidFf(0);
+    }
+
 }

@@ -26,10 +26,14 @@ public class SingleModuleSubsystem extends SubsystemBase {
             modulePositionOnRobot[i] = modules[i].config.positionRelativeToRobotCenter;
             moduleState[i] = modules[i].state;
             modulePositions[i] = modules[i].position;
+            modules[i].configPID();
         }
         SmartDashboard.putData("SingleModule", this);
         SmartDashboard.putData("Steer Power", getSteerPowerCommand());
         SmartDashboard.putData("Drive Power", getDrivePowerCommand());
+        SmartDashboard.putData("Steer Angle", getSteerTurnCommand());
+        SmartDashboard.putData("Drive Velocity", getDriveVelocityCommand());
+
     }
 
     private Command getSteerPowerCommand() {
@@ -47,6 +51,24 @@ public class SingleModuleSubsystem extends SubsystemBase {
                 double power = SmartDashboard.getNumber("Drive Power:", 0); 
                 for(SwerveModule m : modules) {
                     m.setDrivePower(power);
+                }
+            },this);
+    }
+    private Command getSteerTurnCommand() {
+        SmartDashboard.putNumber("Steer Angle:", 0);
+        return new RunCommand(()-> { 
+                double angle = SmartDashboard.getNumber("Steer Angle:", 0); 
+                for(SwerveModule m : modules) {
+                    m.setSteerAngle(angle);
+                }
+            },this);
+    }
+    private Command getDriveVelocityCommand() {
+        SmartDashboard.putNumber("Drive Velocity:", 0);
+        return new RunCommand(()-> { 
+                double velocity = SmartDashboard.getNumber("Drive Velocity:", 0); 
+                for(SwerveModule m : modules) {
+                    m.setDriveVelocity(velocity);
                 }
             },this);
     }
