@@ -28,7 +28,7 @@ public class GoToAngle extends Command {
             power = 0.05*Math.signum(error);
         }
         SmartDashboard.putNumber("Power", power);
-        subsystem.setsteerPower(power);
+        subsystem.setSPower(power);
 
     }
     

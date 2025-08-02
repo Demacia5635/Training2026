@@ -11,43 +11,38 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.GoToAngle;
 
 public class MyFirstSubsystem extends SubsystemBase {
     // Define the motor 
-    TalonFX motor;
+    TalonFX steerMotor;
      
-    TalonFX motor2;
+    TalonFX driveMotor;
     
 
     // Constructor
     public MyFirstSubsystem() {
         super();
-        motor = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
-        SmartDashboard.putData("Subsystem1", this);
-        SmartDashboard.putData("GoToAngle", new GoToAngle(this));
+        steerMotor = new TalonFX(Constants.MyFirstSubsystemConstants.SMOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
+        driveMotor = new TalonFX(Constants.MyFirstSubsystemConstants.DMOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
     }
 
     // Method to set the motor speed
-    public void setPower(double power) {
-        motor.set(power);
+    public void setSPower(double power) {
+        steerMotor.set(power);
     }
-    public void setPower2(double power2) {
-        motor2.set(power2);
+    public void setDPower(double power2) {
+        driveMotor.set(power2);
     }
     // Method to stop the motor
     public void stop() {
-        setPower(0);
-        setPower2(0);
+        setSPower(0);
+        setDPower(0);
     }
-    public double getPosition2() {
-     double motorposition = motor.getPosition().getValueAsDouble();
-     return ((motorposition/OperatorConstants .gearRatio)*360);
-    }
+    public double getSPosition() {
+        double SMotorPosition = steerMotor.getPosition().getValueAsDouble();
+        return (SMotorPosition/OperatorConstants.SgearRatio)*360;
 
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        super.initSendable(builder);
-        builder.addDoubleProperty("angle", this::getPosition2, null);
-}  
 } 
+ 
+}
+
