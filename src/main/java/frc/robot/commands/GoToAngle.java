@@ -15,20 +15,20 @@ public class GoToAngle extends Command {
 
     @Override
     public void execute() {
-        double target = SmartDashboard.getNumber("Target Angle", 0);
-        double currnt = subsystem.getPosition2();
-        double error = target - currnt;
+        double target1 = 90;
+        double currnt = subsystem.getSPosition();
+        double error = target1 - currnt;
         double power;
         SmartDashboard.putNumber("Error", error);
         SmartDashboard.putNumber("angle", currnt);
-        if (Math.abs(error) < 3){
+        if (Math.abs(error) < 10){
             power = 0;
         }
         else {
             power = 0.05*Math.signum(error);
         }
         SmartDashboard.putNumber("Power", power);
-        subsystem.setPower(power);
+        subsystem.setsteerPower(power);
 
     }
     
