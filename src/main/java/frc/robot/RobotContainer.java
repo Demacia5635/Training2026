@@ -4,8 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.ModuleSubsystem;
-import frc.robot.subsystems.MotorExampleSubsytem;
+import frc.robot.Drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -23,10 +22,13 @@ public class RobotContainer {
   private static Robot robot;
   public static int N_CYCLE = 0;
   public static double CYCLE_TIME = 0.02;
-  public final ModuleSubsystem module = new ModuleSubsystem();
-  public final MotorExampleSubsytem motorExample = new MotorExampleSubsytem();
 
-  //  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController controller = new CommandXboxController(0);
+  public DriveSubsystem driveSubsystem = new DriveSubsystem(controller);
+  
+  //public final ModuleSubsystem module = new ModuleSubsystem();
+  //public final MotorExampleSubsytem motorExample = new MotorExampleSubsytem();
+
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
