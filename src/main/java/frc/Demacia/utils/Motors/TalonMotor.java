@@ -21,23 +21,20 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.Demacia.utils.XboxUtils;
 import frc.Demacia.utils.Log.LogManager;
 import frc.Demacia.utils.Log.MotorLogEntry;
-import frc.Demacia.utils.XboxUtils.JoystickSide;
 
 public class TalonMotor extends TalonFX implements MotorInterface {
 
     TalonConfig config;
     String name;
     TalonFXConfiguration cfg;
+
+    double unitMultiplier = 1.0;
 
     DutyCycleOut dutyCycle = new DutyCycleOut(0);
     VoltageOut voltageOut = new VoltageOut(0);
@@ -86,41 +83,45 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         cfg.MotorOutput.NeutralMode = config.brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
         cfg.MotorOutput.PeakForwardDutyCycle = config.maxVolt / 12.0;
         cfg.MotorOutput.PeakReverseDutyCycle = config.minVolt / 12.0;
+        if(config.motorRatio < 0.2) {
+            unitMultiplier = 100.0;
+        }
+        cfg.Feedback.SensorToMechanismRatio = config.motorRatio * unitMultiplier;
 
-        cfg.Slot0.kP = config.pid.kp;
-        cfg.Slot0.kI = config.pid.ki;
-        cfg.Slot0.kD = config.pid.kd;
+
+
+        cfg.Slot0.kP = config.pid.kp * unitMultiplier;
+        cfg.Slot0.kI = config.pid.ki * unitMultiplier;
+        cfg.Slot0.kD = config.pid.kd * unitMultiplier;
         cfg.Slot0.kS = config.pid.ks;
-        cfg.Slot0.kV = config.pid.kv;
-        cfg.Slot0.kA = config.pid.ka;
+        cfg.Slot0.kV = config.pid.kv * unitMultiplier;
+        cfg.Slot0.kA = config.pid.ka * unitMultiplier;
         cfg.Slot0.kG = config.pid.kg;
         if (config.pid1 != null) {
-            cfg.Slot1.kP = config.pid1.kp;
-            cfg.Slot1.kI = config.pid1.ki;
-            cfg.Slot1.kD = config.pid1.kd;
+            cfg.Slot1.kP = config.pid1.kp * unitMultiplier;
+            cfg.Slot1.kI = config.pid1.ki * unitMultiplier;
+            cfg.Slot1.kD = config.pid1.kd * unitMultiplier;
             cfg.Slot1.kS = config.pid1.ks;
-            cfg.Slot1.kV = config.pid1.kv;
-            cfg.Slot1.kA = config.pid1.ka;
+            cfg.Slot1.kV = config.pid1.kv * unitMultiplier;
+            cfg.Slot1.kA = config.pid1.ka * unitMultiplier;
             cfg.Slot1.kG = config.pid1.kg;
         }
         if (config.pid2 != null) {
-            cfg.Slot2.kP = config.pid2.kp;
-            cfg.Slot2.kI = config.pid2.ki;
-            cfg.Slot2.kD = config.pid2.kd;
+            cfg.Slot2.kP = config.pid2.kp * unitMultiplier;
+            cfg.Slot2.kI = config.pid2.ki * unitMultiplier;
+            cfg.Slot2.kD = config.pid2.kd * unitMultiplier;
             cfg.Slot2.kS = config.pid2.ks;
-            cfg.Slot2.kV = config.pid2.kv;
-            cfg.Slot2.kA = config.pid2.ka;
+            cfg.Slot2.kV = config.pid2.kv * unitMultiplier;
+            cfg.Slot2.kA = config.pid2.ka * unitMultiplier;
             cfg.Slot2.kG = config.pid2.kg;
         }
 
         cfg.Voltage.PeakForwardVoltage = config.maxVolt;
         cfg.Voltage.PeakReverseVoltage = config.minVolt;
 
-        cfg.Feedback.SensorToMechanismRatio = config.motorRatio;
-
-        cfg.MotionMagic.MotionMagicAcceleration = config.maxAcceleration;
-        cfg.MotionMagic.MotionMagicCruiseVelocity = config.maxVelocity;
-        cfg.MotionMagic.MotionMagicJerk = config.maxJerk;
+        cfg.MotionMagic.MotionMagicAcceleration = config.maxAcceleration / unitMultiplier;
+        cfg.MotionMagic.MotionMagicCruiseVelocity = config.maxVelocity / unitMultiplier;
+        cfg.MotionMagic.MotionMagicJerk = config.maxJerk / unitMultiplier;
 
         getConfigurator().apply(cfg);
     }
@@ -211,7 +212,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
      *                    defaults to 0
      */
     public void setVelocity(double velocity, double feedForward) {
-        setControl(velocityVoltage.withVelocity(velocity).withFeedForward(feedForward));
+        setControl(velocityVoltage.withVelocity(velocity/unitMultiplier).withFeedForward(feedForward));
         // velocityEntry.log(velocity);
     }
 
@@ -231,7 +232,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
      *                    to 0
      */
     public void setMotion(double position, double feedForward) {
-        setControl(motionMagicVoltage.withPosition(position).withFeedForward(feedForward));
+        setControl(motionMagicVoltage.withPosition(position/unitMultiplier).withFeedForward(feedForward));
         // positionEntry.log(position);
     }
 
@@ -240,7 +241,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     }
 
     public void setPositionVoltage(double position, double feedForward) {
-        setControl(positionVoltage.withPosition(position).withFeedForward(feedForward));
+        setControl(positionVoltage.withPosition(position/unitMultiplier).withFeedForward(feedForward));
         // positionEntry.log(position);
     }
 
@@ -265,10 +266,10 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     }
 
     @SuppressWarnings("rawtypes")
-    private double getStatusSignal(StatusSignal statusSignal, double lastValue) {
+    private double getStatusSignal(StatusSignal statusSignal, double lastValue, double multiplier) {
         statusSignal.refresh();
         if (statusSignal.getStatus() == StatusCode.OK) {
-            lastValue = statusSignal.getValueAsDouble();
+            lastValue = statusSignal.getValueAsDouble() * multiplier;
         }
         return lastValue;
     }
@@ -282,27 +283,27 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     }
 
     public double getCurrentClosedLoopSP() {
-        return getStatusSignal(closedLoopSPSignal, lastClosedLoopSP);
+        return getStatusSignal(closedLoopSPSignal, lastClosedLoopSP, unitMultiplier);
     }
 
     public double getCurrentClosedLoopError() {
-        return getStatusSignal(closedLoopErrorSignal, lastClosedLoopError);
+        return getStatusSignal(closedLoopErrorSignal, lastClosedLoopError, unitMultiplier);
     }
 
     public double getCurrentPosition() {
-        return getStatusSignal(positionSignal, lastPosition);
+        return getStatusSignal(positionSignal, lastPosition, unitMultiplier);
     }
 
     public double getCurrentVelocity() {
-        return getStatusSignal(velocitySignal, lastVelocity);
+        return getStatusSignal(velocitySignal, lastVelocity, unitMultiplier);
     }
 
     public double getCurrentAcceleration() {
-        return getStatusSignal(accelerationSignal, lastAcceleration);
+        return getStatusSignal(accelerationSignal, lastAcceleration, unitMultiplier);
     }
 
     public double getCurrentVoltage() {
-        return getStatusSignal(voltageSignal, lastVoltage);
+        return getStatusSignal(voltageSignal, lastVoltage, 1.0);
     }
 
     /**
@@ -356,7 +357,11 @@ public class TalonMotor extends TalonFX implements MotorInterface {
                     cfg.kG = config.pid.kg;
                     break;
             }
-
+            cfg.kP *= unitMultiplier;
+            cfg.kI *= unitMultiplier;
+            cfg.kD *= unitMultiplier;
+            cfg.kV *= unitMultiplier;
+            cfg.kA *= unitMultiplier;
             getConfigurator().apply(cfg);
         }).ignoringDisable(true);
 
@@ -457,9 +462,9 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         Command configMotionMagic = new InstantCommand(() -> {
             MotionMagicConfigs cfg = new MotionMagicConfigs();
 
-            cfg.MotionMagicCruiseVelocity = config.maxVelocity;
-            cfg.MotionMagicAcceleration = config.maxAcceleration;
-            cfg.MotionMagicJerk = config.maxJerk;
+            cfg.MotionMagicCruiseVelocity = config.maxVelocity / unitMultiplier;
+            cfg.MotionMagicAcceleration = config.maxAcceleration / unitMultiplier;
+            cfg.MotionMagicJerk = config.maxJerk / unitMultiplier;
 
             getConfigurator().apply(cfg);
         }).ignoringDisable(true);
@@ -506,7 +511,6 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("TalonMotor");
         super.initSendable(builder);
-        builder.addBooleanProperty("IsInverted", () -> config.inverted, null);
         builder.addDoubleProperty("CloseLoopSP", this::getCurrentClosedLoopSP, null);
         builder.addDoubleProperty("CloseLoopError", this::getCurrentClosedLoopError, null);
         builder.addDoubleProperty("Position", this::getCurrentPosition, null);
@@ -523,9 +527,6 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         return name;
     }
 
-    public Command getManualPowerCommand(XboxController controller, boolean useLeftJS, double max, Subsystem subsystem) {
-        return new RunCommand(() -> setDuty(XboxUtils.getJSvalue(controller, JoystickSide.LeftY) * max), subsystem);
-    }
     @Override
     public void setEncoderPosition(double position) {
       setPosition(position);   
