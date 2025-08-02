@@ -3,6 +3,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.MyFirstSubsystem;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+
 
 public class GoToAngle extends Command {
     MyFirstSubsystem subsystem;
@@ -21,6 +24,7 @@ public class GoToAngle extends Command {
         double power;
         SmartDashboard.putNumber("Error", error);
         SmartDashboard.putNumber("angle", currnt);
+        SmartDashboard.putNumber("Target Angle", target1);
         if (Math.abs(error) < 10){
             power = 0;
         }
@@ -29,7 +33,10 @@ public class GoToAngle extends Command {
         }
         SmartDashboard.putNumber("Power", power);
         subsystem.setSPower(power);
-
     }
-    
-}
+    public Command drive1steer135() {
+        return new ParallelCommandGroup(
+          
+          
+        )
+    }

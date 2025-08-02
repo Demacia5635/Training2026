@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
 
+
 public class MyFirstSubsystem extends SubsystemBase {
     // Define the motor 
     TalonFX steerMotor;
@@ -43,6 +44,10 @@ public class MyFirstSubsystem extends SubsystemBase {
         return (SMotorPosition/OperatorConstants.SgearRatio)*360;
 
 } 
- 
+ @Override
+ public void initSendable(SendableBuilder builder){
+    builder.addDoubleProperty("angle", () -> getSPosition(), null);
+ }
+ public void drive1meter()
 }
 

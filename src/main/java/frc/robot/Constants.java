@@ -23,5 +23,6 @@ public final class Constants {
     public static final int DriverControllerPort = 0;
     public static final double SgearRatio = 12.8;
     public static final double DgearRatio = 8.14 ;
+    public static final double wheelDiameter = 10.16;
   }
 }
