@@ -529,7 +529,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
 
     @Override
     public void setEncoderPosition(double position) {
-      setPosition(position);   
+      setPosition(position / unitMultiplier);   
     }
   
 }
