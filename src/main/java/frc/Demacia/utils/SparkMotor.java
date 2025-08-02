@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.Demacia.utils.Log.LogManager;
+import frc.Demacia.utils.Log.MotorLogEntry;
 import frc.robot.RobotContainer;
 
 public class SparkMotor extends SparkMax implements Sendable, Motor {
@@ -22,10 +24,6 @@ public class SparkMotor extends SparkMax implements Sendable, Motor {
   private SparkMaxConfig cfg;
   private ClosedLoopSlot slot = ClosedLoopSlot.kSlot0;
   private ControlType controlType = ControlType.kDutyCycle;
-
-  private LogManager.LogEntry dutyCycleEntry;
-  private LogManager.LogEntry velocityEntry;
-  private LogManager.LogEntry positionEntry;
 
   private String lastControlMode;
   private double lastVelocity;
@@ -68,15 +66,7 @@ public class SparkMotor extends SparkMax implements Sendable, Motor {
   }
 
   private void addLog() {
-    // MotorLogEntry.add(this);
-    LogManager.addEntry(name + "/Position", this::getCurrentPosition, 3);
-    LogManager.addEntry(name + "/Velocity", this::getCurrentVelocity, 3);
-    LogManager.addEntry(name + "/Voltage", this::getCurrentVoltage, 3);
-    LogManager.addEntry(name + "/Current", this::getOutputCurrent, 3);
-
-    dutyCycleEntry = LogManager.getEntry(name + "/SetDutyCycle");
-    velocityEntry = LogManager.getEntry(name + "/SetVelocity");
-    positionEntry = LogManager.getEntry(name + "/SetPosition");
+    MotorLogEntry.add(this);
 
   }
 
@@ -121,14 +111,12 @@ public class SparkMotor extends SparkMax implements Sendable, Motor {
    */
   public void setDuty(double power) {
     super.set(power);
-    dutyCycleEntry.log(power);
     controlType = ControlType.kDutyCycle;
 
   }
 
   public void setVoltage(double voltage) {
     super.setVoltage(voltage);
-    dutyCycleEntry.log(voltage/12.0);
     controlType = ControlType.kVoltage;
   }
 
@@ -142,7 +130,6 @@ public class SparkMotor extends SparkMax implements Sendable, Motor {
    */
   public void setVelocity(double velocity, double feedForward) {
     super.closedLoopController.setReference(velocity, ControlType.kMAXMotionVelocityControl, slot, feedForward);
-    velocityEntry.log(velocity);
     controlType = ControlType.kMAXMotionVelocityControl;
     setPoint = velocity;
   }
@@ -153,7 +140,6 @@ public class SparkMotor extends SparkMax implements Sendable, Motor {
 
   public void setPositionVoltage(double position, double feedForward) {
     super.closedLoopController.setReference(position, ControlType.kPosition, slot, feedForward);
-    positionEntry.log(position);
     controlType = ControlType.kPosition;
     setPoint = position;
   }

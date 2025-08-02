@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.Demacia.utils.Log.LogManager;
 import frc.Demacia.utils.Log.MotorLogEntry;
+import frc.Demacia.utils.XboxUtils.JoystickSide;
 
 public class TalonMotor extends TalonFX implements Motor {
 
@@ -521,9 +522,8 @@ public class TalonMotor extends TalonFX implements Motor {
         return name;
     }
 
-    public Command getManualPowerCommand(XboxController controller, boolean useLeftJS, double max,
-            Subsystem subsystem) {
-        return new RunCommand(() -> setDuty(XboxUtils.getJSvalue(controller, useLeftJS) * max), subsystem);
+    public Command getManualPowerCommand(XboxController controller, boolean useLeftJS, double max, Subsystem subsystem) {
+        return new RunCommand(() -> setDuty(XboxUtils.getJSvalue(controller, JoystickSide.LeftY) * max), subsystem);
     }
 
 }

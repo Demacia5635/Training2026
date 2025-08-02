@@ -30,10 +30,10 @@ public class MotorLogEntry {
                 new LogSupplier(motor::getCurrentVoltage, "Volts",null),
                 new LogSupplier(motor::getCurrentPosition, "Position",null),
                 new LogSupplier(motor::getCurrentVelocity, "Velocity",null),
-                new LogSupplier(()->0, "Acceleration",null),
+                new LogSupplier(motor::getCurrentAcceleration, "Acceleration",null),
                 new LogSupplier(motor::getOutputCurrent, "Current",null),
-                new LogSupplier(motor::getCloseLoopError, "Error",null),
-                new LogSupplier(motor::getSetPoint, "SetPoint",null)
+                new LogSupplier(motor::getCurrentClosedLoopError, "Error",null),
+                new LogSupplier(motor::getCurrentClosedLoopSP, "SetPoint",null)
                             },
             2, 
             "Motor", 

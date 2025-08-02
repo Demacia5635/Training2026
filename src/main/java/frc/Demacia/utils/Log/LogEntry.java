@@ -62,22 +62,28 @@ import edu.wpi.first.util.datalog.FloatLogEntry;
       this.suppliers = suplliers;
       this.meta = "Type:" + type + ";Subtype:" + subType + ";" + meta;
       updateNetworkTable = (logLevel == 4 || logLevel == 3);
-      isDouble = suplliers[0].isFloat();
-      isArray = suplliers.length > 1;
+      if(suplliers == null) {
+        isDouble = true;
+        isArray = false;
+
+      } else {
+        isDouble = suplliers[0].isFloat();
+        isArray = suplliers.length > 1;
+      }
       if(updateNetworkTable) {
         ntPublisher = new Publisher[suplliers.length];
       }
       if(!isArray) {
         if(isDouble) { // Single Double
             entry = new FloatLogEntry(logManager.log, name, this.meta);
-            floatData = new float[] {suplliers[0].getFloat()};
+            floatData = new float[] {0};
             if(updateNetworkTable) {
                 DoubleTopic dt = this.logManager.table.getDoubleTopic(name);
                 ntPublisher[0] = dt.publish();
             }
         } else { // Single Boolean
             entry = new BooleanLogEntry(logManager.log, name, this.meta);
-            booleanData = new boolean[] {suplliers[0].getBoolean()};
+            booleanData = new boolean[] {true};
             if(updateNetworkTable) {
                 BooleanTopic bt = this.logManager.table.getBooleanTopic(name);
                 ntPublisher[0] = bt.publish();
@@ -109,6 +115,11 @@ import edu.wpi.first.util.datalog.FloatLogEntry;
       }
       logEntries.add(this);
     }
+
+    public LogEntry(String name, int logLevel) {
+        this(name, null, logLevel, "data", "", "");
+    }
+
 
     /*
      * perform a periodic log
