@@ -1,4 +1,4 @@
-package frc.Demacia.utils;
+package frc.Demacia.utils.Log;
 
 import static frc.Demacia.utils.constants.UtilsContants.*;
 
@@ -24,11 +24,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.Demacia.utils.Log.ConsoleAlert;
 
-public class LogManager extends SubsystemBase {
+public class OldLogManager extends SubsystemBase {
 
-  public static LogManager logManager = new LogManager(); // singelton reference
+  public static OldLogManager logManager = new OldLogManager(); // singelton reference
 
   private DataLog log;
   private NetworkTableInstance ntInst = NetworkTableInstance.getDefault();
@@ -188,7 +187,7 @@ public class LogManager extends SubsystemBase {
   ArrayList<LogEntry> logEntries = new ArrayList<>();
 
   // Log managerconstructor
-  private LogManager() {
+  private OldLogManager() {
 
     DataLogManager.start();
     DataLogManager.logNetworkTables(false);
@@ -222,10 +221,10 @@ public class LogManager extends SubsystemBase {
   }
 
   public static void removeInComp() {
-    for (int i = 0; i < LogManager.logManager.logEntries.size(); i++) {
-      LogManager.logManager.logEntries.get(i).removeInComp();
-      if (LogManager.logManager.logEntries.get(i).logLevel == 1) {
-        LogManager.logManager.logEntries.remove(LogManager.logManager.logEntries.get(i));
+    for (int i = 0; i < OldLogManager.logManager.logEntries.size(); i++) {
+      OldLogManager.logManager.logEntries.get(i).removeInComp();
+      if (OldLogManager.logManager.logEntries.get(i).logLevel == 1) {
+        OldLogManager.logManager.logEntries.remove(OldLogManager.logManager.logEntries.get(i));
         i--;
       }
     }
