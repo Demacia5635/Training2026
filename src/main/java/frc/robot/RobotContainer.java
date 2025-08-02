@@ -20,6 +20,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 //  private final MotorExampleSubsytem motorExample = new MotorExampleSubsytem();
 //  private final Command autoCommand = new MotorExampleCommand(motorExample);
+  private static Robot robot;
+  public static int N_CYCLE = 0;
+  public static double CYCLE_TIME = 0.02;
   public final ModuleSubsystem module = new ModuleSubsystem();
   public final MotorExampleSubsytem motorExample = new MotorExampleSubsytem();
 
@@ -27,7 +30,9 @@ public class RobotContainer {
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  public RobotContainer(Robot robot) {
+    RobotContainer.robot = robot;
+    RobotContainer.CYCLE_TIME = robot.getPeriod();
     configureBindings();
   }
 
@@ -43,6 +48,14 @@ public class RobotContainer {
 
    private void configureBindings() {
 //    controller.a().onTrue(aCommand);
+  }
+
+  public static boolean isEnabled() {
+    return robot.isEnabled();
+  }
+
+  public void periodic() {
+    N_CYCLE++;
   }
 
   /**
