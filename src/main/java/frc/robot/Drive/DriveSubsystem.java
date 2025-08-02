@@ -17,6 +17,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -60,6 +61,8 @@ public class DriveSubsystem extends SubsystemBase {
         robotField = new Field2d();
         SmartDashboard.putData("Drive", this);
         SmartDashboard.putData("Robot Position", robotField);
+        SmartDashboard.putData("Steer Power", getSteerPowerCommand());
+        SmartDashboard.putData("Drive Power", getDrivePowerCommand());
         setDefaultCommand(new RunCommand(this::drive, this));
         controller.start().onTrue(new InstantCommand(this::setFieldHeading, this).ignoringDisable(true));
     }
@@ -69,6 +72,25 @@ public class DriveSubsystem extends SubsystemBase {
         targetChassisSpeeds.vyMetersPerSecond = -XboxUtils.getJSvalue(controller, JoystickSide.RightX) * Constants.MAX_SPEED;
         targetChassisSpeeds.omegaRadiansPerSecond = XboxUtils.getNormalized(controller.getLeftTriggerAxis() - controller.getRightTriggerAxis()) * Constants.MAX_OMEGA;
         setSpeeds(targetChassisSpeeds);
+    }
+
+    private Command getSteerPowerCommand() {
+        SmartDashboard.putNumber("Steer Power:", 0);
+        return new RunCommand(()-> { 
+                double power = SmartDashboard.getNumber("Steer Power:", 0); 
+                for(SwerveModule m : modules) {
+                    m.setSteerPower(power);
+                }
+            },this);
+    }
+    private Command getDrivePowerCommand() {
+        SmartDashboard.putNumber("Drive Power:", 0);
+        return new RunCommand(()-> { 
+                double power = SmartDashboard.getNumber("Drive Power:", 0); 
+                for(SwerveModule m : modules) {
+                    m.setDrivePower(power);
+                }
+            },this);
     }
 
     public void setFieldHeading() {

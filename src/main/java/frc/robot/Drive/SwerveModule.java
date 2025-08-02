@@ -13,14 +13,14 @@ import frc.Demacia.utils.Motors.MotorInterface;
 import frc.Demacia.utils.Motors.TalonMotor;
 
 public class SwerveModule {
-    MotorInterface steer;
-    MotorInterface drive;
-    CANcoder absEncoder;
-    Constants.ModuleConfig config;
-    StatusSignal<Angle> absEncoderSignal;
-    SwerveModuleState state = new SwerveModuleState();
-    SwerveModulePosition position = new SwerveModulePosition();
-    double lastSteerPosition = 0;
+    private MotorInterface steer;
+    private MotorInterface drive;
+    private CANcoder absEncoder;
+    protected Constants.ModuleConfig config;
+    private StatusSignal<Angle> absEncoderSignal;
+    protected SwerveModuleState state = new SwerveModuleState();
+    protected SwerveModulePosition position = new SwerveModulePosition();
+    private double lastSteerPosition = 0;
 
     private static final double STEER_TO_DISTANCE_RATIO = 0.1;
 
@@ -72,6 +72,19 @@ public class SwerveModule {
         targetAngle = currentAngle + diff;
         steer.setPositionVoltage(targetAngle);
         drive.setVelocity(targetVelocity);
+    }
+
+    public void setSteerPower(double power) {
+        steer.setDuty(power);
+    }
+    public void setDrivePower(double power) {
+        drive.setDuty(power);
+    }
+    public void setSteerAngle(double angle) {
+        steer.setPositionVoltage(angle);
+    }
+    public void setDriveVelocity(double velocity) {
+        drive.setVelocity(velocity);
     }
 
 }
