@@ -2,7 +2,7 @@ package frc.robot.Drive;
 
 import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.Demacia.utils.TalonConfig;
+import frc.Demacia.utils.Motors.TalonConfig;
 
 public class Constants {
 

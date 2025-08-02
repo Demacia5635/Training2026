@@ -2,8 +2,8 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.Demacia.utils.SparkMotor;
-import frc.Demacia.utils.TalonMotor;
+import frc.Demacia.utils.Motors.SparkMotor;
+import frc.Demacia.utils.Motors.TalonMotor;
 import frc.robot.Constants;
 
 public class MotorExampleSubsytem extends SubsystemBase {

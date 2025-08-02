@@ -1,4 +1,4 @@
-package frc.Demacia.utils;
+package frc.Demacia.utils.Motors;
 
 /**
  * Abstract base class for motor configurations

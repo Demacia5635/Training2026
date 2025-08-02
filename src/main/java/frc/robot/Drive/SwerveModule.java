@@ -9,7 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
-import frc.Demacia.utils.TalonMotor;
+import frc.Demacia.utils.Motors.TalonMotor;
 
 public class SwerveModule {
     TalonMotor steer;

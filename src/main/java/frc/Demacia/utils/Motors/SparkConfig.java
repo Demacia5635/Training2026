@@ -1,5 +1,4 @@
-package frc.Demacia.utils;
-
+package frc.Demacia.utils.Motors;
 
 /** 
  * Class to hold all Spark motor configuration

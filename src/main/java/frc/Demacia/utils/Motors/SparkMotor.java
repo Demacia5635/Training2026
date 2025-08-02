@@ -1,4 +1,4 @@
-package frc.Demacia.utils;
+package frc.Demacia.utils.Motors;
 
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkLowLevel;

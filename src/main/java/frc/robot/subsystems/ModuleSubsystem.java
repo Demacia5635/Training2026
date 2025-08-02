@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.Demacia.utils.SparkConfig;
-import frc.Demacia.utils.SparkMotor;
+import frc.Demacia.utils.Motors.SparkConfig;
+import frc.Demacia.utils.Motors.SparkMotor;
 
 import static frc.robot.Constants.ModuleConstants.*;
 

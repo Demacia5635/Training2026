@@ -1,4 +1,4 @@
-package frc.Demacia.utils;
+package frc.Demacia.utils.Motors;
 
 public interface Motor {
     void changeSlot(int slot);
