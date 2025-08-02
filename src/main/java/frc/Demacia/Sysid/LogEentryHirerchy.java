@@ -14,6 +14,7 @@ public class LogEentryHirerchy {
     String name;
     MotorData motorData = null; // motor data if it is a motor
     int level = 0;
+    boolean isNewMotor = false;
 
 
     LogEentryHirerchy(String name, int level) {
@@ -81,6 +82,11 @@ public class LogEentryHirerchy {
     */
     void addMotorsData() {
         boolean isMotor = true;
+        if(entryData.startRecord.metadata.startsWith("Type:Motor")) {
+            isNewMotor = true;
+            motorData = new MotorData(this);
+            return;
+        }
         for(String fld : LogReader.MotorFields) {
             if(!hasChildWithData(fld)) {
                 isMotor = false;
