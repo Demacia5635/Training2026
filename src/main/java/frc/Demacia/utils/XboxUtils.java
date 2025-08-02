@@ -1,63 +1,64 @@
 package frc.Demacia.utils;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class XboxUtils {
 
-    public static double getJSvalue(XboxController controller, boolean useLeft, boolean useY, double deadband, boolean usePower) {
-        double value = 0;
-        if(useLeft) {
-            if(useY) {
-                value = -controller.getLeftY();
-            } else {
-                value = controller.getLeftX();
+        public static enum JoystickSide { LeftX, LeftY, RightX, RightY;
+            double value(XboxController controller) {
+                switch (this) {
+                    case LeftX:
+                        return controller.getLeftX();
+                    case LeftY:
+                        return -controller.getLeftY();
+                    case RightX:
+                        return controller.getRightX();
+                    case RightY:
+                        return -controller.getRightY();
+                    default:
+                        return 0;
+                }
+
             }
-        } else {
-            if(useY) {
-                value = -controller.getRightY();
-            } else {
-                value = controller.getRightX();
-            }
+            double value(CommandXboxController controller) {
+                return value(controller.getHID());
+            };
         }
-        return getNormalized(value, deadband, usePower);
-    }
+
 
     public static double getNormalized(double value, double deadband, boolean power) {
-        if(value < -deadband) {
-            if(power) {
-                return -value*value;
-            } else {
-                return value;
-            }
-        } else if(value > deadband) {
-            if(power) {
-                return value*value;
-            } else {
-                return value;
-            }
-        }
-        return 0;
+        return  value < -deadband ? (power ? -value*value : value):
+                value > deadband ? (power ? value*value : value) :
+                0;
     }
+    
     public static double getNormalized(double value, double deadband) {
         return getNormalized(value, deadband, true);
     }
     public static double getNormalized(double value) {
         return getNormalized(value, 0.1, true);
     }
-    public static double getJSvalue(XboxController controller, boolean useLeft, double deadband, boolean usePower) {
-        return getJSvalue(controller, useLeft, true, deadband, usePower);
+
+    public static double getJSvalue(XboxController controller, JoystickSide side, double deadband, boolean usePower) {
+        return getNormalized(side.value(controller), deadband, usePower);
     }
-    public static double getJSvalue(XboxController controller, boolean useLeft, double deadband) {
-        return getJSvalue(controller, useLeft, true, deadband, true);
+    public static double getJSvalue(XboxController controller, JoystickSide side, double deadband) {
+        return getJSvalue(controller, side, deadband, true);
     }
-    public static double getJSvalue(XboxController controller, boolean useLeft) {
-        return getJSvalue(controller, useLeft, true, 0.1, true);
+    public static double getJSvalue(XboxController controller, JoystickSide side) {
+        return getJSvalue(controller, side, 0.1, true);
     }
-    public static double getJSXvalue(XboxController controller, boolean useLeft) {
-        return getJSvalue(controller, useLeft, false, 0.1, true);
+
+    public static double getJSvalue(CommandXboxController controller, JoystickSide side, double deadband, boolean usePower) {
+        return getJSvalue(controller.getHID(),side,deadband,usePower);
     }
-    public static double getJSYvalue(XboxController controller, boolean useLeft) {
-        return getJSvalue(controller, useLeft, true, 0.1, true);
+    public static double getJSvalue(CommandXboxController controller, JoystickSide side, double deadband) {
+        return getJSvalue(controller.getHID(), side, deadband, true);
     }
+    public static double getJSvalue(CommandXboxController controller, JoystickSide side) {
+        return getJSvalue(controller.getHID(), side, 0.1, true);
+    }
+
 
 }
