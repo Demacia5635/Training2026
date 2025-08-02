@@ -57,6 +57,7 @@ public class LogSupplier {
       isFloat = false;
       this.name = name;
     }
+    
     float getFloat() {
       lastValue = newValue;
       if(statusSignal != null) {
