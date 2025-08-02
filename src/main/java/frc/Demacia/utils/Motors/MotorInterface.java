@@ -22,4 +22,7 @@ public interface MotorInterface {
     double getCurrentVoltage();
 
     void setEncoderPosition(double position);
+    void configPidFf(int slot);
+    void configMotion();
+
 }

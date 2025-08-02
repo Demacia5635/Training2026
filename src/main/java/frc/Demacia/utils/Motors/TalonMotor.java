@@ -453,7 +453,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     /**
      * creates a widget in elastic to configure motion magic in hot reload
      */
-    public void configMotionMagic() {
+    public void configMotion() {
         Command configMotionMagic = new InstantCommand(() -> {
             MotionMagicConfigs cfg = new MotionMagicConfigs();
 

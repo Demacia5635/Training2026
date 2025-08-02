@@ -312,4 +312,9 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   public void setEncoderPosition(double position) {
     encoder.setPosition(position);
   }
+
+  @Override
+  public void configMotion() {
+    
+  }
 }
