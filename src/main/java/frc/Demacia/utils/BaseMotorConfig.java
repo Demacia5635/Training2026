@@ -5,7 +5,11 @@ package frc.Demacia.utils;
  * Contains common fields and methods shared between different motor controller types
  */
 public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
+
+    public static enum MotorControllerType { TalonFX, SparkMax};
+
     public int id;                  // CAN bus ID
+    public MotorControllerType motorType  = MotorControllerType.TalonFX;
     public String name;             // Name of the motor - used for logging
 
     public double maxVolt = 12;     // Max Volt allowed
@@ -42,7 +46,6 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
         double kv;
         double ka;
         double kg;
-        double kf;
 
         closeLoopParam(double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
             this.ka = ka;
@@ -52,7 +55,6 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
             this.ks = ks;
             this.kv = kv;
             this.kg = kg;
-            this.kf = 0;
         }
         closeLoopParam(double kp, double ki, double kd, double kf) {
             this.ka = 0;
@@ -60,9 +62,8 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
             this.ki = ki;
             this.kp = kp;
             this.ks = 0;
-            this.kv = 0;
+            this.kv = kf;
             this.kg = 0;
-            this.kf = kf;
         }
     }
 

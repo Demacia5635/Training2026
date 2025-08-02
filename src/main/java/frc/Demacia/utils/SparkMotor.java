@@ -8,31 +8,31 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.RobotContainer;
 
 public class SparkMotor extends SparkMax implements Sendable, Motor {
 
-  SparkConfig config;
-  String name;
-  SparkMaxConfig cfg;
-  ClosedLoopSlot slot = ClosedLoopSlot.kSlot0;
-  ControlType controlType = ControlType.kDutyCycle;
+  private SparkConfig config;
+  private String name;
+  private SparkMaxConfig cfg;
+  private ClosedLoopSlot slot = ClosedLoopSlot.kSlot0;
+  private ControlType controlType = ControlType.kDutyCycle;
 
-  LogManager.LogEntry dutyCycleEntry;
-  LogManager.LogEntry velocityEntry;
-  LogManager.LogEntry positionEntry;
+  private LogManager.LogEntry dutyCycleEntry;
+  private LogManager.LogEntry velocityEntry;
+  private LogManager.LogEntry positionEntry;
 
-  String lastControlMode;
-  double lastClosedLoopSP;
-  double lastClosedLoopError;
-  double lastPosition;
-  double lastVelocity;
-  double lastAcceleration;
-  double lastVoltage;
-  double setPoint = 0;
+  private String lastControlMode;
+  private double lastVelocity;
+  private double lastAcceleration;
+  private double setPoint = 0;
+  private int lastCycleNum = 0;
+  private double lastTime = 0;
 
   public SparkMotor(SparkConfig config) {
     super(config.id, SparkLowLevel.MotorType.kBrushless);
@@ -51,12 +51,12 @@ public class SparkMotor extends SparkMax implements Sendable, Motor {
     cfg.inverted(config.inverted);
     cfg.idleMode(config.brake ? SparkBaseConfig.IdleMode.kBrake : SparkBaseConfig.IdleMode.kCoast);
     cfg.voltageCompensation(config.maxVolt);
-    cfg.closedLoop.pidf(config.pid.kp, config.pid.ki, config.pid.kd, config.pid.kf, ClosedLoopSlot.kSlot0);
+    cfg.closedLoop.pidf(config.pid.kp, config.pid.ki, config.pid.kd, config.pid.kv, ClosedLoopSlot.kSlot0);
     if (config.pid1 != null) {
-      cfg.closedLoop.pidf(config.pid1.kp, config.pid1.ki, config.pid1.kd, config.pid1.kf, ClosedLoopSlot.kSlot1);
+      cfg.closedLoop.pidf(config.pid1.kp, config.pid1.ki, config.pid1.kd, config.pid1.kv, ClosedLoopSlot.kSlot1);
     }
     if (config.pid2 != null) {
-      cfg.closedLoop.pidf(config.pid2.kp, config.pid2.ki, config.pid2.kd, config.pid2.kf, ClosedLoopSlot.kSlot2);
+      cfg.closedLoop.pidf(config.pid2.kp, config.pid2.ki, config.pid2.kd, config.pid2.kv, ClosedLoopSlot.kSlot2);
     }
     cfg.encoder.positionConversionFactor(config.motorRatio);
     cfg.encoder.velocityConversionFactor(config.motorRatio / 60);
@@ -121,12 +121,14 @@ public class SparkMotor extends SparkMax implements Sendable, Motor {
    */
   public void setDuty(double power) {
     super.set(power);
+    dutyCycleEntry.log(power);
     controlType = ControlType.kDutyCycle;
 
   }
 
   public void setVoltage(double voltage) {
     super.setVoltage(voltage);
+    dutyCycleEntry.log(voltage/12.0);
     controlType = ControlType.kVoltage;
   }
 
@@ -140,6 +142,7 @@ public class SparkMotor extends SparkMax implements Sendable, Motor {
    */
   public void setVelocity(double velocity, double feedForward) {
     super.closedLoopController.setReference(velocity, ControlType.kMAXMotionVelocityControl, slot, feedForward);
+    velocityEntry.log(velocity);
     controlType = ControlType.kMAXMotionVelocityControl;
     setPoint = velocity;
   }
@@ -150,6 +153,7 @@ public class SparkMotor extends SparkMax implements Sendable, Motor {
 
   public void setPositionVoltage(double position, double feedForward) {
     super.closedLoopController.setReference(position, ControlType.kPosition, slot, feedForward);
+    positionEntry.log(position);
     controlType = ControlType.kPosition;
     setPoint = position;
   }
@@ -174,16 +178,19 @@ public class SparkMotor extends SparkMax implements Sendable, Motor {
     return Math.cos(positin * config.posToRad) * config.kSin;
   }
 
+  @Override
   public String getCurrentControlMode() {
     return lastControlMode;
   }
 
-  public double getCloseLoopError() {
+  @Override
+  public double getCurrentClosedLoopError() {
     return controlType == ControlType.kMAXMotionPositionControl ? setPoint - getCurrentPosition()
         : controlType == ControlType.kMAXMotionVelocityControl ? setPoint - getCurrentVelocity() : 0;
   }
 
-  public double getSetPoint() {
+  @Override
+  public double getCurrentClosedLoopSP() {
     return setPoint;
   }
 
@@ -257,7 +264,19 @@ public class SparkMotor extends SparkMax implements Sendable, Motor {
   }
 
   public double getCurrentVelocity() {
-    return encoder.getVelocity();
+    double velocity = encoder.getVelocity();
+    if(lastCycleNum != RobotContainer.N_CYCLE) {
+      lastCycleNum = RobotContainer.N_CYCLE;
+      double time = Timer.getFPGATimestamp();
+      lastAcceleration = (velocity - lastVelocity) / (time - lastTime);
+      lastTime = time;
+      lastVelocity = velocity;
+    }
+    return velocity;
+  }
+
+  public double getCurrentAcceleration() {
+    return lastAcceleration;
   }
 
   public double getCurrentVoltage() {
@@ -302,5 +321,6 @@ public class SparkMotor extends SparkMax implements Sendable, Motor {
   public void setMotion(double position) {
     setMotion(position, 0);
   }
+
 
 }

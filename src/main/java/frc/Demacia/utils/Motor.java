@@ -12,4 +12,11 @@ public interface Motor {
     void setPositionVoltage(double position);
     void setVelocityWithFeedForward(double velocity);
     void setMotionWithFeedForward(double velocity);
+    String getCurrentControlMode();
+    double getCurrentClosedLoopSP();
+    double getCurrentClosedLoopError();
+    double getCurrentPosition();
+    double getCurrentVelocity();
+    double getCurrentAcceleration();
+    double getCurrentVoltage();
 }

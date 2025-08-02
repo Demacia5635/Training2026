@@ -22,11 +22,13 @@ public class TalonConfig extends BaseMotorConfig<TalonConfig> {
     public TalonConfig(int id, CANBus canbus, String name) {
         super(id, name);
         this.canbus = canbus;
+        motorType = MotorControllerType.TalonFX;
     }
 
     public TalonConfig(int id, String name, TalonConfig config) {
         super(id, name);
         this.canbus = config.canbus;
+        motorType = MotorControllerType.TalonFX;
         copyBaseFields(config);
     }
    
