@@ -33,12 +33,38 @@ public class MyFirstSubsystem extends SubsystemBase {
         drive.set(power);
     }
     // Method to stop the motor
-    public void stop() {
-      SteersetPower(0);
-      drivesetPower(0);
+    public void stopDrive() {
+        setPower(0, drive);
     }
-    public double BoardValue() { //in degrees
-        return 360*drive.getPosition().getValueAsDouble()/12.8;
+    public void stopSteer() {
+        setPower(0, steer);
+    }
+    public void stopAll() {
+     stopDrive();
+     stopSteer();
+    }
+
+    public void Movetoangle(TalonFX motor, double gearRatioforSaidMotor, double angle) {
+        if(360*motor.getPosition().getValueAsDouble()/gearRatioforSaidMotor < angle) {
+        setPower(Constants.MyFirstSubsystemConstants.SET_POWER, motor);
+        WaitUntilCommand(BoardValue() >= angle);
+        return;
+        }else if(360*motor.getPosition().getValueAsDouble()/gearRatioforSaidMotor > angle){
+        setPower(-Constants.MyFirstSubsystemConstants.SET_POWER, motor);
+        WaitUntilCommand(BoardValue() <= angle);
+        return;
+        }else{
+            return;
+        }
+        
+        }
+            private void WaitUntilCommand(boolean b) {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'WaitUntilCommand'");
+            }
+        
+            public double BoardValue() { //in degrees
+        return 360*drive.getPosition().getValueAsDouble()/Constants.MyFirstSubsystemConstants.GEAR_RATIO1;
     }
     public double BoardValue2() { //in degrees
         return 360*steer.getPosition().getValueAsDouble()/12.8;
