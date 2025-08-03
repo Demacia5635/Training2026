@@ -61,15 +61,21 @@ public class SwerveModule {
         double targetAngle = state.angle.getRadians();
         double targetVelocity = state.speedMetersPerSecond;
         double currentAngle = steer.getCurrentPosition();
-        double diff = MathUtil.angleModulus(targetAngle-currentAngle);
-        if(diff < -Math.PI/2) {
-            diff += Math.PI;
+        double diff = MathUtil.inputModulus(targetAngle-currentAngle, -180, 180);
+        if(diff < -90) {
+            diff += 180;
             targetVelocity = -targetVelocity;
-        } else if(diff < Math.PI) {
-            diff -= Math.PI;
+        } else if(diff < 90) {
+            diff -= 180;
             targetVelocity = -targetVelocity;            
         }
-        targetAngle = currentAngle + diff;
+        if(diff > 10) {
+            targetAngle = currentAngle + diff + 10;
+        } else if(diff > -10) {
+            targetAngle = currentAngle + diff*2;
+        } else {
+            targetAngle = currentAngle + diff - 10;
+        }
         steer.setPositionVoltage(targetAngle);
         drive.setVelocity(targetVelocity);
     }
