@@ -34,16 +34,16 @@ public class MyFirstSubsystem extends SubsystemBase {
       setPower2(0);
     }
     public double BoardValue() { //in degrees
-        return 360*motor.getPosition().getValueAsDouble()/12.8;
+        return 360*motor.getPosition().getValueAsDouble()/Constants.MyFirstSubsystemConstants.GEAR_RATIO1;
     }
     public double BoardValue2() { //in degrees
-        return 360*motor2.getPosition().getValueAsDouble()/12.8;
+        return 360*motor2.getPosition().getValueAsDouble()/Constants.MyFirstSubsystemConstants.GEAR_RATIO2;
     }
     public double BoardValueRad() { //in radians
-        return (2*Math.PI)*motor.getPosition().getValueAsDouble()/12.8;
+        return (2*Math.PI)*motor.getPosition().getValueAsDouble()/Constants.MyFirstSubsystemConstants.GEAR_RATIO1;
     }
     public double BoardValueRad2() { //in radians
-        return (2*Math.PI)*motor2.getPosition().getValueAsDouble()/12.8;
+        return (2*Math.PI)*motor2.getPosition().getValueAsDouble()/Constants.MyFirstSubsystemConstants.GEAR_RATIO2;
     }
     // builder.addDoubleProperty("remaining", ()->target-getPosition(),null); // lambda function variable
     @Override
