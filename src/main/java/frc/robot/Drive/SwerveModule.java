@@ -69,14 +69,14 @@ public class SwerveModule {
             diff -= 180;
             targetVelocity = -targetVelocity;            
         }
-        if(diff > 10) {
-            targetAngle = currentAngle + diff + 10;
-        } else if(diff > -10) {
+        if(diff > Constants.MAX_SET_STATE_STEER_ADDITION) {
+            targetAngle = currentAngle + diff + Constants.MAX_SET_STATE_STEER_ADDITION;
+        } else if(diff > -Constants.MAX_SET_STATE_STEER_ADDITION) {
             targetAngle = currentAngle + diff*2;
         } else {
-            targetAngle = currentAngle + diff - 10;
+            targetAngle = currentAngle + diff - Constants.MAX_SET_STATE_STEER_ADDITION;
         }
-        steer.setPositionVoltage(targetAngle);
+        steer.setMotion(targetAngle);
         drive.setVelocity(targetVelocity);
     }
 

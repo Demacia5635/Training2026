@@ -28,6 +28,8 @@ public class Constants {
     public static final double MAX_Y_ACCELERATION = 5;
     public static final double MAX_Y_VELOCITY_CHANGE = MAX_Y_ACCELERATION * CYCLE_TIME;
 
+    public static double MAX_SET_STATE_STEER_ADDITION = 5.0;
+
     public static final ModuleConfig[] CONFIGS = {
             new ModuleConfig(1, 2, 3, X_POSITION, Y_POSITION, 22.6),
             new ModuleConfig(4, 5, 6, X_POSITION, -Y_POSITION, 35.7),
@@ -45,7 +47,7 @@ public class Constants {
             .withInvert(true)
             .withPID(0, 0, 0, 0, 0, 0, 0)
             .withRampTime(0.2)
-            .withVelocities(Math.PI * 4, Math.PI * 8, Math.PI * 16)
+            .withVelocities(480, 960, 2000)
             .withVolts(8);
     public static final TalonConfig BASE_DRIVE_CONFIG = new TalonConfig(0, CANBUS, "BASE_DRIVE")
             .withBrake(true)

@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -39,7 +40,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     DutyCycleOut dutyCycle = new DutyCycleOut(0);
     VoltageOut voltageOut = new VoltageOut(0);
     VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
-    MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
+    MotionMagicExpoVoltage motionMagicVoltage = new MotionMagicExpoVoltage(0).withSlot(0);
     PositionVoltage positionVoltage = new PositionVoltage(0).withSlot(0);
 
     StatusSignal<ControlModeValue> controlModeSignal;
@@ -122,6 +123,9 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         cfg.MotionMagic.MotionMagicAcceleration = config.maxAcceleration / unitMultiplier;
         cfg.MotionMagic.MotionMagicCruiseVelocity = config.maxVelocity / unitMultiplier;
         cfg.MotionMagic.MotionMagicJerk = config.maxJerk / unitMultiplier;
+        cfg.MotionMagic.MotionMagicExpo_kA = config.pid.ka;
+        cfg.MotionMagic.MotionMagicExpo_kV = config.pid.kv;
+        cfg.MotionMagic.MotionMagicCruiseVelocity = 0;
 
         getConfigurator().apply(cfg);
     }
