@@ -6,8 +6,12 @@ package frc.robot;
 
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Drive;
+import frc.robot.commands.PID;
 import frc.robot.commands.Steer90Deg;
 import frc.robot.commands.time;
 import frc.robot.subsystems.Modle;
@@ -24,6 +28,8 @@ public class RobotContainer {
   time command = new time(0.4, 4.0, subsystem);
   Modle subModule = new Modle();
   Steer90Deg steerCommand = new Steer90Deg(0.4, 90, subModule);
+  Drive driveCommand = new Drive(0.4, 1.0, subModule);
+  PID pid = new PID(subModule); // Assuming PID is a class you have defined for PID control
   // The robot's subsystems and commands are defined here...
   
   
@@ -53,6 +59,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return new Steer90Deg(0.4, 90, subModule);
+    return pid;
   }
 }

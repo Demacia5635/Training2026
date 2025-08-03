@@ -41,12 +41,12 @@ public class Steer90Deg extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) { modle.motor(0);}
+  public void end(boolean interrupted) { modle.setSteerPower(0);}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(angle - modle.getSteerPosition()) < 10; // Command is finished when within 1 degree of target angle
+    return Math.abs(angle - modle.getSteerPosition()) < 3; // Command is finished when within 1 degree of target angle
    
     
   }
