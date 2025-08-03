@@ -58,7 +58,7 @@ public class SwerveModule {
     }
 
     public void setState(SwerveModuleState state) {
-        double targetAngle = state.angle.getRadians();
+        double targetAngle = state.angle.getDegrees();
         double targetVelocity = state.speedMetersPerSecond;
         double currentAngle = steer.getCurrentPosition();
         double diff = MathUtil.inputModulus(targetAngle-currentAngle, -180, 180);
