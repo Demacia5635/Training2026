@@ -17,4 +17,10 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
   public static final int motorId = 1;
+  public static final int driveMotor = 11;
+  public static final int steerMotor = 10;
+  public static final double geerRatio = 12.8;
+  public static final double KP = 1;
+  public static final double KI = 0;
+  public static final double KD = 0;
 }
