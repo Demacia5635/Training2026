@@ -23,12 +23,11 @@ public class RobotContainer {
     public void initialize() {
       subsystem.SteerMovetoangle(90);
       return new ParallelCommandGroup(
-        new DriveMovetoangle(1/Math.PI*Constants.MyFirstSubsystemConstants.WHEEL_DIA_METRES);
-        new SteerMovetoangle(135);
-      );
+        new DriveMovetoangle(360*1/Math.PI*Constants.MyFirstSubsystemConstants.WHEEL_DIA_METRES);
+        new SteerMovetoangle(135));
       return new ParallelCommandGroup(
-
-      );
+        new SteerMovetoangle(0);
+        new DriveMovetoangle(360*1/Math.PI*Constants.MyFirstSubsystemConstants.WHEEL_DIA_METRES));
 
     };
     
