@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Drive.DriveSubsystem;
+import frc.robot.Drive.SingleModuleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -23,8 +24,9 @@ public class RobotContainer {
   public static int N_CYCLE = 0;
   public static double CYCLE_TIME = 0.02;
 
-  private final CommandXboxController controller = new CommandXboxController(0);
-  public DriveSubsystem driveSubsystem = new DriveSubsystem(controller);
+//  private final CommandXboxController controller = new CommandXboxController(0);
+//  public DriveSubsystem driveSubsystem = new DriveSubsystem(controller);
+  public SingleModuleSubsystem singleModuleSubsystem = new SingleModuleSubsystem();
   
   //public final ModuleSubsystem module = new ModuleSubsystem();
   //public final MotorExampleSubsytem motorExample = new MotorExampleSubsytem();

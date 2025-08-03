@@ -15,6 +15,24 @@ public class SingleModuleSubsystem extends SubsystemBase {
     SwerveModulePosition[] modulePositions;
     SwerveModuleState[] moduleState;
 
+    /*
+     * TODO
+     * - add the system to RobotContainer - remove all others
+     * - check elastic for steer/drive/abs data and check units and direction
+     * - see all log table - make sure all OK
+     * - activate steer and drive power - collect log
+     * - run sysid -
+     *      - transfer log to PC
+     *      - set newLog in LogReader
+     *      - check the syslog - list of motors, number of data, calculation
+     * - display the PIDFF of steer in ekastic
+     * - set data
+     * - rotate steer using the set position - using position voltage
+     * - update all gains in constants
+     * - do the same for drive velocity
+     * - check using steer motion instead of positionVoltage
+     */
+
     public SingleModuleSubsystem() {
         super();
         modules = new SwerveModule[Constants.CONFIGS1.length];
