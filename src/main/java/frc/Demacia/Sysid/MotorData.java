@@ -11,9 +11,7 @@ public class MotorData {
 
     public MotorData(LogEentryHirerchy motor) {
         this.motor = motor;
-        if(motor.isNewMotor) {
-            createNewData();
-        } else {
+        if(motor != null) {
             for(int i = 0; i < LogReader.MotorFields.length; i++) {
                 String s = LogReader.MotorFields[i];
                 LogEentryHirerchy e = motor.child(s);
@@ -22,17 +20,6 @@ public class MotorData {
             createData();        
         }
     }
-    private void createNewData() {
-        motor.entryData.resetIterator();
-        DataLogRecord record = motor.entryData.next();
-        while(record != null) {
-            double[] d = record.getDoubleArray();
-            data.add(new MotorTimeData(d[2], d[1],d[3],d[0],record.getTimestamp()));
-            record = motor.entryData.next();
-        }
-        updateAcceleration();
-    }
-
 
     private void createData() {
         DataLogRecord[] records = new DataLogRecord[LogReader.MotorFields.length+1];

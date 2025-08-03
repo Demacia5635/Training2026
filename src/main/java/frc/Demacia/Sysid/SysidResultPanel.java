@@ -79,9 +79,8 @@ public class SysidResultPanel extends JPanel {
         applyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LogEentryHirerchy motor = app.getMotor();
-                if(motor != null) {
-                    MotorData motorData = motor.getMotorData();
+                MotorData motorData = app.getMotor();
+                if(motorData != null) {
                     SysidCalculate calculate = new SysidCalculate(motorData, getSelectedTypes());
                     velLabels[1].setText(String.format("0 - %4.2f",calculate.getRange(VelocityRange.SLOW)));
                     velLabels[2].setText(String.format("%4.2f - %4.2f",calculate.getRange(VelocityRange.SLOW),calculate.getRange(VelocityRange.MID)));

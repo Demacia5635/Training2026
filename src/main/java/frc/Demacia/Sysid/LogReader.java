@@ -6,8 +6,6 @@ import java.util.Vector;
 import edu.wpi.first.util.datalog.DataLogReader;
 import edu.wpi.first.util.datalog.DataLogRecord;
 
-
-
 /**
  * Class to read the log
  * Create the hirerchy of entries
@@ -36,8 +34,10 @@ public class LogReader {
         try {
             DataLogReader reader = new DataLogReader(file);
             reader.forEach(this::process); // process all records
-            addHirerchy(); // build the hirerchy
-            top.addMotorsData();
+            if(!Sysid.newLog) {
+                addHirerchy(); // build the hirerchy
+                top.addMotorsData();
+            }
         } catch (IOException e) {
             System.err.println(" Can not open Log File " + file + " error:" + e.getMessage());
             throw e;
