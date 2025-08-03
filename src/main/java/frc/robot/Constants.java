@@ -14,15 +14,15 @@ package frc.robot;
  */
 public final class Constants {
   public static class MyFirstSubsystemConstants {
-    public static final int MOTOR_ID = 10;
-    public static final int MOTOR_ID2 = 11;
+    public static final int SMOTOR_ID = 11;
     public static final String MOTOR_CAN = "rio";
-    public static final double GEAR_RATIO1 = 12.8;
-    public static final double GEAR_RATIO2 = 8.14;
-    public static final double SET_POWER = 0.3;
+    public static final int DMOTOR_ID = 10;
   }
 
   public static class OperatorConstants {
     public static final int DriverControllerPort = 0;
+    public static final double SgearRatio = 12.8;
+    public static final double DgearRatio = 8.14 ;
+    public static final double wheelDiameter = 10.16;
   }
 }

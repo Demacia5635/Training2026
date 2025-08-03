@@ -57,14 +57,14 @@ public double getDPosition() {
     double wheelCircumference = Math.PI * OperatorConstants.wheelDiameter;
     double rotations = distanceInCm / wheelCircumference; 
     double targetPosition = rotations*360+getDPosition();
-    double currnt = getDPosition();
-    double error = targetPosition - currnt;
+    double current = getDPosition();
+    double error = targetPosition - current;
     power = power*Math.signum(error);
      while (Math.abs(error) > 10){
-     currnt = getDPosition();
-     error = targetPosition - currnt;
+     current = getDPosition();
+     error = targetPosition - current;
     SmartDashboard.putNumber("drive Error", error);
-    SmartDashboard.putNumber("drive angle", currnt);
+    SmartDashboard.putNumber("drive angle", current);
     SmartDashboard.putNumber("drive Target ", targetPosition);
     setDPower(power);
     SmartDashboard.putNumber("drive Power", power);
@@ -75,14 +75,14 @@ public double getDPosition() {
         setDPower(power);
     }
     public void steer(double targetAngle, double power){
-        double currnt = getSPosition();
-    double error = targetAngle - currnt;
+        double current = getSPosition();
+    double error = targetAngle - current;
     power = power*Math.signum(error);
      while (Math.abs(error) > 10){
-     currnt = getSPosition();
-     error = targetAngle - currnt;
+     current = getSPosition();
+     error = targetAngle - current;
     SmartDashboard.putNumber("steering Error", error);
-    SmartDashboard.putNumber("steering angle", currnt);
+    SmartDashboard.putNumber("steering angle", current);
     SmartDashboard.putNumber("steering Target ", targetAngle);
     setSPower(power);
     SmartDashboard.putNumber("steering Power", power);
