@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import frc.robot.commands.MoveToAngle;
 import frc.robot.commands.MyFirstSubsystemCommand;
+import frc.robot.commands.PidTest;
+import frc.robot.subsystems.Motor;
 import frc.robot.subsystems.MyFirstSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -20,6 +23,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
   private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, 0.4, 10.0);
+  Motor motor = new Motor();
+  PidTest pidTest = new PidTest(motor);
+  MoveToAngle cmd = new MoveToAngle(motor);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -47,6 +53,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return autoCommand;
+    return cmd;
   }
 }
