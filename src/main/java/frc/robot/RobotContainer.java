@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-
+import frc.robot.commands.GoToAngle;
 import frc.robot.commands.MyFirstSubsystemCommand;
 import frc.robot.subsystems.MyFirstSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,29 +19,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
-  private Command susiesIdea = new Command() {
-    public void initialize() {
-      subsystem.SteerMovetoangle(90);
-      return new ParallelCommandGroup(
-        new DriveMovetoangle(360*1/Math.PI*Constants.MyFirstSubsystemConstants.WHEEL_DIA_METRES);
-        new SteerMovetoangle(135));
-      return new ParallelCommandGroup(
-        new SteerMovetoangle(0);
-        new DriveMovetoangle(360*1/Math.PI*Constants.MyFirstSubsystemConstants.WHEEL_DIA_METRES));
-
-    };
-    
-  };
-  
-  private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, Constants.MyFirstSubsystemConstants.SET_POWER, 10.0);
+  private final Command autoCommand = new GoToAngle(subsystem);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     configureBindings();
   }
- 
+
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -63,7 +48,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return autoCommand;
     return autoCommand;
   }
 }
