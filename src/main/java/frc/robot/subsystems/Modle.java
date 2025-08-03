@@ -18,6 +18,7 @@ public class Modle extends SubsystemBase {
 
     steerMotor = new TalonFX(Constants.steerMotorId); // Replace 1 with the actual CAN ID of your motor
     driveMotor = new TalonFX(Constants.steerMotorId); // Replace 1 with the actual CAN ID of your motor
+    steerMotor.setPosition(0); // Reset the position to 0 at the start
   }
   public void setSteerPower(double power) {
     // Set the motor power

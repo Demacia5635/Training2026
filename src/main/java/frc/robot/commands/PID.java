@@ -19,7 +19,7 @@ import frc.robot.subsystems.Modle;
 public class PID extends Command {
   /** Creates a new PID. */ 
   private double engle = 0;
-  private PIDController velocityController = new PIDController(0.0001, 0.0, 0.00001);
+  private PIDController velocityController = new PIDController(0.004, 0.0, 0.0003);
   private double currentAngle = 0;
   private Modle module; // Assuming Module is a class that represents your subsystem
 
