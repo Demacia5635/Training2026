@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.Demacia.utils.XboxUtils;
+import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
 import frc.Demacia.utils.XboxUtils.JoystickSide;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -54,7 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
             modulePositions[i] = modules[i].position;
         }
         kinematics = new SwerveDriveKinematics(modulePositionOnRobot);
-        gyro = new Pigeon2(Constants.GYRO_ID, Constants.CANBUS);
+        gyro = new Pigeon2(Constants.GYRO_ID, Canbus.Rio.canbus);
         gyroSignal = gyro.getYaw();
         poseEstimator = new SwerveDrivePoseEstimator(kinematics, getGyroRotation(), modulePositions,new Pose2d());
         pose = poseEstimator.getEstimatedPosition();

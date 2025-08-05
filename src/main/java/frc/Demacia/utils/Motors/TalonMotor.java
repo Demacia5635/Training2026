@@ -61,7 +61,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     double lastVoltage;
 
     public TalonMotor(TalonConfig config) {
-        super(config.id, config.canbus);
+        super(config.id, config.canbus.canbus);
         this.config = config;
         name = config.name;
         configMotor();
@@ -531,7 +531,6 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("TalonMotor");
         super.initSendable(builder);
-        builder.addDoubleProperty("CloseLoopSP", this::getCurrentClosedLoopSP, null);
         builder.addDoubleProperty("CloseLoopError", this::getCurrentClosedLoopError, null);
         builder.addDoubleProperty("Position", this::getCurrentPosition, null);
         builder.addDoubleProperty("Velocity", this::getCurrentVelocity, null);

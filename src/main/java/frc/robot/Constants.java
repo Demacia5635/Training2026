@@ -4,10 +4,10 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.CANBus;
 
 import frc.Demacia.utils.Motors.SparkConfig;
 import frc.Demacia.utils.Motors.TalonConfig;
+import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -19,7 +19,7 @@ import frc.Demacia.utils.Motors.TalonConfig;
  */
 public final class Constants {
   public static class Example {
-    public static final TalonConfig TALON_CONFIG = new TalonConfig(7,new CANBus("rio"), "talon example motor")
+    public static final TalonConfig TALON_CONFIG = new TalonConfig(7, Canbus.Rio, "talon example motor")
           .withBrake(true)
           .withCurrent(20)
           .withInvert(true)
@@ -70,7 +70,7 @@ public final class Constants {
   }
 
   public static class BaseConfigs {
-    public static final TalonConfig BASE_TALON_CONFIG = new TalonConfig(0, new CANBus("rio"), "base")
+    public static final TalonConfig BASE_TALON_CONFIG = new TalonConfig(0, Canbus.Rio, "base")
         .withBrake(true)
         .withCurrent(40)
         .withRampTime(0.3)

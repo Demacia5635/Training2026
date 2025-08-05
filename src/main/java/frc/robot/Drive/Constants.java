@@ -1,8 +1,8 @@
 package frc.robot.Drive;
 
-import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.Demacia.utils.Motors.TalonConfig;
+import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
 
 public class Constants {
 
@@ -14,8 +14,6 @@ public class Constants {
 
     public static final double X_POSITION = 0.35;
     public static final double Y_POSITION = 0.3;
-
-    public static CANBus CANBUS = new CANBus("rio");
 
     public static final int GYRO_ID = 13;
 
@@ -30,7 +28,7 @@ public class Constants {
 
     public static double MAX_SET_STATE_STEER_ADDITION = 5.0;
 
-    public static final TalonConfig BASE_STEER_CONFIG = new TalonConfig(0, CANBUS, "BASE_STEER")
+    public static final TalonConfig BASE_STEER_CONFIG = new TalonConfig(0, Canbus.Rio, "BASE_STEER")
             .withBrake(true)
             .withCurrent(15)
             .withDegreesMotor(MK4_STEER_RATIO)
@@ -40,7 +38,7 @@ public class Constants {
             .withVelocities(900, 1960, 3000)
             .withVolts(8)
             .withMaxPositionError(0.7);
-    public static final TalonConfig BASE_DRIVE_CONFIG = new TalonConfig(0, CANBUS, "BASE_DRIVE")
+    public static final TalonConfig BASE_DRIVE_CONFIG = new TalonConfig(0, Canbus.Rio, "BASE_DRIVE")
             .withBrake(true)
             .withCurrent(30)
             .withMeterMotor(L1_DRIVE_RATIO, Math.PI * WHEEL_DIAMETER)

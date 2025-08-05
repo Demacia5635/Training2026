@@ -1,14 +1,25 @@
 package frc.Demacia.utils.Motors;
 
+import com.ctre.phoenix6.CANBus;
+
 /**
  * Abstract base class for motor configurations
  * Contains common fields and methods shared between different motor controller types
  */
 public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
 
+    public static enum Canbus { Rio("rio"), CANIvore("CANIvore");
+    
+        public CANBus canbus;
+        private Canbus(String name) {
+            this.canbus = new CANBus(name);
+        }
+    } 
+
     public static enum MotorControllerType { TalonFX, SparkMax};
 
     public int id;                  // CAN bus ID
+    public Canbus canbus = Canbus.Rio;
     public MotorControllerType motorType  = MotorControllerType.TalonFX;
     public String name;             // Name of the motor - used for logging
 
@@ -76,6 +87,10 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
     public BaseMotorConfig(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+    public BaseMotorConfig(int id, String name, Canbus canbus) {
+        this(id,name);
+        this.canbus = canbus;
     }
 
     /**
@@ -282,12 +297,18 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
         return (T)withPID(id, kp, ki, kf);
     }
 
+    @SuppressWarnings("unchecked")
+    public T withCanbus(Canbus canbus) {
+        this.canbus = canbus;
+        return (T)this;
+    }
 
     /**
      * Copy common fields from another BaseMotorConfig
      * @param other the config to copy from
      */
     protected void copyBaseFields(BaseMotorConfig<?> other) {
+        this.canbus = other.canbus;
         this.maxVolt = other.maxVolt;
         this.minVolt = other.minVolt;
         this.maxCurrent = other.maxCurrent;

@@ -2,14 +2,16 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Demacia.utils.Motors.MotorCommands;
+import frc.Demacia.utils.Motors.MotorInterface;
 import frc.Demacia.utils.Motors.SparkMotor;
 import frc.Demacia.utils.Motors.TalonMotor;
 import frc.robot.Constants;
 
 public class MotorExampleSubsytem extends SubsystemBase {
     // Define the motor 
-    TalonMotor talonMotor;
-    SparkMotor sparkMotor;
+    MotorInterface talonMotor;
+    MotorInterface sparkMotor;
 
     
     // Constructor
@@ -17,6 +19,9 @@ public class MotorExampleSubsytem extends SubsystemBase {
         super();
         talonMotor = new TalonMotor(Constants.Example.TALON_CONFIG);
         sparkMotor = new SparkMotor(Constants.Example.SPARKMOTOR_CONFIG);
+        MotorCommands.showPowerCommand("talon power", this, talonMotor);
+        MotorCommands.showRandomPowerCommand("talon random", -0.5, 0.5, 0.3, this, talonMotor);
+        MotorCommands.showPositionCommand("talon position", this, talonMotor);
     }
 
     // Method to set the motor speed
