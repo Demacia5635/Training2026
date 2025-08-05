@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "RandomPowerGenerator",
+      "request": "launch",
+      "mainClass": "frc.Demacia.utils.Motors.RandomPowerGenerator",
+      "projectName": "Training2026"
+    },
+    {
+      "type": "java",
       "name": "MyVisionPipeline",
       "request": "launch",
       "mainClass": "frc.robot.subsystems.MyVisionPipeline",

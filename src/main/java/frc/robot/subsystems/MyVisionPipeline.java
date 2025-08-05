@@ -51,7 +51,7 @@ public class MyVisionPipeline implements VisionPipeline {
         System.load("D:\\Projects\\OpenCV\\opencv\\build\\java\\x64\\opencv_java4100.dll");
         Mat img = Imgcodecs.imread(fileName);
         Mat resized = new Mat();
-        Imgproc.resize(img, resized, new Size(640, 480));
+        Imgproc.resize(img, resized, new Size(320, 240));
         Mat blur = new Mat();
         Imgproc.GaussianBlur(resized, blur, new Size(15, 15), 2);
         HighGui.imshow("blur", blur);
@@ -85,23 +85,18 @@ public class MyVisionPipeline implements VisionPipeline {
             MatOfPoint m = contours.get(i);
             double area = Imgproc.contourArea(m);
             if (area > 200) {
+                Rect rect = Imgproc.boundingRect(m);
+                double r = (double)rect.height / rect.width;
                 Imgproc.drawContours(out, contours, i, new Scalar(0, 0, 255), 2);
-                if (best == null) {
-                    best = m;
-                    bestRect = Imgproc.boundingRect(m);
-                    bestSize = area;
-                    bestRatio = Math.abs(1 - bestRect.height / bestRect.width);
-                } else {
-                    Rect rect = Imgproc.boundingRect(m);
-                    double r = Math.abs(1 - rect.height / rect.width);
-                    if ((r < 1.3 && (bestRatio > 1.3 || area > bestSize)) || (r > 1.3 && r < bestRatio)) {
+                Imgproc.rectangle(out, rect, new Scalar(255,0,0),1);
+                System.out.println("r = " + r + " area=" + area + " rect=" + rect.height + " / " + rect.width);
+                if (best == null || isBetter(r, area, bestRatio, bestSize)) {
                         best = m;
                         bestRect = rect;
                         bestRatio = r;
                         bestSize = area;
-                    }
+                        System.out.println("r = " + r + " area=" + area);
                 }
-
             }
         }
         if (bestRect != null) {
@@ -118,6 +113,16 @@ public class MyVisionPipeline implements VisionPipeline {
         System.exit(1);
     }
 
+    private static boolean isBetter(double r1, double area1, double r2, double area2) {
+        if(r1 > 1.0/1.5 && r1 < 1.5 && (r2 < 1.0/1.5 || r2 > 1.5)) {
+            return true;
+        }
+        if(r2 > 1.0/1.5 && r2 < 1.5 && (r1 < 1.0/1.5 || r1 > 1.5)) {
+            return false;
+        }
+        return area1 > area2;
+    }
+
 
     public static void main(String[] args) {
         detectBall();
@@ -125,9 +130,8 @@ public class MyVisionPipeline implements VisionPipeline {
         UsbCamera camera = CameraServer.startAutomaticCapture();
         camera.setExposureAuto();
         camera.setFPS(30);
-        camera.setResolution(320, 200);
-        VisionThread visionThread = new VisionThread(camera, new MyVisionPipeline(), pipeline -> {
-        });
+        camera.setResolution(320, 240);
+        VisionThread visionThread = new VisionThread(camera, new MyVisionPipeline(), pipeline -> {        });
         visionThread.setDaemon(true);
         visionThread.start();
     }

@@ -98,4 +98,11 @@ public class SwerveModule {
         drive.configPidFf(0);
     }
 
+    protected MotorInterface steerMotor() {
+        return steer;
+    }
+    protected MotorInterface driveMotor() {
+        return drive;
+    }
+
 }

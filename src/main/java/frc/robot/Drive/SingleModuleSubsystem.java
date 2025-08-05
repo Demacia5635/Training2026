@@ -1,5 +1,7 @@
 package frc.robot.Drive;
 
+import java.util.random.RandomGeneratorFactory;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -8,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Demacia.utils.Motors.RandomPowerGenerator;
 
 public class SingleModuleSubsystem extends SubsystemBase {
 
@@ -55,6 +58,14 @@ public class SingleModuleSubsystem extends SubsystemBase {
     }
 
     private Command getSteerPowerCommand() {
+        return RandomPowerGenerator.getRandomPowerCommand(modules[0].steerMotor(), 
+            new RandomPowerGenerator(-0.6,0.6,0.5), this);
+    }
+    private Command getDrivePowerCommand() {
+        return RandomPowerGenerator.getRandomPowerCommand(modules[0].driveMotor(), 
+            new RandomPowerGenerator(-1.0,1.0,0.4), this);
+    }
+    private Command getSteerPowerCommand1() {
         SmartDashboard.putNumber("Steer Power:", 0);
         return new RunCommand(()-> { 
                 double power = SmartDashboard.getNumber("Steer Power:", 0); 
@@ -63,7 +74,7 @@ public class SingleModuleSubsystem extends SubsystemBase {
                 }
             },this);
     }
-    private Command getDrivePowerCommand() {
+    private Command getDrivePowerCommand1() {
         SmartDashboard.putNumber("Drive Power:", 0);
         return new RunCommand(()-> { 
                 double power = SmartDashboard.getNumber("Drive Power:", 0); 
