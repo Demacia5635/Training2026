@@ -32,8 +32,9 @@ public class GoToAngle extends Command {
     }
     @Override
     public void execute() {
-        end();
+    end().schedule();
     }
+    
     public Command end() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> subsystem.steer(90,0.05)),
