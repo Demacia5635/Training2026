@@ -32,7 +32,7 @@ public class GoToAngle extends Command {
     }
     @Override
     public void execute() {
-        end();
+        end().schedule();
     }
     public Command end() {
         return new SequentialCommandGroup(
