@@ -37,7 +37,8 @@ public class GoToAngle extends Command {
     
     public Command end() {
         return new SequentialCommandGroup(
-            new InstantCommand(() -> subsystem.steer(90,0.05)),
+            
+            new InstantCommand(() -> subsystem.steer(90,0.05, 0.01, 0.01)),
             new InstantCommand(() -> drive1steer135()),
             new InstantCommand(() -> drive_1steer0())
         );
@@ -45,15 +46,15 @@ public class GoToAngle extends Command {
     
     public Command drive1steer135() {
         return new ParallelCommandGroup(
-            new InstantCommand(() -> subsystem.drive(100, 0.3)),
-            new InstantCommand(() -> subsystem.steer(135,0.05))
+            new InstantCommand(() -> subsystem.drive(100, 0.05, 0.01, 0.01)),
+            new InstantCommand(() -> subsystem.steer(135,0.05, 0.02 , 0.02))
             );
         
     }
     public Command drive_1steer0() {
         return new ParallelCommandGroup(
-            new InstantCommand(() -> subsystem.drive(-100, 0.3)),
-            new InstantCommand(() -> subsystem.steer(0,0.05))
+            new InstantCommand(() -> subsystem.drive(-100, 0.05, 0.01, 0.01)),
+            new InstantCommand(() -> subsystem.steer(0,0.05, 0.005, 0.005))
             );
         
     }

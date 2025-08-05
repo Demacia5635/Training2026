@@ -4,6 +4,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.fasterxml.jackson.databind.deser.ValueInstantiator.Gettable;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -54,16 +55,23 @@ public double getDPosition() {
     builder.addDoubleProperty("drive angle", () -> getDPosition(), null);
     builder.addDoubleProperty("steering angle", () -> getSPosition(), null);
  }
- public void drive(double distanceInCm, double power){
+ public void drive(double distanceInCm,  double kp, double ki, double kd){
+    double power;
+    double sumError = 0;
+    double lastError = 0;
     double wheelCircumference = Math.PI * OperatorConstants.wheelDiameter;
     double rotations = distanceInCm / wheelCircumference; 
     double targetPosition = rotations*360+getDPosition();
     double currnt = getDPosition();
-    double error = targetPosition - currnt;
-    power = power*Math.signum(error);
+    double error = targetPosition - currnt;;
      while (Math.abs(error) > 10){
      currnt = getDPosition();
      error = targetPosition - currnt;
+     sumError += error;
+    double p = kp * error;
+    double i = ki * sumError;
+    double d = kd * (lastError - error);
+    power = MathUtil.clamp(p+i+d,-0.5, 0.5);
     SmartDashboard.putNumber("drive Error", error);
     SmartDashboard.putNumber("drive angle", currnt);
     SmartDashboard.putNumber("drive Target ", targetPosition);
@@ -75,13 +83,20 @@ public double getDPosition() {
         power = 0;
         setDPower(power);
     }
-    public void steer(double targetAngle, double power){
+    public void steer(double targetAngle,  double kp, double ki, double kd){
+        double power;
         double currnt = getSPosition();
+        double sumError = 0;
     double error = targetAngle - currnt;
-    power = power*Math.signum(error);
-     while (Math.abs(error) > 10){
+     while (Math.abs(error) > 3){
      currnt = getSPosition();
+     double lastError = error;
      error = targetAngle - currnt;
+    sumError += error;
+    double p = kp * error;
+    double i = ki * sumError;
+    double d = kd * (lastError - error);
+    power = MathUtil.clamp(p+i+d,-0.5, 0.5);
     SmartDashboard.putNumber("steering Error", error);
     SmartDashboard.putNumber("steering angle", currnt);
     SmartDashboard.putNumber("steering Target ", targetAngle);
@@ -92,6 +107,5 @@ public double getDPosition() {
         power = 0;
         setSPower(power);
     }
-    }
-    
+}
 
