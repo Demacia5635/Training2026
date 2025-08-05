@@ -1,18 +1,19 @@
 package frc.Demacia.utils.Motors;
 
 public interface MotorInterface {
-    void changeSlot(int slot);
+    void changeSlot(int slot);    // change the slot used in the motor for PID/FF calculation
     void setNeutralMode(boolean isBrake);
-    void setDuty(double power);
+    void setDuty(double power); // power -1 to 1
     void setVoltage(double voltage);
-    void setVelocity(double velocity, double feedForward);
+    void setVelocity(double velocity, double feedForward); // velocity with additional calculated volts
     void setVelocity(double velocity);
-    void setMotion(double position, double feedForward);
+    void setMotion(double position, double feedForward); // position profiled motion in motor with feedForward value calculated in roborio
     void setMotion(double position);
     void setPositionVoltage(double position, double feedForward);
     void setPositionVoltage(double position);
     void setVelocityWithFeedForward(double velocity);
     void setMotionWithFeedForward(double velocity);
+
     String getCurrentControlMode();
     double getCurrentClosedLoopSP();
     double getCurrentClosedLoopError();
@@ -22,7 +23,8 @@ public interface MotorInterface {
     double getCurrentVoltage();
 
     void setEncoderPosition(double position);
-    void configPidFf(int slot);
-    void configMotion();
+
+    void showConfigPIDFSlotCommand(int slot);
+    void showConfigMotionVelocitiesCommand();
 
 }

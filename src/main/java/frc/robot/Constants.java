@@ -33,8 +33,8 @@ public final class Constants {
         .withCurrent(20)
         .withInvert(false)
         .withPID(2,   0.2,   0, 0.1)
-        .withRadiansMotor(8.4)
-        .withVelocities(20, 0, 30)
+        .withDegreesMotor(8.4)
+        .withVelocities(900, 1800, 3000)
         .withRampTime(0.2)
         .withVolts(8);
   }

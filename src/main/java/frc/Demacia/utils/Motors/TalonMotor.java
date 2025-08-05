@@ -326,7 +326,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
      * 
      * @param slot the slot of the close loop perams (from 0 to 2)
      */
-    public void configPidFf(int slot) {
+    public void showConfigPIDFSlotCommand(int slot) {
 
         Command configPidFf = new InstantCommand(() -> {
             SlotConfigs cfg = new SlotConfigs();
@@ -478,7 +478,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     /**
      * creates a widget in elastic to configure motion magic in hot reload
      */
-    public void configMotion() {
+    public void showConfigMotionVelocitiesCommand() {
         Command configMotionMagic = new InstantCommand(() -> {
             MotionMagicConfigs cfg = new MotionMagicConfigs();
 

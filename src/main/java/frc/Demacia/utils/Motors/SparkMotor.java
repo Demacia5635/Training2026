@@ -38,6 +38,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
     name = config.name;
     configMotor();
     addLog();
+    SmartDashboard.putData(name, this);
     LogManager.log(name + " motor initialized");
   }
 
@@ -171,8 +172,14 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
 
   @Override
   public double getCurrentClosedLoopError() {
-    return controlType == ControlType.kMAXMotionPositionControl ? setPoint - getCurrentPosition()
-        : controlType == ControlType.kMAXMotionVelocityControl ? setPoint - getCurrentVelocity() : 0;
+    switch (controlType) {
+      case kPosition, kMAXMotionPositionControl:
+        return setPoint - getCurrentPosition();
+      case kVelocity, kMAXMotionVelocityControl:
+        return setPoint - getCurrentVelocity();
+      default:
+        return 0;
+    }
   }
 
   @Override
@@ -185,7 +192,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
    * 
    * @param slot the slot of the close loop perams (from 0 to 2)
    */
-  public void configPidFf(int slot) {
+  public void showConfigPIDFSlotCommand(int slot) {
 
     Command configPidFf = new InstantCommand(() -> {
       switch (slot) {
@@ -283,9 +290,10 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("SparkMotor");
     builder.addStringProperty("ControlMode", this::getCurrentControlMode, null);
-    builder.addDoubleProperty("Position", encoder::getPosition, null);
-    builder.addDoubleProperty("Velocity", encoder::getVelocity, null);
-    builder.addDoubleProperty("Voltage", super::getAppliedOutput, null);
+    builder.addDoubleProperty("Position", this::getCurrentPosition, null);
+    builder.addDoubleProperty("Velocity", this::getCurrentVelocity, null);
+    builder.addDoubleProperty("Voltage", this::getCurrentVoltage, null);
+    builder.addDoubleProperty("CloseLoop Error", this::getCurrentClosedLoopError, null);
   }
 
   public double gearRatio() {
@@ -314,7 +322,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   }
 
   @Override
-  public void configMotion() {
+  public void showConfigMotionVelocitiesCommand() {
     
   }
 }

@@ -99,8 +99,8 @@ public class SwerveModule implements Sendable {
     }
 
     public void configPID() {
-        steer.configPidFf(0);
-        drive.configPidFf(0);
+        steer.showConfigPIDFSlotCommand(0);
+        drive.showConfigPIDFSlotCommand(0);
     }
 
     protected MotorInterface steerMotor() {
