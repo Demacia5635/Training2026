@@ -17,6 +17,18 @@ public class GoToAngle extends Command {
         this.subsystem = subsystem;
         addRequirements(subsystem);
         SmartDashboard.putNumber("Target Angle",90);
+        SmartDashboard.putNumber("drive angle", subsystem.getDPosition());
+        SmartDashboard.putNumber("steering angle", subsystem.getSPosition());
+        SmartDashboard.putNumber("drive Error", 0);
+    SmartDashboard.putNumber("drive angle", subsystem.getDPosition());
+    SmartDashboard.putNumber("drive Target ", subsystem.getDPosition());
+    SmartDashboard.putNumber("drive Power", 0);
+    SmartDashboard.putNumber("drive velocity", 0);
+    SmartDashboard.putNumber("steering Error", 0);
+    SmartDashboard.putNumber("steering angle", subsystem.getSPosition());
+    SmartDashboard.putNumber("steering Target ", subsystem.getSPosition());
+    SmartDashboard.putNumber("steering Power", 0);
+    SmartDashboard.putNumber("steering velocity", 0);
     }
     @Override
     public void execute() {

@@ -21,10 +21,11 @@ public class MyFirstSubsystem extends SubsystemBase {
     
 
     // Constructor
-    public MyFirstSubsystem() {
+    public MyFirstSubsystem () {
         super();
         steerMotor = new TalonFX(Constants.MyFirstSubsystemConstants.SMOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
         driveMotor = new TalonFX(Constants.MyFirstSubsystemConstants.DMOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
+        SmartDashboard.putData("Subsystem 1", this);
     }
 
     // Method to set the motor speed
