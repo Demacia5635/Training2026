@@ -39,7 +39,6 @@ public class Constants {
             .withRampTime(0.2)
             .withVelocities(900, 1960, 3000)
             .withVolts(8)
-            .withPositionK(2.5)
             .withMaxPositionError(0.7);
     public static final TalonConfig BASE_DRIVE_CONFIG = new TalonConfig(0, CANBUS, "BASE_DRIVE")
             .withBrake(true)
