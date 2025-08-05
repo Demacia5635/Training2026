@@ -95,7 +95,7 @@ public class SysidResultPanel extends JPanel {
                         countLabels[i].setText(Integer.toString(calculate.getCount(range)));
                         avgErrorLabels[i].setText(String.format("%4.2f%%", calculate.getAverageError(range)));
                         maxErrorLabels[i].setText(String.format("%4.2f%%", calculate.getMaxError(range)));
-                        kp[i].setText(String.format("%4.2f", calculate.getKP(range)));
+                        kp[i].setText(String.format("%.5f", calculate.getKP(range)));
                     }
                 } else {
                     Sysid.msg("No motor selected");

@@ -27,7 +27,7 @@ public class Sysid implements Consumer<File> {
     JScrollPane msgPane = new JScrollPane(msgArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     LogReader log;
 
-    static boolean newLog = false;
+    static boolean newLog = true;
 
     private static Sysid sysid = null;
 
@@ -71,6 +71,9 @@ public class Sysid implements Consumer<File> {
         try {
             log = new LogReader(file.getAbsolutePath());
             if(newLog) {
+                for(LogDataEntry m : MotorDataNew.motors) {
+                    m.getMotorData();
+                }
                 motorListNew.setListData(MotorDataNew.motors);
             } else {
                 var motors = log.motors();

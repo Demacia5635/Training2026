@@ -10,9 +10,9 @@ public class MotorLogEntry {
             motor.name(), 
             new LogSupplier[] {
                 new LogSupplier(motor.getMotorVoltage(), "Volts",null),
-                new LogSupplier(motor.getPosition(), "Position",null),
-                new LogSupplier(motor.getVelocity(), "Velocity",null),
-                new LogSupplier(motor.getAcceleration(), "Acceleration",null),
+                new LogSupplier(motor::getCurrentPosition, "Position",null),
+                new LogSupplier(motor::getCurrentVelocity, "Velocity",null),
+                new LogSupplier(motor::getCurrentAcceleration, "Acceleration",null),
                 new LogSupplier(motor.getStatorCurrent(), "Current",null),
                 new LogSupplier(motor.getClosedLoopError(), "Error",null),
                 new LogSupplier(motor.getClosedLoopReference(), "SetPoint",null)

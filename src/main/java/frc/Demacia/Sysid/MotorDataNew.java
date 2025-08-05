@@ -18,13 +18,25 @@ public class MotorDataNew extends MotorData {
     }
     private void createData() {
         entry.resetIterator();
+        double maxVolt = 0;
         DataLogRecord record = entry.next();
         while(record != null) {
-            double[] d = record.getDoubleArray();
-            data.add(new MotorTimeData(d[2], d[1],d[3],d[0],record.getTimestamp()));
+            try {
+                float[] d = record.getFloatArray();
+                data.add(new MotorTimeData(d[2], d[1],d[3],d[0],record.getTimestamp()));
+                if(Math.abs(d[2]) > maxVelocity) {
+                    maxVelocity = Math.abs(d[2]);
+                }
+                if(Math.abs(d[0]) > maxVolt) {
+                    maxVolt = Math.abs(d[0]);
+                }
+            } catch (Exception e) {
+                System.err.println("Error getting double array for " + entry.name  +  " after " + data.size() + "  : " + e);
+            }
             record = entry.next();
         }
         updateAcceleration();
+        System.out.println("max volt = " + maxVolt);
     }
 
     private void updateAcceleration() {

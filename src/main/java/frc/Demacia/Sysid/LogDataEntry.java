@@ -26,6 +26,7 @@ public class LogDataEntry {
      */
     LogDataEntry(StartRecordData start) {
         startRecord = start;
+        name = start.name;
         isMotor = start.metadata != null && start.metadata.length() > 10 && start.metadata.startsWith("Type:Motor;");
         if(isMotor) {
             MotorDataNew.motors.add(this);
@@ -38,6 +39,13 @@ public class LogDataEntry {
      */
     void add(DataLogRecord record) {
         records.add(record);
+    }
+
+    public MotorDataNew getMotorData() {
+        if(isMotor && motorData == null) {
+            motorData = new MotorDataNew(this);
+        }
+        return motorData;
     }
 
     /**
