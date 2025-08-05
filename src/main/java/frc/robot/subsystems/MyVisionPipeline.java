@@ -37,7 +37,7 @@ public class MyVisionPipeline implements VisionPipeline {
         boolean found = false;
         double x = 0;
         double y = 0;
-        // TODO - calculate target psition
+        // calculate target psition
 
         // set result
         targetFound.setBoolean(found);
