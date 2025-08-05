@@ -24,6 +24,7 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
     public double maxVelocity = 0;
     public double maxAcceleration = 0;
     public double maxJerk = 0;
+    public double maxPositionError = 0.5;
 
     public closeLoopParam pid = new closeLoopParam(0, 0, 0, 0, 0, 0, 0); // close loop argument - PID + FF
     public closeLoopParam pid1 = null; // pid for slot 1
@@ -153,6 +154,13 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
     @SuppressWarnings("unchecked")
     public T withDegreesMotor(double gearRatio) {
         this.motorRatio = gearRatio / 360;
+        return (T) this;
+    }
+
+    
+    @SuppressWarnings("unchecked")
+    public T withMaxPositionError(double maxPositionError) {
+        this.maxPositionError = maxPositionError;
         return (T) this;
     }
 
@@ -297,5 +305,6 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
         this.pid = other.pid;
         this.pid1 = other.pid1;
         this.pid2 = other.pid2;
+        this.maxPositionError = other.maxPositionError;
    }
 }
