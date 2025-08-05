@@ -57,11 +57,19 @@ public class SingleModuleSubsystem extends SubsystemBase {
 
     private Command getSteerPowerCommand() {
         return RandomPowerGenerator.getRandomPowerCommand(modules[0].steerMotor(), 
-            new RandomPowerGenerator(-0.6,0.6,0.5), this);
+            new RandomPowerGenerator(-0.6,0.6,0.5), this).finallyDo((boolean b)-> {
+                for(SwerveModule m : modules) {
+                    m.setSteerPower(0);
+                }
+            });
     }
     private Command getDrivePowerCommand() {
         return RandomPowerGenerator.getRandomPowerCommand(modules[0].driveMotor(), 
-            new RandomPowerGenerator(-1.0,1.0,0.4), this);
+            new RandomPowerGenerator(-1.0,1.0,0.4), this).finallyDo((boolean b)-> {
+                for(SwerveModule m : modules) {
+                    m.setDrivePower(0);
+                }
+            });
     }
     private Command getSteerPowerCommand1() {
         SmartDashboard.putNumber("Steer Power:", 0);
@@ -88,7 +96,11 @@ public class SingleModuleSubsystem extends SubsystemBase {
                 for(SwerveModule m : modules) {
                     m.setSteerAngle(angle);
                 }
-            },this);
+            },this).finallyDo((boolean b)-> {
+                for(SwerveModule m : modules) {
+                    m.setSteerPower(0);
+                }
+            });
     }
     private Command getDriveVelocityCommand() {
         SmartDashboard.putNumber("Drive Velocity:", 0);
@@ -97,7 +109,12 @@ public class SingleModuleSubsystem extends SubsystemBase {
                 for(SwerveModule m : modules) {
                     m.setDriveVelocity(velocity);
                 }
-            },this);
+            },this)
+            .finallyDo((boolean b)-> {
+                    for(SwerveModule m : modules) {
+                        m.setDrivePower(0);
+                    }
+                });
     }
 
 
