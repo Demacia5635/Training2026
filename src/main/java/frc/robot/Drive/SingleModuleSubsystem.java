@@ -5,34 +5,14 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.Demacia.utils.Motors.RandomPowerGenerator;
+import frc.Demacia.utils.Motors.MotorCommands;
 
 public class SingleModuleSubsystem extends SubsystemBase {
 
     SwerveModule[] modules;
     SwerveModulePosition[] modulePositions;
     SwerveModuleState[] moduleState;
-
-    /*
-     * TODO
-     * - add the system to RobotContainer - remove all others
-     * - check elastic for steer/drive/abs data and check units and direction
-     * - see all log table - make sure all OK
-     * - activate steer and drive power - collect log
-     * - run sysid -
-     *      - transfer log to PC
-     *      - set newLog in LogReader
-     *      - check the syslog - list of motors, number of data, calculation
-     * - display the PIDFF of steer in ekastic
-     * - set data
-     * - rotate steer using the set position - using position voltage
-     * - update all gains in constants
-     * - do the same for drive velocity
-     * - check using steer motion instead of positionVoltage
-     */
 
     public SingleModuleSubsystem() {
         super();
@@ -48,75 +28,12 @@ public class SingleModuleSubsystem extends SubsystemBase {
             modules[i].configPID();
         }
         SmartDashboard.putData("SingleModule", this);
-        SmartDashboard.putData("Steer Power", getSteerPowerCommand());
-        SmartDashboard.putData("Drive Power", getDrivePowerCommand());
-        SmartDashboard.putData("Steer Angle", getSteerTurnCommand());
-        SmartDashboard.putData("Drive Velocity", getDriveVelocityCommand());
+        MotorCommands.showPowerCommand("Steer Power",this, modules[0].steerMotor());
+        MotorCommands.showPowerCommand("Drive Power",this, modules[0].driveMotor());
+        MotorCommands.showMotionCommand("Steer Angle",this, modules[0].steerMotor());
+        MotorCommands.showVelocityCommand("Drive Velocity",this, modules[0].driveMotor());
 
     }
-
-    private Command getSteerPowerCommand() {
-        return RandomPowerGenerator.getRandomPowerCommand(modules[0].steerMotor(), 
-            new RandomPowerGenerator(-0.6,0.6,0.5), this).finallyDo((boolean b)-> {
-                for(SwerveModule m : modules) {
-                    m.setSteerPower(0);
-                }
-            });
-    }
-    private Command getDrivePowerCommand() {
-        return RandomPowerGenerator.getRandomPowerCommand(modules[0].driveMotor(), 
-            new RandomPowerGenerator(-1.0,1.0,0.4), this).finallyDo((boolean b)-> {
-                for(SwerveModule m : modules) {
-                    m.setDrivePower(0);
-                }
-            });
-    }
-    private Command getSteerPowerCommand1() {
-        SmartDashboard.putNumber("Steer Power:", 0);
-        return new RunCommand(()-> { 
-                double power = SmartDashboard.getNumber("Steer Power:", 0); 
-                for(SwerveModule m : modules) {
-                    m.setSteerPower(power);
-                }
-            },this);
-    }
-    private Command getDrivePowerCommand1() {
-        SmartDashboard.putNumber("Drive Power:", 0);
-        return new RunCommand(()-> { 
-                double power = SmartDashboard.getNumber("Drive Power:", 0); 
-                for(SwerveModule m : modules) {
-                    m.setDrivePower(power);
-                }
-            },this);
-    }
-    private Command getSteerTurnCommand() {
-        SmartDashboard.putNumber("Steer Angle:", 0);
-        return new RunCommand(()-> { 
-                double angle = SmartDashboard.getNumber("Steer Angle:", 0); 
-                for(SwerveModule m : modules) {
-                    m.setSteerAngle(angle);
-                }
-            },this).finallyDo((boolean b)-> {
-                for(SwerveModule m : modules) {
-                    m.setSteerPower(0);
-                }
-            });
-    }
-    private Command getDriveVelocityCommand() {
-        SmartDashboard.putNumber("Drive Velocity:", 0);
-        return new RunCommand(()-> { 
-                double velocity = SmartDashboard.getNumber("Drive Velocity:", 0); 
-                for(SwerveModule m : modules) {
-                    m.setDriveVelocity(velocity);
-                }
-            },this)
-            .finallyDo((boolean b)-> {
-                    for(SwerveModule m : modules) {
-                        m.setDrivePower(0);
-                    }
-                });
-    }
-
 
     @Override
     public void periodic() {
