@@ -7,6 +7,7 @@ import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -39,7 +40,8 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     DutyCycleOut dutyCycle = new DutyCycleOut(0);
     VoltageOut voltageOut = new VoltageOut(0);
     VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
-    MotionMagicExpoVoltage motionMagicVoltage = new MotionMagicExpoVoltage(0).withSlot(0);
+    MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
+    MotionMagicExpoVoltage motionMagicExpoVoltage = new MotionMagicExpoVoltage(0).withSlot(0);
     PositionVoltage positionVoltage = new PositionVoltage(0).withSlot(0);
 
     StatusSignal<ControlModeValue> controlModeSignal;
@@ -66,6 +68,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         setSignals();
         addLog();
         LogManager.log(name + " motor initialized");
+        SmartDashboard.putData(name,this);
     }
 
     private void configMotor() {
@@ -97,15 +100,13 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         cfg.Slot0.kV = config.pid.kv * unitMultiplier;
         cfg.Slot0.kA = config.pid.ka * unitMultiplier;
         cfg.Slot0.kG = config.pid.kg;
-        if (config.pid1 != null) {
-            cfg.Slot1.kP = config.pid1.kp * unitMultiplier;
-            cfg.Slot1.kI = config.pid1.ki * unitMultiplier;
-            cfg.Slot1.kD = config.pid1.kd * unitMultiplier;
-            cfg.Slot1.kS = config.pid1.ks;
-            cfg.Slot1.kV = config.pid1.kv * unitMultiplier;
-            cfg.Slot1.kA = config.pid1.ka * unitMultiplier;
-            cfg.Slot1.kG = config.pid1.kg;
-        }
+        cfg.Slot1.kP = config.pid.kp * unitMultiplier;
+        cfg.Slot1.kI = config.pid.ki * unitMultiplier;
+        cfg.Slot1.kD = config.pid.kd * unitMultiplier;
+        cfg.Slot1.kS = -config.pid.ks;
+        cfg.Slot1.kV = config.pid.kv * unitMultiplier;
+        cfg.Slot1.kA = config.pid.ka * unitMultiplier;
+        cfg.Slot1.kG = config.pid.kg;
         if (config.pid2 != null) {
             cfg.Slot2.kP = config.pid2.kp * unitMultiplier;
             cfg.Slot2.kI = config.pid2.ki * unitMultiplier;
@@ -124,7 +125,6 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         cfg.MotionMagic.MotionMagicJerk = config.maxJerk / unitMultiplier;
         cfg.MotionMagic.MotionMagicExpo_kA = config.pid.ka;
         cfg.MotionMagic.MotionMagicExpo_kV = config.pid.kv;
-        cfg.MotionMagic.MotionMagicCruiseVelocity = 0;
 
         getConfigurator().apply(cfg);
     }
@@ -235,7 +235,19 @@ public class TalonMotor extends TalonFX implements MotorInterface {
      *                    to 0
      */
     public void setMotion(double position, double feedForward) {
-        setControl(motionMagicVoltage.withPosition(position/unitMultiplier).withFeedForward(feedForward));
+        double error = position-getCurrentPosition(); 
+        if(error > 0) {
+            setControl(motionMagicExpoVoltage.withPosition(position/unitMultiplier).withFeedForward(feedForward).withSlot(0));  
+        } else {
+            setControl(motionMagicExpoVoltage.withPosition(position/unitMultiplier).withFeedForward(feedForward).withSlot(1));  
+        }
+        /* 
+            if(Math.abs(error) < config.maxPositionError) {
+            setVelocity(0,0);
+        } else {
+            setVelocity(error*config.positoinK, feedForward);
+        }*/
+//        setControl(motionMagicVoltage.withPosition(position/unitMultiplier).withFeedForward(feedForward));
         // positionEntry.log(position);
     }
 
@@ -331,13 +343,13 @@ public class TalonMotor extends TalonFX implements MotorInterface {
                     break;
 
                 case 1:
-                    cfg.kP = config.pid1.kp;
-                    cfg.kI = config.pid1.ki;
-                    cfg.kD = config.pid1.kd;
-                    cfg.kS = config.pid1.ks;
-                    cfg.kV = config.pid1.kv;
-                    cfg.kA = config.pid1.ka;
-                    cfg.kG = config.pid1.kg;
+                    cfg.kP = config.pid.kp;
+                    cfg.kI = config.pid.ki;
+                    cfg.kD = config.pid.kd;
+                    cfg.kS = -config.pid.ks;
+                    cfg.kV = config.pid.kv;
+                    cfg.kA = config.pid.ka;
+                    cfg.kG = config.pid.kg;
                     break;
 
                 case 2:
@@ -366,6 +378,11 @@ public class TalonMotor extends TalonFX implements MotorInterface {
             cfg.kV *= unitMultiplier;
             cfg.kA *= unitMultiplier;
             getConfigurator().apply(cfg);
+            if(cfg.SlotNumber == 0) {
+                cfg.SlotNumber = 1;
+                cfg.kS = -cfg.kS;
+            }
+            getConfigurator().apply(cfg);
         }).ignoringDisable(true);
 
         SmartDashboard.putData(name + "/PID+FF config", new Sendable() {
@@ -392,19 +409,19 @@ public class TalonMotor extends TalonFX implements MotorInterface {
                         break;
 
                     case 1:
-                        builder.addDoubleProperty("KP", () -> config.pid1.kp,
+                        builder.addDoubleProperty("KP", () -> config.pid.kp,
                                 (double newValue) -> config.pid1.kp = newValue);
-                        builder.addDoubleProperty("KI", () -> config.pid1.ki,
+                        builder.addDoubleProperty("KI", () -> config.pid.ki,
                                 (double newValue) -> config.pid1.ki = newValue);
-                        builder.addDoubleProperty("KD", () -> config.pid1.kd,
+                        builder.addDoubleProperty("KD", () -> config.pid.kd,
                                 (double newValue) -> config.pid1.kd = newValue);
-                        builder.addDoubleProperty("KS", () -> config.pid1.ks,
+                        builder.addDoubleProperty("KS", () -> -config.pid.ks,
                                 (double newValue) -> config.pid1.ks = newValue);
-                        builder.addDoubleProperty("KV", () -> config.pid1.kv,
+                        builder.addDoubleProperty("KV", () -> config.pid.kv,
                                 (double newValue) -> config.pid1.kv = newValue);
-                        builder.addDoubleProperty("KA", () -> config.pid1.ka,
+                        builder.addDoubleProperty("KA", () -> config.pid.ka,
                                 (double newValue) -> config.pid1.ka = newValue);
-                        builder.addDoubleProperty("KG", () -> config.pid1.kg,
+                        builder.addDoubleProperty("KG", () -> config.pid.kg,
                                 (double newValue) -> config.pid1.kg = newValue);
                         break;
 
