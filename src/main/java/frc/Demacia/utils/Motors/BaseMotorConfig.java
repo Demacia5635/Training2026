@@ -162,7 +162,7 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
      * @return this config for chaining
      */
     @SuppressWarnings("unchecked")
-    public T withVelocities(double maxVelocity, double maxAcceleration, double maxJerk) {
+    public T withMotionParam(double maxVelocity, double maxAcceleration, double maxJerk) {
         this.maxVelocity = maxVelocity;
         this.maxAcceleration = maxAcceleration;
         this.maxJerk = maxJerk;
