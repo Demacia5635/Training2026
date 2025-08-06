@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
 
-public class Subsystem extends SubsystemBase {
+public class Subsystem1 extends SubsystemBase {
 
     // This is a subsystem class for controlling a TalonFX motor
     private TalonFX motor;
-    public Subsystem() {
+    public Subsystem1() {
         // Initialize the TalonFX motor with a device ID of 1
         motor = new TalonFX(Constants.DRIVE_MOTOR_ID, Constants.CAN);
 
