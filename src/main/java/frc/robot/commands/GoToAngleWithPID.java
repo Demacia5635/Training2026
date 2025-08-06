@@ -33,16 +33,19 @@ public class GoToAngleWithPID extends Command {
       if(i == 0) {
         SteertargetAngle = new_SteertargetAngle;
       }
-      i++;
-    } else if (SteertargetAngle != new_SteertargetAngle && Math.abs(SteertargetAngle - currentAngle) < subsystem.getSteerErrTol() && i > 5) 
-      i = 0;
-      new_SteertargetAngle = Math.floor(Math.random()*361);
-      execute();
-    }
+      //i++;
+     } //else if (SteertargetAngle != new_SteertargetAngle && Math.abs(SteertargetAngle - currentAngle) < subsystem.getSteerErrTol() && i > 5) 
+    //   i = 0;
+    //   new_SteertargetAngle = Math.floor(Math.random()*361);
+    //   execute();
+     }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    subsystem.stop();
+    System.out.println("Command ended at: " + subsystem.getSPosition() + " degrees");
+  }
 
   // Returns true when the command should end.
   @Override
