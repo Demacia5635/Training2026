@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.fasterxml.jackson.databind.deser.ValueInstantiator.Gettable;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -84,26 +85,55 @@ public double getDPosition() {
         setDPower(power);
     }
     public void steer(double targetAngle,  double kp, double ki, double kd){
+        targetAngle = SmartDashboard.getNumber( "steering Target", targetAngle);
         double power;
         double currnt = getSPosition();
         double sumError = 0;
-    double error = targetAngle - currnt;
-     while (Math.abs(error) > 3){
-     currnt = getSPosition();
-     double lastError = error;
-     error = targetAngle - currnt;
-    sumError += error;
-    double p = kp * error;
-    double i = ki * sumError;
-    double d = kd * (lastError - error);
-    power = MathUtil.clamp(p+i+d,-0.5, 0.5);
-    SmartDashboard.putNumber("steering Error", error);
-    SmartDashboard.putNumber("steering angle", currnt);
-    SmartDashboard.putNumber("steering Target ", targetAngle);
-    setSPower(power);
-    SmartDashboard.putNumber("steering Power", power);
-    SmartDashboard.putNumber("steering velocity", steerMotor.getVelocity().getValueAsDouble());
-     }
+        PIDController Spid = new PIDController(kp,ki,kd);
+        SmartDashboard.putData("My steering PID", Spid);
+        double error = targetAngle - currnt;
+        while (Math.abs(error) > 3){
+            currnt = getSPosition();
+            double lastError = error;
+            error = targetAngle - currnt;
+            sumError += error;
+            double p = kp * error;
+            double i = ki * sumError;
+            double d = kd * (lastError - error);
+            power = MathUtil.clamp(p+i+d,-0.5, 0.5);
+            SmartDashboard.putNumber("steering Error", error);
+            SmartDashboard.putNumber("steering angle", currnt);
+            SmartDashboard.putNumber("steering Target ", targetAngle);
+            setSPower(power);
+            SmartDashboard.putNumber("steering Power", power);
+            SmartDashboard.putNumber("steering velocity", steerMotor.getVelocity().getValueAsDouble());
+        }
+        power = 0;
+        setSPower(power);
+    }
+    public void setDVelocity(double targetVelocity,  double kp, double ki, double kd){
+        targetVelocity = SmartDashboard.getNumber( "drive target velocity", targetVelocity);
+        double power;
+        double currnt = driveMotor.getVelocity().getValueAsDouble();
+        double sumError = 0;
+        PIDController DVpid = new PIDController(kp,ki,kd);
+        SmartDashboard.putData("My drive velocity PID", DVpid);
+        double error = targetVelocity - currnt;
+        while (Math.abs(error) > 3){
+            currnt = driveMotor.getVelocity().getValueAsDouble();
+            double lastError = error;
+            error = targetVelocity - currnt;
+            sumError += error;
+            double p = kp * error;
+            double i = ki * sumError;
+            double d = kd * (lastError - error);
+            power = MathUtil.clamp(p+i+d,-0.5, 0.5);
+            SmartDashboard.putNumber("drive velocity Error", error);
+            SmartDashboard.putNumber("drive velocity", currnt);
+            SmartDashboard.putNumber("drive target velocity", targetVelocity);
+            setSPower(power);
+            SmartDashboard.putNumber("drive power", power);
+        }
         power = 0;
         setSPower(power);
     }
