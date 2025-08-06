@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
+import java.lang.module.Configuration;
+
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.fasterxml.jackson.databind.deser.ValueInstantiator.Gettable;
 
@@ -25,7 +28,9 @@ public class MyFirstSubsystem extends SubsystemBase {
         super();
         steerMotor = new TalonFX(Constants.MyFirstSubsystemConstants.SMOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
         driveMotor = new TalonFX(Constants.MyFirstSubsystemConstants.DMOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
-    }
+        steerMotor.getConfigurator().apply(new TalonFXConfiguration());
+        driveMotor.getConfigurator().apply(new TalonFXConfiguration());
+    }   
 
     // Method to set the motor speed
     public void setSPower(double power) {

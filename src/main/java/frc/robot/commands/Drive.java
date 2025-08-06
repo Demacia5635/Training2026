@@ -17,11 +17,15 @@ public class Drive extends Command {
   /** Creates a new driveAndSteer. */
   MyFirstSubsystem subsystem;
   private double targetDistance;
+  private double targetPosition;
 
   public Drive(MyFirstSubsystem subsystem, double targetDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
         this.subsystem = subsystem;
-        addRequirements(subsystem);
+        this.targetDistance = targetDistance;
+        double wheelCircumference = Math.PI * OperatorConstants.wheelDiameter;
+        double rotations = targetDistance / wheelCircumference; 
+        double targetPosition = rotations*360+subsystem.getDPosition();
   }
 
   // Called when the command is initially scheduled.
@@ -31,9 +35,7 @@ public class Drive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double wheelCircumference = Math.PI * OperatorConstants.wheelDiameter;
-    double rotations = targetDistance / wheelCircumference; 
-    double targetPosition = rotations*360+subsystem.getDPosition();
+
     double dCurrnt = subsystem.getDPosition();
     double dError = targetPosition - dCurrnt;
     double dPower = 0.3*Math.signum(dError);
@@ -43,11 +45,6 @@ public class Drive extends Command {
     subsystem.setDPower(dPower);
     SmartDashboard.putNumber("drive Power", dPower);
     SmartDashboard.putNumber("drive velocity", subsystem.driveMotor.getVelocity().getValueAsDouble());
-
-    
-    
-
-
   }
 
   // Called once the command ends or is interrupted.
@@ -57,7 +54,7 @@ public class Drive extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean isFinished = Math.abs(subsystem.getDPosition() - (targetDistance/OperatorConstants.wheelDiameter*360)) < 10;
+    boolean isFinished = Math.abs(targetPosition - subsystem.getDPosition()) < 10;
     return isFinished;
   }
 }
