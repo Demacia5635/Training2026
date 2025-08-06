@@ -1,7 +1,5 @@
 package frc.Demacia.utils.Motors;
 
-import com.ctre.phoenix6.StatusCode;
-import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
@@ -22,6 +20,7 @@ import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.Demacia.utils.StatusSignalData;
 import frc.Demacia.utils.Elastic.UpdateArray;
 import frc.Demacia.utils.Log.LogManager;
 import frc.Demacia.utils.Log.MotorLogEntry;
@@ -41,21 +40,15 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     MotionMagicExpoVoltage motionMagicExpoVoltage = new MotionMagicExpoVoltage(0).withSlot(0);
     PositionVoltage positionVoltage = new PositionVoltage(0).withSlot(0);
 
-    StatusSignal<ControlModeValue> controlModeSignal;
-    StatusSignal<Double> closedLoopSPSignal;
-    StatusSignal<Double> closedLoopErrorSignal;
-    StatusSignal<Angle> positionSignal;
-    StatusSignal<AngularVelocity> velocitySignal;
-    StatusSignal<AngularAcceleration> accelerationSignal;
-    StatusSignal<Voltage> voltageSignal;
+    StatusSignalData<ControlModeValue> controlModeSignal;
+    StatusSignalData<Double> closedLoopSPSignal;
+    StatusSignalData<Double> closedLoopErrorSignal;
+    StatusSignalData<Angle> positionSignal;
+    StatusSignalData<AngularVelocity> velocitySignal;
+    StatusSignalData<AngularAcceleration> accelerationSignal;
+    StatusSignalData<Voltage> voltageSignal;
 
     String lastControlMode;
-    double lastClosedLoopSP;
-    double lastClosedLoopError;
-    double lastPosition;
-    double lastVelocity;
-    double lastAcceleration;
-    double lastVoltage;
 
     public TalonMotor(TalonConfig config) {
         super(config.id, config.canbus.canbus);
@@ -134,20 +127,13 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     }
 
     private void setSignals() {
-        controlModeSignal = getControlMode();
-        closedLoopSPSignal = getClosedLoopReference();
-        closedLoopErrorSignal = getClosedLoopError();
-        positionSignal = getPosition();
-        velocitySignal = getVelocity();
-        accelerationSignal = getAcceleration();
-        voltageSignal = getMotorVoltage();
-
-        lastControlMode = controlModeSignal.getValue().toString();
-        lastClosedLoopSP = closedLoopSPSignal.getValueAsDouble();
-        lastClosedLoopError = closedLoopErrorSignal.getValueAsDouble();
-        lastPosition = positionSignal.getValueAsDouble();
-        lastVelocity = velocitySignal.getValueAsDouble();
-        lastAcceleration = accelerationSignal.getValueAsDouble();
+        controlModeSignal = new StatusSignalData<>(getControlMode());
+        closedLoopSPSignal = new StatusSignalData<>(getClosedLoopReference());
+        closedLoopErrorSignal = new StatusSignalData<>(getClosedLoopError());
+        positionSignal = new StatusSignalData<>(getPosition());
+        velocitySignal = new StatusSignalData<>(getVelocity());
+        accelerationSignal = new StatusSignalData<>(getAcceleration());
+        voltageSignal = new StatusSignalData<>(getMotorVoltage());
     }
 
     private void addLog() {
@@ -269,45 +255,32 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         return Math.cos(positin * config.posToRad) * config.kSin;
     }
 
-    @SuppressWarnings("rawtypes")
-    private double getStatusSignal(StatusSignal statusSignal, double lastValue, double multiplier) {
-        statusSignal.refresh();
-        if (statusSignal.getStatus() == StatusCode.OK) {
-            lastValue = statusSignal.getValueAsDouble() * multiplier;
-        }
-        return lastValue;
-    }
-
     public String getCurrentControlMode() {
-        controlModeSignal.refresh();
-        if (controlModeSignal.getStatus() == StatusCode.OK) {
-            lastControlMode = controlModeSignal.getValue().toString();
-        }
-        return lastControlMode;
+        return controlModeSignal.getString();
     }
 
     public double getCurrentClosedLoopSP() {
-        return getStatusSignal(closedLoopSPSignal, lastClosedLoopSP, unitMultiplier);
+        return closedLoopSPSignal.get();
     }
 
     public double getCurrentClosedLoopError() {
-        return getStatusSignal(closedLoopErrorSignal, lastClosedLoopError, unitMultiplier);
+        return closedLoopErrorSignal.get();
     }
 
     public double getCurrentPosition() {
-        return getStatusSignal(positionSignal, lastPosition, unitMultiplier);
+        return positionSignal.get();
     }
 
     public double getCurrentVelocity() {
-        return getStatusSignal(velocitySignal, lastVelocity, unitMultiplier);
+        return velocitySignal.get();
     }
 
     public double getCurrentAcceleration() {
-        return getStatusSignal(accelerationSignal, lastAcceleration, unitMultiplier);
+        return accelerationSignal.get();
     }
 
     public double getCurrentVoltage() {
-        return getStatusSignal(voltageSignal, lastVoltage, 1.0);
+        return voltageSignal.get();
     }
 
     /**
