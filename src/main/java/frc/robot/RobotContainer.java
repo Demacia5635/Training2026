@@ -4,9 +4,9 @@
 
 package frc.robot;
 
+import frc.robot.commands.Drive;
 import frc.robot.commands.GoToAngle;
 import frc.robot.commands.MyFirstSubsystemCommand;
-import frc.robot.commands.driveAndSteer;
 import frc.robot.subsystems.MyFirstSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -21,8 +21,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
-  private final Command autoCommand = new GoToAngle(subsystem,90);
-  private final Command drive1 = new drive(subsystem, 100);
+  private final Command steer90 = new GoToAngle(subsystem,90);
+  private final Command drive1 = new Drive(subsystem, 100);
+  private final Command steer135 = new GoToAngle(subsystem,135);
+  private final Command drive_1 = new Drive(subsystem, -100);
+  private final Command steer0 = new GoToAngle(subsystem,0);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -50,7 +53,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return autoCommand.andThen(steer135drive1);
+    return steer90.andThen(drive1.alongWith(steer135)).andThen(drive_1.alongWith(steer0));
 
   }
 }
