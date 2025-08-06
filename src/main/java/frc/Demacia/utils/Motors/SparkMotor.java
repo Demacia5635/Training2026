@@ -261,6 +261,15 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
 
   @Override
   public void showConfigMotionVelocitiesCommand() {
-    
+    UpdateArray.show(name + "MOTION PARAM",
+      new String[] {"Velocity", "Acceleration"},
+      new double[] {config.maxVelocity, config.maxAcceleration},
+      (double[] array)->{
+        config.maxVelocity = array[0];
+        config.maxAcceleration = array[1];
+        cfg.closedLoop.maxMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration);
+        configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+      }
+    );
   }
 }
