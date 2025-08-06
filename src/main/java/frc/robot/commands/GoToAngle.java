@@ -11,10 +11,19 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 public class GoToAngle extends Command {
     MyFirstSubsystem subsystem;
     private double targetAngle;
+    private double kp;
+    private double ki;
+    private double kd;
 
-    public GoToAngle(MyFirstSubsystem subsystem,  double targetAngle) {
+    public GoToAngle(MyFirstSubsystem subsystem,  double targetAngle, double kp, double ki, double kd) {
         this.targetAngle = targetAngle;
         this.subsystem = subsystem;
+        this.kp = kp;
+        this.ki = ki;
+        this.kd = kd;
+        double sumError = 0;
+  //       PIDController Spid = new PIDController(kp,ki,kd);
+  //       SmartDashboard.putData("My steering PID", Spid);
         addRequirements(subsystem);
     //     SmartDashboard.putNumber("Target Angle",90);
     //     SmartDashboard.putNumber("drive Error", 0);
@@ -39,6 +48,7 @@ public class GoToAngle extends Command {
   public void execute () {
     double currnt = subsystem.getSPosition();
     double error = targetAngle - currnt;
+    double lastError = error;
     double power = 0.05*Math.signum(error);
     SmartDashboard.putNumber("steering Error", error);
     SmartDashboard.putNumber("steering angle", currnt);
@@ -57,8 +67,36 @@ public class GoToAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean isFinished = Math.abs(subsystem.getSPosition() - targetAngle) < 10;
+    boolean isFinished = Math.abs(subsystem.getSPosition() - targetAngle) < 3;
     return isFinished;
   }
 
 }
+  //   public void steer(double targetAngle,  double kp, double ki, double kd){
+  //       targetAngle = SmartDashboard.getNumber( "steering Target", targetAngle);
+  //       double power;
+  //       double currnt = getSPosition();
+  //       double sumError = 0;
+  //       PIDController Spid = new PIDController(kp,ki,kd);
+  //       SmartDashboard.putData("My steering PID", Spid);
+  //       double error = targetAngle - currnt;
+  //       while (Math.abs(error) > 3){
+  //           currnt = getSPosition();
+  //           double lastError = error;
+  //           error = targetAngle - currnt;
+  //           sumError += error;
+  //           double p = kp * error;
+  //           double i = ki * sumError;
+  //           double d = kd * (lastError - error);
+  //           power = MathUtil.clamp(p+i+d,-0.5, 0.5);
+  //           SmartDashboard.putNumber("steering Error", error);
+  //           SmartDashboard.putNumber("steering angle", currnt);
+  //           SmartDashboard.putNumber("steering Target ", targetAngle);
+  //           setSPower(power);
+  //           SmartDashboard.putNumber("steering Power", power);
+  //           SmartDashboard.putNumber("steering velocity", steerMotor.getVelocity().getValueAsDouble());
+  //       }
+  //       power = 0;
+  //       setSPower(power);
+  //   }
+  
