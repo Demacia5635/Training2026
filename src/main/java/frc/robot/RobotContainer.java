@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.MoveDriveMotor1Meter;
+import frc.robot.commands.MoveInSameVelocity;
 import frc.robot.commands.MoveToAngle;
 import frc.robot.commands.MyFirstSubsystemCommand;
 import frc.robot.subsystems.MyFirstSubsystem;
@@ -20,12 +21,17 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
-  private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, 0.4,0.3,  10.0);
+  private MyFirstSubsystem subsystem1;
+  // private final Command autoCommand = new MyFirstSubsystemCommand(subsystem1, 0.4,0.3,  10.0);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  MoveToAngle SteerMotorcmd = new MoveToAngle(subsystem);
-  MoveDriveMotor1Meter DriveMotorcmd = new MoveDriveMotor1Meter(subsystem);
+  MoveToAngle SteerMotorcmd;
+  MoveDriveMotor1Meter DriveMotorcmd;
+  MoveInSameVelocity MovingInSameVelocity;
   public RobotContainer() {
+    subsystem1 = new MyFirstSubsystem();
+    DriveMotorcmd = new MoveDriveMotor1Meter(subsystem1);
+    SteerMotorcmd = new MoveToAngle(subsystem1);
+    MovingInSameVelocity = new MoveInSameVelocity(subsystem1);
     configureBindings();
   }
 
@@ -50,6 +56,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return DriveMotorcmd.alongWith(SteerMotorcmd);
+    // return DriveMotorcmd.andThen(SteerMotorcmd);
+    return MovingInSameVelocity;
   }
 }
