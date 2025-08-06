@@ -23,11 +23,15 @@ public class GoToAngle extends Command {
         end();
     }
     public Command end() {
+        // return new SequentialCommandGroup(
+        //     new InstantCommand(() -> subsystem.steer(90,0.05)),
+        //     new InstantCommand(() -> drive1steer135()),
+        //     new InstantCommand(() -> drive_1steer0())
+        // );
         return new SequentialCommandGroup(
-            new InstantCommand(() -> subsystem.steer(90,0.05)),
-            new InstantCommand(() -> drive1steer135()),
-            new InstantCommand(() -> drive_1steer0())
-        );
+            new InstantCommand(() -> subsystem.DriveToAngle(100)),
+            new InstantCommand(() -> subsystem.SteerToAngle(135))
+        ); // will this work???????? PLEASE DO YOU FUCKING NIGGER!!!
     }
     
     public Command drive1steer135() {
