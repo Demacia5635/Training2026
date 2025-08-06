@@ -131,11 +131,12 @@ public double getDPosition() {
             SmartDashboard.putNumber("drive velocity Error", error);
             SmartDashboard.putNumber("drive velocity", currnt);
             SmartDashboard.putNumber("drive target velocity", targetVelocity);
-            setSPower(power);
+            setDPower(power);
             SmartDashboard.putNumber("drive power", power);
         }
         power = 0;
-        setSPower(power);
+        setDPower(power);
     }
+    
 }
 
