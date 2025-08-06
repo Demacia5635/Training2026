@@ -5,6 +5,7 @@ import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.Demacia.utils.Motors.TalonConfig;
 import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
+import frc.Demacia.utils.Sensors.CancoderConfig;
 
 public class Constants {
 
@@ -33,6 +34,8 @@ public class Constants {
 
     public static double MAX_SET_STATE_STEER_ADDITION = 5.0;
 
+    public static boolean CANCODER_INVERTED = false;
+
     public static final TalonConfig BASE_STEER_CONFIG = new TalonConfig(0, Canbus.Rio, "BASE_STEER")
             .withBrake(true)
             .withCurrent(15)
@@ -56,19 +59,19 @@ public class Constants {
     static class ModuleConfig {
         TalonConfig steerConfig;
         TalonConfig driveConfig;
-        int cancoderId;
+        CancoderConfig cancoderConfig;
         double cancoderOffset;
         Translation2d positionRelativeToRobotCenter;
         String name;
 
         ModuleConfig(int steerId, int driveId, int cancoderId, double xPosition, double yPosition,
                 double cancoderOffset) {
-            this.cancoderId = cancoderId;
-            this.cancoderOffset = cancoderOffset;
             positionRelativeToRobotCenter = new Translation2d(xPosition, yPosition);
             name = (xPosition > 0 ? "Front" : "Back") + (yPosition > 0 ? "Left" : "Right");
-            steerConfig = new TalonConfig(steerId, name + "/STEER", BASE_STEER_CONFIG);
-            driveConfig = new TalonConfig(driveId, name + "/DRIVE", BASE_DRIVE_CONFIG);
+            cancoderConfig = new CancoderConfig(cancoderId, BASE_STEER_CONFIG.canbus, name + "/Cancoder").withInvert(CANCODER_INVERTED);
+            this.cancoderOffset = cancoderOffset;
+            steerConfig = new TalonConfig(steerId, name + "/Steer", BASE_STEER_CONFIG);
+            driveConfig = new TalonConfig(driveId, name + "/Drive", BASE_DRIVE_CONFIG);
         }
     }
 
