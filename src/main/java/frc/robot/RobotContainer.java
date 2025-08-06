@@ -21,7 +21,7 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   modle subsystem = new modle();
-  setPower set = new setPower(0.1, subsystem);
+  setPower set = new setPower(0.4, subsystem);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

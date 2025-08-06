@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -16,8 +17,10 @@ public class modle extends SubsystemBase {
   
   /** Creates a new modle. */
   public modle() {
+    super();
     driveMotor= new TalonFX(Constants.driveMotor);
     steerMotor= new TalonFX(Constants.steerMotor);
+    SmartDashboard.putData("this", this);
   }
   public double getSteerPosition(){
     return steerMotor.getPosition().getValueAsDouble()/Constants.geerRatio*360;
@@ -30,6 +33,7 @@ public class modle extends SubsystemBase {
   }
   
   public void initSendable(SendableBuilder builder){
+    super.initSendable(builder);
     builder.addDoubleProperty("wanted angle",this::getSteerPosition,null);
     builder.addDoubleProperty("velocity", this::getMotorVelocity, null);
 
