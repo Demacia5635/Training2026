@@ -1,11 +1,12 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.StatusSignal;
+//import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.fasterxml.jackson.databind.deser.ValueInstantiator.Gettable;
+// import com.fasterxml.jackson.databind.deser.ValueInstantiator.Gettable;
 
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.math.controller.PIDController;
+// import edu.wpi.first.units.measure.Angle;
+// import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,6 +15,9 @@ import frc.robot.Constants.OperatorConstants;
 
 
 public class MyFirstSubsystem extends SubsystemBase {
+    private PIDController SteerController;
+
+
     // Define the motor 
     TalonFX steerMotor;
      
@@ -25,6 +29,11 @@ public class MyFirstSubsystem extends SubsystemBase {
         super();
         steerMotor = new TalonFX(Constants.MyFirstSubsystemConstants.SMOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
         driveMotor = new TalonFX(Constants.MyFirstSubsystemConstants.DMOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
+
+        SteerController = new PIDController(0.005, 0.001, 0.0005);
+
+        SteerController.setTolerance(2.0); // angle tolerance for the wheel  
+        SteerController.setIntegratorRange(-5, 5);
     }
 
     // Method to set the motor speed
@@ -42,8 +51,18 @@ public class MyFirstSubsystem extends SubsystemBase {
     public double getSPosition() {
         double SMotorPosition = steerMotor.getPosition().getValueAsDouble();
         return (SMotorPosition/OperatorConstants.SgearRatio)*360;
+}
+public void SteerToAngle(double targetAngle) {
+    double currentAngle = getSPosition();
+    double turnSpeed = SteerController.calculate(currentAngle, targetAngle);
+    setSPower(turnSpeed);
+}
+public void DriveToAngle(double targetAngle) {
+    double currentAngle = getDPosition();
+    double turnSpeed = SteerController.calculate(currentAngle, targetAngle);
+    setDPower(turnSpeed);
+}
 
-} 
 public double getDPosition() {
     double DMotorPosition = driveMotor.getPosition().getValueAsDouble();
     return (DMotorPosition/OperatorConstants.DgearRatio)*360;
