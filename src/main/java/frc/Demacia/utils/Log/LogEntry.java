@@ -54,7 +54,7 @@ import edu.wpi.first.util.datalog.FloatLogEntry;
     /*
      * Constructor with the suppliers and boolean if add to network table
      */
-    LogEntry(String name, LogSupplier[] suplliers, int logLevel, String type, String subType, String meta) {
+    public LogEntry(String name, LogSupplier[] suplliers, int logLevel, String type, String subType, String meta) {
 
       this.logManager = LogManager.logManager;
       this.name = name;
