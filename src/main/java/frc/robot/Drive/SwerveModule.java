@@ -5,7 +5,6 @@ import static edu.wpi.first.units.Units.Degrees;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
@@ -25,7 +24,7 @@ public class SwerveModule implements Sendable {
     protected SwerveModulePosition position = new SwerveModulePosition();
     private double lastSteerPosition = 0;
 
-    private static final double STEER_TO_DISTANCE_RATIO = 0.14/360.0; // 14 cm for 1 steer rotation
+    
 
     SwerveModule(Constants.ModuleConfig config) {
         this.config = config;
@@ -48,16 +47,16 @@ public class SwerveModule implements Sendable {
     }
 
     public SwerveModuleState refreshState() {
-        state.angle = new Rotation2d(steer.getCurrentPosition());
+        state.angle.set(Math.toRadians(steer.getCurrentPosition()));
         state.speedMetersPerSecond = drive.getCurrentVelocity();
         return state;
     }
 
     public SwerveModulePosition refreshPosition() {
         double steerPosition = steer.getCurrentPosition();
-        position.angle = new Rotation2d((lastSteerPosition + steerPosition)/2);
+        position.angle.set(Math.toRadians(lastSteerPosition + steerPosition)/2);
         lastSteerPosition = steerPosition;
-        position.distanceMeters = drive.getCurrentPosition() + steerPosition * STEER_TO_DISTANCE_RATIO;
+        position.distanceMeters = drive.getCurrentPosition() + steerPosition * Constants.STEER_TO_DISTANCE_RATIO;
         return position;
     }
 
@@ -69,7 +68,7 @@ public class SwerveModule implements Sendable {
         if(diff < -90) {
             diff += 180;
             targetVelocity = -targetVelocity;
-        } else if(diff < 90) {
+        } else if(diff > 90) {
             diff -= 180;
             targetVelocity = -targetVelocity;            
         }
@@ -92,13 +91,12 @@ public class SwerveModule implements Sendable {
     }
     public void setSteerAngle(double angle) {
         steer.setMotion(angle);
-        //steer.setPositionVoltage(angle);
     }
     public void setDriveVelocity(double velocity) {
         drive.setVelocity(velocity);
     }
 
-    public void configPID() {
+    public void showConfigPID() {
         steer.showConfigPIDFSlotCommand(0);
         drive.showConfigPIDFSlotCommand(0);
     }
@@ -108,6 +106,15 @@ public class SwerveModule implements Sendable {
     }
     protected MotorInterface driveMotor() {
         return drive;
+    }
+
+    public void setBrake() {
+        steer.setNeutralMode(true);
+        drive.setNeutralMode(true);
+    }
+    public void setCoast() {
+        steer.setNeutralMode(false);
+        drive.setNeutralMode(false);
     }
 
     @Override
