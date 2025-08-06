@@ -14,6 +14,7 @@ public class GoToAngle extends Command {
     private double kp;
     private double ki;
     private double kd;
+    private double sumError = 0;
 
     public GoToAngle(MyFirstSubsystem subsystem,  double targetAngle, double kp, double ki, double kd) {
         this.targetAngle = targetAngle;
@@ -49,7 +50,11 @@ public class GoToAngle extends Command {
     double currnt = subsystem.getSPosition();
     double error = targetAngle - currnt;
     double lastError = error;
-    double power = 0.05*Math.signum(error);
+    sumError += error;
+            double p = kp * error;
+            double i = ki * sumError;
+            double d = kd * (lastError - error);
+    double power = MathUtil.clamp(p+i+d,-0.5, 0.5);
     SmartDashboard.putNumber("steering Error", error);
     SmartDashboard.putNumber("steering angle", currnt);
     SmartDashboard.putNumber("steering Target ", targetAngle);
