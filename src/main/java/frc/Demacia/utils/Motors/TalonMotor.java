@@ -128,11 +128,11 @@ public class TalonMotor extends TalonFX implements MotorInterface {
 
     private void setSignals() {
         controlModeSignal = new StatusSignalData<>(getControlMode());
-        closedLoopSPSignal = new StatusSignalData<>(getClosedLoopReference());
-        closedLoopErrorSignal = new StatusSignalData<>(getClosedLoopError());
-        positionSignal = new StatusSignalData<>(getPosition());
-        velocitySignal = new StatusSignalData<>(getVelocity());
-        accelerationSignal = new StatusSignalData<>(getAcceleration());
+        closedLoopSPSignal = new StatusSignalData<>(getClosedLoopReference(), unitMultiplier);
+        closedLoopErrorSignal = new StatusSignalData<>(getClosedLoopError(), unitMultiplier);
+        positionSignal = new StatusSignalData<>(getPosition(), unitMultiplier);
+        velocitySignal = new StatusSignalData<>(getVelocity(), unitMultiplier);
+        accelerationSignal = new StatusSignalData<>(getAcceleration(), unitMultiplier);
         voltageSignal = new StatusSignalData<>(getMotorVoltage());
     }
 
@@ -347,5 +347,23 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     public void setEncoderPosition(double position) {
       setPosition(position / unitMultiplier);   
     }
-  
+    public StatusSignalData<Double> getClosedLoopErrorSignal() {
+        return closedLoopErrorSignal;
+    }
+    public StatusSignalData<Double> getClosedLoopSPSignal() {
+        return closedLoopSPSignal;
+    }
+    public StatusSignalData<Angle> getPositionSignal() {
+        return positionSignal;
+    }
+    public StatusSignalData<AngularVelocity> getVelocitySignal() {
+        return velocitySignal;
+    }
+    public StatusSignalData<AngularAcceleration> getAccelerationSignal() {
+        return accelerationSignal;
+    }
+    public StatusSignalData<Voltage> getVoltageSignal() {
+        return voltageSignal;
+    }
+
 }

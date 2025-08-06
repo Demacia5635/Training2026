@@ -4,16 +4,14 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
-import com.ctre.phoenix6.StatusCode;
-import com.ctre.phoenix6.StatusSignal;
-
 import edu.wpi.first.util.function.BooleanConsumer;
+import frc.Demacia.utils.StatusSignalData;
 
 @SuppressWarnings("rawtypes")
 public class LogSupplier {
     private DoubleSupplier doubleSupplier;
     private BooleanSupplier booleanSupplier;
-    private StatusSignal statusSignal;
+    private StatusSignalData statusSignal;
     private boolean isFloat;
     private String name;
     private float lastValue = 0;
@@ -32,7 +30,7 @@ public class LogSupplier {
       isFloat = true;
       this.name = name;
     }
-    public LogSupplier(StatusSignal supplier, String name, DoubleConsumer consumer) {
+    public LogSupplier(StatusSignalData supplier, String name, DoubleConsumer consumer) {
       statusSignal = supplier;
       doubleSupplier = null;
       booleanSupplier = null;
@@ -49,7 +47,7 @@ public class LogSupplier {
       this.name = name;
     }
 
-    public LogSupplier(StatusSignal<Boolean> supplier, String name, BooleanConsumer consumer) {
+    public LogSupplier(StatusSignalData<Boolean> supplier, String name, BooleanConsumer consumer) {
       statusSignal = supplier;
       doubleSupplier = null;
       booleanSupplier = null;
@@ -61,12 +59,7 @@ public class LogSupplier {
     float getFloat() {
       lastValue = newValue;
       if(statusSignal != null) {
-        statusSignal.refresh();
-        if(statusSignal.getStatus() == StatusCode.OK) {
-          newValue =  (float)statusSignal.getValueAsDouble();
-        } else {
-          newValue =  statusSignal.getStatus().value + 10000;
-        }
+          newValue =  (float)statusSignal.get();
       } else {
         newValue =  (float)doubleSupplier.getAsDouble();
       }
@@ -79,7 +72,6 @@ public class LogSupplier {
     boolean getBoolean() {
       lastBool = newBool;
       if(statusSignal != null) {
-        statusSignal.refresh();
         newBool =  (Boolean)statusSignal.getValue();
       } else {
         newBool = booleanSupplier.getAsBoolean();

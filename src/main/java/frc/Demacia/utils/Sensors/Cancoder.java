@@ -40,19 +40,18 @@ public class Cancoder extends CANcoder {
     }
     
     private void setStatusSignals() {
-        positionSignal = new StatusSignalData<>(getPosition());
-        absPositionSignal = new StatusSignalData<>(getAbsolutePosition());
-        velocitySignal = new StatusSignalData<>(getVelocity());
-
+        positionSignal = new StatusSignalData<>(getPosition(),360);
+        absPositionSignal = new StatusSignalData<>(getAbsolutePosition(), 360);
+        velocitySignal = new StatusSignalData<>(getVelocity(), 360);
     }
 
     private void addLog() {
         new LogEntry(
             name, 
             new LogSupplier[] {
-                new LogSupplier(positionSignal.signal(), "Position",null),
-                new LogSupplier(absPositionSignal.signal(), "AbsPosition",null),
-                new LogSupplier(velocitySignal.signal(), "Velocity",null),
+                new LogSupplier(positionSignal, "Position",null),
+                new LogSupplier(absPositionSignal, "AbsPosition",null),
+                new LogSupplier(velocitySignal, "Velocity",null),
                             },
             2, 
             "Cancoder", 
@@ -66,18 +65,18 @@ public class Cancoder extends CANcoder {
      * @return the none absolute amaunt of rotations the motor did in Radians
      */
     public double getCurrentPosition() {
-        return positionSignal.get() * 360;
+        return positionSignal.get();
     }
     /**
      * @return the absolute amaunt of rotations the motor did in Radians
      */
     public double getCurrentAbsPosition() {
-        return absPositionSignal.get() * 360;
+        return absPositionSignal.get();
     }
     /** 
      * @return the amount of rotations the motor do per second in Radians
      */
     public double getCurrentVelocity(){
-        return velocitySignal.get() * 360;
+        return velocitySignal.get();
     }
 }

@@ -5,13 +5,20 @@ import com.ctre.phoenix6.StatusSignal;
 public class StatusSignalData<T> {
     StatusSignal<T> signal;
     double lastValue;
-
-
+    double multiplier = 1;
 
     public StatusSignalData(StatusSignal<T> signal) {
         this.signal = signal;
         signal.refresh();
         lastValue = signal.getValueAsDouble();
+    }
+    public StatusSignalData(StatusSignal<T> signal, double multiplier) {
+        this(signal);
+        setMultiplier(multiplier);
+    }
+
+    public void setMultiplier(double multiplier) {
+        this.multiplier = multiplier;
     }
 
     public double get() {
@@ -19,13 +26,16 @@ public class StatusSignalData<T> {
         if(signal.getStatus().isOK()) {
             lastValue = signal.getValueAsDouble();
         }
-        return lastValue;
+        return lastValue * multiplier;
+    }
+
+    public T getValue() {
+        return signal.getValue();
     }
 
     public String getString() {
         signal.refresh();
         return signal.getValue().toString();
-
     }
 
     public StatusSignal<T> signal() {
