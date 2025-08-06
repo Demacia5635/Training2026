@@ -2,8 +2,6 @@ package frc.Demacia.utils.Motors;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
@@ -15,17 +13,16 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.Demacia.utils.Elastic.UpdateArray;
 import frc.Demacia.utils.Log.LogManager;
 import frc.Demacia.utils.Log.MotorLogEntry;
 
@@ -90,43 +87,50 @@ public class TalonMotor extends TalonFX implements MotorInterface {
             unitMultiplier = 100.0;
         }
         cfg.Feedback.SensorToMechanismRatio = config.motorRatio * unitMultiplier;
-
-
-
-        cfg.Slot0.kP = config.pid.kp * unitMultiplier;
-        cfg.Slot0.kI = config.pid.ki * unitMultiplier;
-        cfg.Slot0.kD = config.pid.kd * unitMultiplier;
-        cfg.Slot0.kS = config.pid.ks;
-        cfg.Slot0.kV = config.pid.kv * unitMultiplier;
-        cfg.Slot0.kA = config.pid.ka * unitMultiplier;
-        cfg.Slot0.kG = config.pid.kg;
-        cfg.Slot1.kP = config.pid.kp * unitMultiplier;
-        cfg.Slot1.kI = config.pid.ki * unitMultiplier;
-        cfg.Slot1.kD = config.pid.kd * unitMultiplier;
-        cfg.Slot1.kS = -config.pid.ks;
-        cfg.Slot1.kV = config.pid.kv * unitMultiplier;
-        cfg.Slot1.kA = config.pid.ka * unitMultiplier;
-        cfg.Slot1.kG = config.pid.kg;
-        if (config.pid2 != null) {
-            cfg.Slot2.kP = config.pid2.kp * unitMultiplier;
-            cfg.Slot2.kI = config.pid2.ki * unitMultiplier;
-            cfg.Slot2.kD = config.pid2.kd * unitMultiplier;
-            cfg.Slot2.kS = config.pid2.ks;
-            cfg.Slot2.kV = config.pid2.kv * unitMultiplier;
-            cfg.Slot2.kA = config.pid2.ka * unitMultiplier;
-            cfg.Slot2.kG = config.pid2.kg;
-        }
-
+        updatePID(false);
         cfg.Voltage.PeakForwardVoltage = config.maxVolt;
         cfg.Voltage.PeakReverseVoltage = config.minVolt;
 
         cfg.MotionMagic.MotionMagicAcceleration = config.maxAcceleration / unitMultiplier;
         cfg.MotionMagic.MotionMagicCruiseVelocity = config.maxVelocity / unitMultiplier;
         cfg.MotionMagic.MotionMagicJerk = config.maxJerk / unitMultiplier;
-        cfg.MotionMagic.MotionMagicExpo_kA = config.pid.ka;
-        cfg.MotionMagic.MotionMagicExpo_kV = config.pid.kv;
+        cfg.MotionMagic.MotionMagicExpo_kA = config.pid[0].ka();
+        cfg.MotionMagic.MotionMagicExpo_kV = config.pid[0].kv();
 
         getConfigurator().apply(cfg);
+    }
+
+    private void updatePID(boolean apply) {
+        System.out.println("update PID");
+        cfg.Slot0.kP = config.pid[0].kp() * unitMultiplier;
+        cfg.Slot0.kI = config.pid[0].ki() * unitMultiplier;
+        cfg.Slot0.kD = config.pid[0].kd() * unitMultiplier;
+        cfg.Slot0.kS = config.pid[0].ks();
+        cfg.Slot0.kV = config.pid[0].kv() * unitMultiplier;
+        cfg.Slot0.kA = config.pid[0].ka() * unitMultiplier;
+        cfg.Slot0.kG = config.pid[0].kg();
+        cfg.Slot1.kP = config.pid[1].kp() * unitMultiplier;
+        cfg.Slot1.kI = config.pid[1].ki() * unitMultiplier;
+        cfg.Slot1.kD = config.pid[1].kd() * unitMultiplier;
+        cfg.Slot1.kS = -config.pid[1].ks();
+        cfg.Slot1.kV = config.pid[1].kv() * unitMultiplier;
+        cfg.Slot1.kA = config.pid[1].ka() * unitMultiplier;
+        cfg.Slot1.kG = config.pid[1].kg();
+        cfg.Slot2.kP = config.pid[2].kp() * unitMultiplier;
+        cfg.Slot2.kI = config.pid[2].ki() * unitMultiplier;
+        cfg.Slot2.kD = config.pid[2].kd() * unitMultiplier;
+        cfg.Slot2.kS = config.pid[2].ks();
+        cfg.Slot2.kV = config.pid[2].kv() * unitMultiplier;
+        cfg.Slot2.kA = config.pid[2].ka() * unitMultiplier;
+        cfg.Slot2.kG = config.pid[2].kg();
+        cfg.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
+        cfg.Slot1.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
+        cfg.Slot2.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
+        if(apply) {
+            getConfigurator().apply(cfg.Slot0);
+            getConfigurator().apply(cfg.Slot1);
+            getConfigurator().apply(cfg.Slot2);
+        }
     }
 
     private void setSignals() {
@@ -167,20 +171,10 @@ public class TalonMotor extends TalonFX implements MotorInterface {
             LogManager.log("slot is not between 0 and 2", AlertType.kError);
             return;
         }
-        if (slot == 0 && config.pid == null) {
-            LogManager.log("slot is null, add config for slot 0", AlertType.kError);
-            return;
-        }
-        if (slot == 1 && config.pid1 == null) {
-            LogManager.log("slot is null, add config for slot 1", AlertType.kError);
-            return;
-        }
-        if (slot == 2 && config.pid2 == null) {
-            LogManager.log("slot is null, add config for slot 2", AlertType.kError);
-            return;
-        }
         velocityVoltage.withSlot(slot);
         motionMagicVoltage.withSlot(slot);
+        motionMagicExpoVoltage.withSlot(slot);
+        positionVoltage.withSlot(slot);
     }
 
     /*
@@ -235,20 +229,15 @@ public class TalonMotor extends TalonFX implements MotorInterface {
      *                    to 0
      */
     public void setMotion(double position, double feedForward) {
+        setControl(motionMagicExpoVoltage.withPosition(position/unitMultiplier).withFeedForward(feedForward));  
+        /* 
         double error = position-getCurrentPosition(); 
         if(error > 0) {
             setControl(motionMagicExpoVoltage.withPosition(position/unitMultiplier).withFeedForward(feedForward).withSlot(0));  
         } else {
             setControl(motionMagicExpoVoltage.withPosition(position/unitMultiplier).withFeedForward(feedForward).withSlot(1));  
         }
-        /* 
-            if(Math.abs(error) < config.maxPositionError) {
-            setVelocity(0,0);
-        } else {
-            setVelocity(error*config.positoinK, feedForward);
-        }*/
-//        setControl(motionMagicVoltage.withPosition(position/unitMultiplier).withFeedForward(feedForward));
-        // positionEntry.log(position);
+            */
     }
 
     public void setMotion(double position) {
@@ -327,194 +316,29 @@ public class TalonMotor extends TalonFX implements MotorInterface {
      * @param slot the slot of the close loop perams (from 0 to 2)
      */
     public void showConfigPIDFSlotCommand(int slot) {
-
-        Command configPidFf = new InstantCommand(() -> {
-            SlotConfigs cfg = new SlotConfigs();
-            cfg.SlotNumber = slot;
-            switch (slot) {
-                case 0:
-                    cfg.kP = config.pid.kp;
-                    cfg.kI = config.pid.ki;
-                    cfg.kD = config.pid.kd;
-                    cfg.kS = config.pid.ks;
-                    cfg.kV = config.pid.kv;
-                    cfg.kA = config.pid.ka;
-                    cfg.kG = config.pid.kg;
-                    break;
-
-                case 1:
-                    cfg.kP = config.pid.kp;
-                    cfg.kI = config.pid.ki;
-                    cfg.kD = config.pid.kd;
-                    cfg.kS = -config.pid.ks;
-                    cfg.kV = config.pid.kv;
-                    cfg.kA = config.pid.ka;
-                    cfg.kG = config.pid.kg;
-                    break;
-
-                case 2:
-                    cfg.kP = config.pid2.kp;
-                    cfg.kI = config.pid2.ki;
-                    cfg.kD = config.pid2.kd;
-                    cfg.kS = config.pid2.ks;
-                    cfg.kV = config.pid2.kv;
-                    cfg.kA = config.pid2.ka;
-                    cfg.kG = config.pid2.kg;
-                    break;
-
-                default:
-                    cfg.kP = config.pid.kp;
-                    cfg.kI = config.pid.ki;
-                    cfg.kD = config.pid.kd;
-                    cfg.kS = config.pid.ks;
-                    cfg.kV = config.pid.kv;
-                    cfg.kA = config.pid.ka;
-                    cfg.kG = config.pid.kg;
-                    break;
-            }
-            cfg.kP *= unitMultiplier;
-            cfg.kI *= unitMultiplier;
-            cfg.kD *= unitMultiplier;
-            cfg.kV *= unitMultiplier;
-            cfg.kA *= unitMultiplier;
-            getConfigurator().apply(cfg);
-            if(cfg.SlotNumber == 0) {
-                cfg.SlotNumber = 1;
-                cfg.kS = -cfg.kS;
-            }
-            getConfigurator().apply(cfg);
-        }).ignoringDisable(true);
-
-        SmartDashboard.putData(name + "/PID+FF config", new Sendable() {
-            @Override
-            public void initSendable(SendableBuilder builder) {
-                builder.setSmartDashboardType("PID+FF Config");
-
-                switch (slot) {
-                    case 0:
-                        builder.addDoubleProperty("KP", () -> config.pid.kp,
-                                (double newValue) -> config.pid.kp = newValue);
-                        builder.addDoubleProperty("KI", () -> config.pid.ki,
-                                (double newValue) -> config.pid.ki = newValue);
-                        builder.addDoubleProperty("KD", () -> config.pid.kd,
-                                (double newValue) -> config.pid.kd = newValue);
-                        builder.addDoubleProperty("KS", () -> config.pid.ks,
-                                (double newValue) -> config.pid.ks = newValue);
-                        builder.addDoubleProperty("KV", () -> config.pid.kv,
-                                (double newValue) -> config.pid.kv = newValue);
-                        builder.addDoubleProperty("KA", () -> config.pid.ka,
-                                (double newValue) -> config.pid.ka = newValue);
-                        builder.addDoubleProperty("KG", () -> config.pid.kg,
-                                (double newValue) -> config.pid.kg = newValue);
-                        break;
-
-                    case 1:
-                        builder.addDoubleProperty("KP", () -> config.pid.kp,
-                                (double newValue) -> config.pid1.kp = newValue);
-                        builder.addDoubleProperty("KI", () -> config.pid.ki,
-                                (double newValue) -> config.pid1.ki = newValue);
-                        builder.addDoubleProperty("KD", () -> config.pid.kd,
-                                (double newValue) -> config.pid1.kd = newValue);
-                        builder.addDoubleProperty("KS", () -> -config.pid.ks,
-                                (double newValue) -> config.pid1.ks = newValue);
-                        builder.addDoubleProperty("KV", () -> config.pid.kv,
-                                (double newValue) -> config.pid1.kv = newValue);
-                        builder.addDoubleProperty("KA", () -> config.pid.ka,
-                                (double newValue) -> config.pid1.ka = newValue);
-                        builder.addDoubleProperty("KG", () -> config.pid.kg,
-                                (double newValue) -> config.pid1.kg = newValue);
-                        break;
-
-                    case 2:
-                        builder.addDoubleProperty("KP", () -> config.pid2.kp,
-                                (double newValue) -> config.pid2.kp = newValue);
-                        builder.addDoubleProperty("KI", () -> config.pid2.ki,
-                                (double newValue) -> config.pid2.ki = newValue);
-                        builder.addDoubleProperty("KD", () -> config.pid2.kd,
-                                (double newValue) -> config.pid2.kd = newValue);
-                        builder.addDoubleProperty("KS", () -> config.pid2.ks,
-                                (double newValue) -> config.pid2.ks = newValue);
-                        builder.addDoubleProperty("KV", () -> config.pid2.kv,
-                                (double newValue) -> config.pid2.kv = newValue);
-                        builder.addDoubleProperty("KA", () -> config.pid2.ka,
-                                (double newValue) -> config.pid2.ka = newValue);
-                        builder.addDoubleProperty("KG", () -> config.pid2.kg,
-                                (double newValue) -> config.pid2.kg = newValue);
-                        break;
-
-                    default:
-                        builder.addDoubleProperty("KP", () -> config.pid.kp,
-                                (double newValue) -> config.pid.kp = newValue);
-                        builder.addDoubleProperty("KI", () -> config.pid.ki,
-                                (double newValue) -> config.pid.ki = newValue);
-                        builder.addDoubleProperty("KD", () -> config.pid.kd,
-                                (double newValue) -> config.pid.kd = newValue);
-                        builder.addDoubleProperty("KS", () -> config.pid.ks,
-                                (double newValue) -> config.pid.ks = newValue);
-                        builder.addDoubleProperty("KV", () -> config.pid.kv,
-                                (double newValue) -> config.pid.kv = newValue);
-                        builder.addDoubleProperty("KA", () -> config.pid.ka,
-                                (double newValue) -> config.pid.ka = newValue);
-                        builder.addDoubleProperty("KG", () -> config.pid.kg,
-                                (double newValue) -> config.pid.kg = newValue);
-                }
-
-                builder.addBooleanProperty("Update", () -> configPidFf.isScheduled(),
-                        value -> {
-                            if (value) {
-                                if (!configPidFf.isScheduled()) {
-                                    configPidFf.schedule();
-                                }
-                            } else {
-                                if (configPidFf.isScheduled()) {
-                                    configPidFf.cancel();
-                                }
-                            }
-                        });
-            }
-        });
+        CloseLoopParam p = config.pid[slot];
+        if(p != null) {
+            UpdateArray.show(name + " PID " + slot , CloseLoopParam.names, p.toArray(),(double[] array)->updatePID(true));
+        }
     }
 
     /**
      * creates a widget in elastic to configure motion magic in hot reload
      */
     public void showConfigMotionVelocitiesCommand() {
-        Command configMotionMagic = new InstantCommand(() -> {
-            MotionMagicConfigs cfg = new MotionMagicConfigs();
-
-            cfg.MotionMagicCruiseVelocity = config.maxVelocity / unitMultiplier;
-            cfg.MotionMagicAcceleration = config.maxAcceleration / unitMultiplier;
-            cfg.MotionMagicJerk = config.maxJerk / unitMultiplier;
-
-            getConfigurator().apply(cfg);
-        }).ignoringDisable(true);
-
-        SmartDashboard.putData(name + "/Motion Magic Config", new Sendable() {
-            @Override
-            public void initSendable(SendableBuilder builder) {
-                builder.setSmartDashboardType("Motion Magic Config");
-
-                builder.addDoubleProperty("Vel", () -> config.maxVelocity,
-                        value -> config.maxVelocity = value);
-                builder.addDoubleProperty("Acc", () -> config.maxAcceleration,
-                        value -> config.maxAcceleration = value);
-                builder.addDoubleProperty("Jerk", () -> config.maxJerk,
-                        value -> config.maxJerk = value);
-
-                builder.addBooleanProperty("Update", () -> configMotionMagic.isScheduled(),
-                        value -> {
-                            if (value) {
-                                if (!configMotionMagic.isScheduled()) {
-                                    configMotionMagic.schedule();
-                                }
-                            } else {
-                                if (configMotionMagic.isScheduled()) {
-                                    configMotionMagic.cancel();
-                                }
-                            }
-                        });
-            }
-        });
+        UpdateArray.show(name + "MOTION PARAM",
+             new String[] {"Velocity", "Acceleration", "Jerk"},
+            new double[] {config.maxVelocity, config.maxAcceleration, config.maxJerk},
+            (double[] array)->{
+                config.maxVelocity = array[0];
+                config.maxAcceleration = array[1];
+                config.maxJerk = array[2];
+                cfg.MotionMagic.MotionMagicCruiseVelocity = config.maxVelocity / unitMultiplier;
+                cfg.MotionMagic.MotionMagicAcceleration = config.maxAcceleration / unitMultiplier;
+                cfg.MotionMagic.MotionMagicJerk = config.maxJerk / unitMultiplier;
+    
+                getConfigurator().apply(cfg.MotionMagic);
+            });
     }
 
     /**

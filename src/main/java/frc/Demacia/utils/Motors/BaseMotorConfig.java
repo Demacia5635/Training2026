@@ -37,9 +37,7 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
     public double maxJerk = 0;
     public double maxPositionError = 0.5;
 
-    public closeLoopParam pid = new closeLoopParam(0, 0, 0, 0, 0, 0, 0); // close loop argument - PID + FF
-    public closeLoopParam pid1 = null; // pid for slot 1
-    public closeLoopParam pid2 = null; // pid for slot 2
+    public CloseLoopParam[] pid = {new CloseLoopParam(), new CloseLoopParam(), new CloseLoopParam()};
 
 
     // enhanced ff
@@ -47,39 +45,7 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
     public double kSin = 0;
     public double posToRad = 0;
 
-        /** 
-    * Class to hold closed loop param
-    *  */
-    static class closeLoopParam { // calculate volts - not -1 to 1 !!!
-        double kp;  
-        double ki;
-        double kd;
-        double ks;
-        double kv;
-        double ka;
-        double kg;
-
-        closeLoopParam(double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
-            this.ka = ka;
-            this.kd = kd;
-            this.ki = ki;
-            this.kp = kp;
-            this.ks = ks;
-            this.kv = kv;
-            this.kg = kg;
-        }
-        closeLoopParam(double kp, double ki, double kd, double kf) {
-            this.ka = 0;
-            this.kd = kd;
-            this.ki = ki;
-            this.kp = kp;
-            this.ks = 0;
-            this.kv = kf;
-            this.kg = 0;
-        }
-    }
-
-    /**
+        /**
      * Constructor
      * @param id - CAN bus ID
      * @param name - name of motor for logging
@@ -228,7 +194,7 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
      * @return TalonConfig
      */
     public T withPID(double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
-        return (T)withPID(1, kp, ki, kd, ks, kv, ka, kg);
+        return (T)withPID(0, kp, ki, kd, ks, kv, ka, kg);
     }
     /** 
      * Set pid
@@ -244,19 +210,7 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
      */
     @SuppressWarnings("unchecked")
     public T withPID(int slot, double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
-        switch(slot) {
-            case 1:
-                pid = new closeLoopParam(kp, ki, kd, ks, kv, ka, kg);
-                break;
-            case 2:
-                pid1 = new closeLoopParam(kp, ki, kd, ks, kv, ka, kg);
-                break;
-            case 3:
-                pid2 = new closeLoopParam(kp, ki, kd, ks, kv, ka, kg);
-                break;
-            default:
-
-        }
+        pid[slot] = new CloseLoopParam(kp, ki, kd, ks, kv, ka, kg);
         return (T)this;
     }
     /** 
@@ -270,19 +224,7 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
      */
     @SuppressWarnings("unchecked")
     public T withPID(int slot, double kp, double ki, double kd, double kf) {
-        switch(slot) {
-            case 1:
-                pid = new closeLoopParam(kp, ki, kd, kf);
-                break;
-            case 2:
-                pid1 = new closeLoopParam(kp, ki, kd, kf);
-                break;
-            case 3:
-                pid2 = new closeLoopParam(kp, ki, kd, kf);
-                break;
-            default:
-
-        }
+        pid[slot] = new CloseLoopParam(kp, ki, kd, kf);
         return (T)this;
     }
     /** 
@@ -294,7 +236,7 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
      * @return TalonConfig
      */
     public T withPID(double kp, double ki, double kd, double kf) {
-        return (T)withPID(id, kp, ki, kf);
+        return (T)withPID(0, kp, ki, kd, kf);
     }
 
     @SuppressWarnings("unchecked")
@@ -323,9 +265,9 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
         this.maxAcceleration = other.maxAcceleration;
         this.maxVelocity = other.maxVelocity;
         this.maxJerk = other.maxJerk;
-        this.pid = other.pid;
-        this.pid1 = other.pid1;
-        this.pid2 = other.pid2;
+        this.pid[0].set(other.pid[0]);
+        this.pid[1].set(other.pid[1]);
+        this.pid[2].set(other.pid[2]);
         this.maxPositionError = other.maxPositionError;
    }
 }

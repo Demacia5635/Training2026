@@ -11,8 +11,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.Demacia.utils.Elastic.UpdateArray;
 import frc.Demacia.utils.Log.LogManager;
 import frc.Demacia.utils.Log.MotorLogEntry;
 import frc.robot.RobotContainer;
@@ -50,20 +49,23 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
     cfg.inverted(config.inverted);
     cfg.idleMode(config.brake ? SparkBaseConfig.IdleMode.kBrake : SparkBaseConfig.IdleMode.kCoast);
     cfg.voltageCompensation(config.maxVolt);
-    cfg.closedLoop.pidf(config.pid.kp, config.pid.ki, config.pid.kd, config.pid.kv, ClosedLoopSlot.kSlot0);
-    if (config.pid1 != null) {
-      cfg.closedLoop.pidf(config.pid1.kp, config.pid1.ki, config.pid1.kd, config.pid1.kv, ClosedLoopSlot.kSlot1);
-    }
-    if (config.pid2 != null) {
-      cfg.closedLoop.pidf(config.pid2.kp, config.pid2.ki, config.pid2.kd, config.pid2.kv, ClosedLoopSlot.kSlot2);
-    }
     cfg.encoder.positionConversionFactor(config.motorRatio);
     cfg.encoder.velocityConversionFactor(config.motorRatio / 60);
+    updatePID(false);
     if (config.maxVelocity != 0) {
       cfg.closedLoop.maxMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration);
     }
     getEncoder();
     this.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+  }
+
+  private void updatePID(boolean apply) {
+    cfg.closedLoop.pidf(config.pid[0].kp(), config.pid[0].ki(), config.pid[0].kd(), config.pid[0].kv(), ClosedLoopSlot.kSlot0);
+    cfg.closedLoop.pidf(config.pid[1].kp(), config.pid[1].ki(), config.pid[1].kd(), config.pid[1].kv(), ClosedLoopSlot.kSlot1);
+    cfg.closedLoop.pidf(config.pid[2].kp(), config.pid[2].ki(), config.pid[2].kd(), config.pid[2].kv(), ClosedLoopSlot.kSlot2);
+    if(apply) {
+      this.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    }
   }
 
   private void addLog() {
@@ -80,18 +82,6 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   public void changeSlot(int slot) {
     if (slot < 0 || slot > 2) {
       LogManager.log("slot is not between 0 and 2", AlertType.kError);
-      return;
-    }
-    if (slot == 0 && config.pid == null) {
-      LogManager.log("slot is null, add config for slot 0", AlertType.kError);
-      return;
-    }
-    if (slot == 1 && config.pid1 == null) {
-      LogManager.log("slot is null, add config for slot 1", AlertType.kError);
-      return;
-    }
-    if (slot == 2 && config.pid2 == null) {
-      LogManager.log("slot is null, add config for slot 2", AlertType.kError);
       return;
     }
     this.slot = slot == 0 ? ClosedLoopSlot.kSlot0 : slot == 1 ? ClosedLoopSlot.kSlot1 : ClosedLoopSlot.kSlot2;
@@ -193,63 +183,11 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
    * @param slot the slot of the close loop perams (from 0 to 2)
    */
   public void showConfigPIDFSlotCommand(int slot) {
-
-    Command configPidFf = new InstantCommand(() -> {
-      switch (slot) {
-
-        case 1:
-          cfg.closedLoop.pid(config.pid1.kp, config.pid1.ki, config.pid1.kd, ClosedLoopSlot.kSlot1);
-          break;
-        case 2:
-          cfg.closedLoop.pid(config.pid1.kp, config.pid1.ki, config.pid1.kd, ClosedLoopSlot.kSlot2);
-          break;
-        case 0:
-        default:
-          cfg.closedLoop.pid(config.pid.kp, config.pid.ki, config.pid.kd, ClosedLoopSlot.kSlot0);
-          break;
-      }
-      super.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-    }).ignoringDisable(true);
-
-    SmartDashboard.putData(name + "/PID+FF config", new Sendable() {
-      @Override
-      public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("PID+FF Config");
-
-        switch (slot) {
-          case 1:
-            builder.addDoubleProperty("KP", () -> config.pid1.kp, (double newValue) -> config.pid1.kp = newValue);
-            builder.addDoubleProperty("KI", () -> config.pid1.ki, (double newValue) -> config.pid1.ki = newValue);
-            builder.addDoubleProperty("KD", () -> config.pid1.kd, (double newValue) -> config.pid1.kd = newValue);
-            break;
-
-          case 2:
-            builder.addDoubleProperty("KP", () -> config.pid2.kp, (double newValue) -> config.pid2.kp = newValue);
-            builder.addDoubleProperty("KI", () -> config.pid2.ki, (double newValue) -> config.pid2.ki = newValue);
-            builder.addDoubleProperty("KD", () -> config.pid2.kd, (double newValue) -> config.pid2.kd = newValue);
-            break;
-
-          case 0:
-          default:
-            builder.addDoubleProperty("KP", () -> config.pid.kp, (double newValue) -> config.pid.kp = newValue);
-            builder.addDoubleProperty("KI", () -> config.pid.ki, (double newValue) -> config.pid.ki = newValue);
-            builder.addDoubleProperty("KD", () -> config.pid.kd, (double newValue) -> config.pid.kd = newValue);
+        CloseLoopParam p = config.pid[slot];
+        if(p != null) {
+            UpdateArray.show(name + " PID " + slot , CloseLoopParam.names, p.toArray(),(double[] array)->updatePID(true));
         }
 
-        builder.addBooleanProperty("Update", () -> configPidFf.isScheduled(),
-            value -> {
-              if (value) {
-                if (!configPidFf.isScheduled()) {
-                  configPidFf.schedule();
-                }
-              } else {
-                if (configPidFf.isScheduled()) {
-                  configPidFf.cancel();
-                }
-              }
-            });
-      }
-    });
   }
 
   public double getCurrentPosition() {
