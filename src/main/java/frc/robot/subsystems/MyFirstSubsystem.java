@@ -15,9 +15,9 @@ import frc.robot.Constants.OperatorConstants;
 
 public class MyFirstSubsystem extends SubsystemBase {
     // Define the motor 
-    TalonFX steerMotor;
+    public TalonFX steerMotor;
      
-    TalonFX driveMotor;
+    public TalonFX driveMotor;
     
 
     // Constructor
@@ -31,8 +31,8 @@ public class MyFirstSubsystem extends SubsystemBase {
     public void setSPower(double power) {
         steerMotor.set(power);
     }
-    public void setDPower(double power2) {
-        driveMotor.set(power2);
+    public void setDPower(double power) {
+        driveMotor.set(power);
     }
     // Method to stop the motor
     public void stop() {
@@ -50,47 +50,48 @@ public double getDPosition() {
 }
  @Override
  public void initSendable(SendableBuilder builder){
+    super.initSendable(builder);
     builder.addDoubleProperty("drive angle", () -> getDPosition(), null);
     builder.addDoubleProperty("steering angle", () -> getSPosition(), null);
  }
- public void drive(double distanceInCm, double power){
-    double wheelCircumference = Math.PI * OperatorConstants.wheelDiameter;
-    double rotations = distanceInCm / wheelCircumference; 
-    double targetPosition = rotations*360+getDPosition();
-    double currnt = getDPosition();
-    double error = targetPosition - currnt;
-    power = power*Math.signum(error);
-     while (Math.abs(error) > 10){
-     currnt = getDPosition();
-     error = targetPosition - currnt;
-    SmartDashboard.putNumber("drive Error", error);
-    SmartDashboard.putNumber("drive angle", currnt);
-    SmartDashboard.putNumber("drive Target ", targetPosition);
-    setDPower(power);
-    SmartDashboard.putNumber("drive Power", power);
-    SmartDashboard.putNumber("drive velocity", driveMotor.getVelocity().getValueAsDouble());
+//  public void drive(double distanceInCm, double power){
+//     double wheelCircumference = Math.PI * OperatorConstants.wheelDiameter;
+//     double rotations = distanceInCm / wheelCircumference; 
+//     double targetPosition = rotations*360+getDPosition();
+//     double currnt = getDPosition();
+//     double error = targetPosition - currnt;
+//     power = power*Math.signum(error);
+//      while (Math.abs(error) > 10){
+//      currnt = getDPosition();
+//      error = targetPosition - currnt;
+//     SmartDashboard.putNumber("drive Error", error);
+//     SmartDashboard.putNumber("drive angle", currnt);
+//     SmartDashboard.putNumber("drive Target ", targetPosition);
+//     setDPower(power);
+//     SmartDashboard.putNumber("drive Power", power);
+//     SmartDashboard.putNumber("drive velocity", driveMotor.getVelocity().getValueAsDouble());
 
-     }
-        power = 0;
-        setDPower(power);
-    }
-    public void steer(double targetAngle, double power){
-        double currnt = getSPosition();
-    double error = targetAngle - currnt;
-    power = power*Math.signum(error);
-     while (Math.abs(error) > 10){
-     currnt = getSPosition();
-     error = targetAngle - currnt;
-    SmartDashboard.putNumber("steering Error", error);
-    SmartDashboard.putNumber("steering angle", currnt);
-    SmartDashboard.putNumber("steering Target ", targetAngle);
-    setSPower(power);
-    SmartDashboard.putNumber("steering Power", power);
-    SmartDashboard.putNumber("steering velocity", steerMotor.getVelocity().getValueAsDouble());
-     }
-        power = 0;
-        setSPower(power);
-    }
+//      }
+//         power = 0;
+//         setDPower(power);
+//     }
+//     public void steer(double targetAngle, double power){
+//         double currnt = getSPosition();
+//     double error = targetAngle - currnt;
+//     power = power*Math.signum(error);
+//      while (Math.abs(error) > 10){
+//      currnt = getSPosition();
+//      error = targetAngle - currnt;
+//     SmartDashboard.putNumber("steering Error", error);
+//     SmartDashboard.putNumber("steering angle", currnt);
+//     SmartDashboard.putNumber("steering Target ", targetAngle);
+//     setSPower(power);
+//     SmartDashboard.putNumber("steering Power", power);
+//     SmartDashboard.putNumber("steering velocity", steerMotor.getVelocity().getValueAsDouble());
+//      }
+//         power = 0;
+//         setSPower(power);
+//     }
     }
     
 
