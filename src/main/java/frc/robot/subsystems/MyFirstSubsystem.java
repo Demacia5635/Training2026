@@ -35,6 +35,9 @@ public class MyFirstSubsystem extends SubsystemBase {
         SteerController.setTolerance(2.0); // angle tolerance for the wheel  
         SteerController.setIntegratorRange(-5, 5);
     }
+    public double getSteerErrTol() {
+        return SteerController.getErrorTolerance();
+    }
 
     // Method to set the motor speed
     public void setSPower(double power) {
@@ -69,6 +72,7 @@ public double getDPosition() {
 }
  @Override
  public void initSendable(SendableBuilder builder){
+    super.initSendable(builder);
     builder.addDoubleProperty("drive angle", () -> getDPosition(), null);
     builder.addDoubleProperty("steering angle", () -> getSPosition(), null);
  }
