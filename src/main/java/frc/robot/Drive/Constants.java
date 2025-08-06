@@ -1,5 +1,7 @@
 package frc.robot.Drive;
 
+import com.ctre.phoenix6.CANBus;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.Demacia.utils.Motors.TalonConfig;
 import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
@@ -16,6 +18,7 @@ public class Constants {
     public static final double Y_POSITION = 0.3;
 
     public static final int GYRO_ID = 13;
+    public static final CANBus GYRO_CANBUS = Canbus.Rio.canbus;
 
     public static double CYCLE_TIME = 0.02;
 
@@ -26,6 +29,8 @@ public class Constants {
     public static final double MAX_Y_ACCELERATION = 5;
     public static final double MAX_Y_VELOCITY_CHANGE = MAX_Y_ACCELERATION * CYCLE_TIME;
 
+    public static final double STEER_TO_DISTANCE_RATIO = 0.14/360.0; // 14 cm for 1 steer rotation
+
     public static double MAX_SET_STATE_STEER_ADDITION = 5.0;
 
     public static final TalonConfig BASE_STEER_CONFIG = new TalonConfig(0, Canbus.Rio, "BASE_STEER")
@@ -35,17 +40,17 @@ public class Constants {
             .withInvert(true)
             .withPID(0.05, 0, 0, 0.14, 0.005, 0.0004, 0)
             .withRampTime(0.2)
-            .withVelocities(900, 1960, 3000)
+            .withMotionParam(1000, 2000, 3000)
             .withVolts(8)
             .withMaxPositionError(0.7);
     public static final TalonConfig BASE_DRIVE_CONFIG = new TalonConfig(0, Canbus.Rio, "BASE_DRIVE")
             .withBrake(true)
             .withCurrent(30)
-            .withMeterMotor(L1_DRIVE_RATIO, Math.PI * WHEEL_DIAMETER)
+            .withMeterMotor(L1_DRIVE_RATIO, WHEEL_DIAMETER)
             .withInvert(false)
             .withPID(1.76, 0, 0, 0.03, 2.93, 0.05, 0)
             .withRampTime(0.2)
-            .withVelocities(3.5, 6.5, 10)
+            .withMotionParam(3.5, 6.5, 10)
             .withVolts(12);
 
     static class ModuleConfig {
@@ -71,7 +76,7 @@ public class Constants {
         new ModuleConfig(1, 2, 3, X_POSITION, Y_POSITION, 22.6),
         new ModuleConfig(4, 5, 6, X_POSITION, -Y_POSITION, 35.7),
         new ModuleConfig(7, 8, 9, -X_POSITION, Y_POSITION, 50.0),
-        new ModuleConfig(10, 11, 12, -X_POSITION, -Y_POSITION, -22.6)
+        new ModuleConfig(10, 11, 12, -X_POSITION, -Y_POSITION, 150.6)
 };
 public static final ModuleConfig[] CONFIGS1 = {
     new ModuleConfig(11, 10, 12, X_POSITION, Y_POSITION, 150.6)

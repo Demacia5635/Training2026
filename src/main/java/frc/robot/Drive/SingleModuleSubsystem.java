@@ -25,11 +25,11 @@ public class SingleModuleSubsystem extends SubsystemBase {
             modulePositionOnRobot[i] = modules[i].config.positionRelativeToRobotCenter;
             moduleState[i] = modules[i].state;
             modulePositions[i] = modules[i].position;
-            modules[i].configPID();
+            modules[i].showConfigPID();
         }
         SmartDashboard.putData("SingleModule", this);
-        MotorCommands.showPowerCommand("Steer Power",this, modules[0].steerMotor());
-        MotorCommands.showPowerCommand("Drive Power",this, modules[0].driveMotor());
+        MotorCommands.showRandomPowerCommand("Steer Random Power",-0.6, 0.6, 0.2, this, modules[0].steerMotor());
+        MotorCommands.showRandomPowerCommand("Drive Random Power",-1, 1, 0.2, this, modules[0].driveMotor());
         MotorCommands.showMotionCommand("Steer Angle",this, modules[0].steerMotor());
         MotorCommands.showVelocityCommand("Drive Velocity",this, modules[0].driveMotor());
 
@@ -47,6 +47,10 @@ public class SingleModuleSubsystem extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
+        builder.addDoubleProperty("state angle",()->moduleState[0].angle.getDegrees(), null);
+        builder.addDoubleProperty("state velocity",()->moduleState[0].speedMetersPerSecond, null);
+        builder.addDoubleProperty("position angle",()->modulePositions[0].angle.getDegrees(), null);
+        builder.addDoubleProperty("position distance",()->modulePositions[0].distanceMeters, null);
     }
 
 }

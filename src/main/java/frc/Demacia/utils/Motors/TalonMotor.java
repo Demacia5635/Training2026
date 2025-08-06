@@ -327,7 +327,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
      */
     public void showConfigMotionVelocitiesCommand() {
         UpdateArray.show(name + "MOTION PARAM",
-             new String[] {"Velocity", "Acceleration", "Jerk"},
+            new String[] {"Velocity", "Acceleration", "Jerk"},
             new double[] {config.maxVelocity, config.maxAcceleration, config.maxJerk},
             (double[] array)->{
                 config.maxVelocity = array[0];

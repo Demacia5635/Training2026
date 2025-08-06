@@ -24,7 +24,7 @@ public final class Constants {
           .withCurrent(20)
           .withInvert(true)
           .withMeterMotor(12.7, 4*0.0254)
-          .withVelocities(3, 6, 10)
+          .withMotionParam(3, 6, 10)
           .withPID(1, 0, 0, 0.12, 3.7, 1.2, 0)
           .withRampTime(0.3)
           .withVolts(6);
@@ -34,7 +34,7 @@ public final class Constants {
         .withInvert(false)
         .withPID(2,   0.2,   0, 0.1)
         .withDegreesMotor(8.4)
-        .withVelocities(900, 1800, 3000)
+        .withMotionParam(900, 1800, 3000)
         .withRampTime(0.2)
         .withVolts(8);
   }
