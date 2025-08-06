@@ -25,10 +25,19 @@ public class modle extends SubsystemBase {
   public void setSteerPower(double power){
     steerMotor.set(power);
   }
+  public void setDrivePower(double power){
+    driveMotor.set(power);
+  }
+  
   public void initSendable(SendableBuilder builder){
     builder.addDoubleProperty("wanted angle",this::getSteerPosition,null);
+    builder.addDoubleProperty("velocity", this::getMotorVelocity, null);
 
   }
+  public double getMotorVelocity(){
+    return driveMotor.getVelocity().getValueAsDouble();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

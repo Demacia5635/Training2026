@@ -18,6 +18,7 @@ public class Motor extends SubsystemBase {
   public void SetPowerForMotor(double power){
     motor.set(power);
   }
+  //public void setVelocity(){}
 
   @Override
   public void periodic() {
