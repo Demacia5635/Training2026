@@ -111,8 +111,8 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
      * @return this config for chaining
      */
     @SuppressWarnings("unchecked")
-    public T withMeterMotor(double gearRatio, double circumference) {
-        this.motorRatio = gearRatio / circumference;
+    public T withMeterMotor(double gearRatio, double diameter) {
+        this.motorRatio = gearRatio / (diameter * Math.PI);
         return (T) this;
     }
 
