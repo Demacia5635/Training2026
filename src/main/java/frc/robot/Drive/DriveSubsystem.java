@@ -17,13 +17,13 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.Demacia.utils.XboxUtils;
-import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
+import frc.Demacia.utils.Motors.MotorCommands;
+import frc.Demacia.utils.Motors.MotorInterface;
 import frc.Demacia.utils.XboxUtils.JoystickSide;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -32,7 +32,9 @@ public class DriveSubsystem extends SubsystemBase {
     SwerveDrivePoseEstimator poseEstimator;
     Field2d robotField;
     SwerveDriveKinematics kinematics;
-    Pigeon2 gyro = new Pigeon2(Constants.GYRO_ID);
+    Pigeon2 gyro;
+    MotorInterface[] steerMotors;
+    MotorInterface[] driveMotors;
     SwerveModulePosition[] modulePositions;
     SwerveModuleState[] moduleState;
     StatusSignal<Angle> gyroSignal;
@@ -48,22 +50,30 @@ public class DriveSubsystem extends SubsystemBase {
         Translation2d[] modulePositionOnRobot = new Translation2d[modules.length];
         modulePositions = new SwerveModulePosition[modules.length];
         moduleState = new SwerveModuleState[modules.length];
+        steerMotors = new MotorInterface[modules.length];
+        driveMotors = new MotorInterface[modules.length];
         for(int i = 0; i < modules.length; i++) {
             modules[i] = new SwerveModule(Constants.CONFIGS[i]);
             modulePositionOnRobot[i] = modules[i].config.positionRelativeToRobotCenter;
             moduleState[i] = modules[i].state;
             modulePositions[i] = modules[i].position;
+            steerMotors[i] = modules[i].steerMotor();
+            driveMotors[i] = modules[i].driveMotor();
         }
         kinematics = new SwerveDriveKinematics(modulePositionOnRobot);
-        gyro = new Pigeon2(Constants.GYRO_ID, Canbus.Rio.canbus);
+        gyro = new Pigeon2(Constants.GYRO_ID, Constants.GYRO_CANBUS);
         gyroSignal = gyro.getYaw();
         poseEstimator = new SwerveDrivePoseEstimator(kinematics, getGyroRotation(), modulePositions,new Pose2d());
         pose = poseEstimator.getEstimatedPosition();
         robotField = new Field2d();
         SmartDashboard.putData("Drive", this);
         SmartDashboard.putData("Robot Position", robotField);
-        SmartDashboard.putData("Steer Power", getSteerPowerCommand());
-        SmartDashboard.putData("Drive Power", getDrivePowerCommand());
+        MotorCommands.showRandomPowerCommand("Steers Random Power", -0.6, 0.6, 0.3, this, steerMotors);
+        MotorCommands.showRandomPowerCommand("Drives Random Power", -0.9, 0.9, 0.2, this, driveMotors);
+        MotorCommands.showMotionCommand("Set Steer Angle",this, steerMotors);
+        MotorCommands.showVelocityCommand("Set Drive Velocity",this, driveMotors);
+        SmartDashboard.putData("Set Drive Brake", new InstantCommand(()-> {for(SwerveModule m : modules) m.setBrake();}).ignoringDisable(true));
+        SmartDashboard.putData("Set Drive Coast", new InstantCommand(()-> {for(SwerveModule m : modules) m.setCoast();}).ignoringDisable(true));
         setDefaultCommand(new RunCommand(this::drive, this));
         controller.start().onTrue(new InstantCommand(this::setFieldHeading, this).ignoringDisable(true));
     }
@@ -73,25 +83,6 @@ public class DriveSubsystem extends SubsystemBase {
         targetChassisSpeeds.vyMetersPerSecond = -XboxUtils.getJSvalue(controller, JoystickSide.RightX) * Constants.MAX_SPEED;
         targetChassisSpeeds.omegaRadiansPerSecond = XboxUtils.getNormalized(controller.getLeftTriggerAxis() - controller.getRightTriggerAxis()) * Constants.MAX_OMEGA;
         setSpeeds(targetChassisSpeeds);
-    }
-
-    private Command getSteerPowerCommand() {
-        SmartDashboard.putNumber("Steer Power:", 0);
-        return new RunCommand(()-> { 
-                double power = SmartDashboard.getNumber("Steer Power:", 0); 
-                for(SwerveModule m : modules) {
-                    m.setSteerPower(power);
-                }
-            },this);
-    }
-    private Command getDrivePowerCommand() {
-        SmartDashboard.putNumber("Drive Power:", 0);
-        return new RunCommand(()-> { 
-                double power = SmartDashboard.getNumber("Drive Power:", 0); 
-                for(SwerveModule m : modules) {
-                    m.setDrivePower(power);
-                }
-            },this);
     }
 
     public void setFieldHeading() {
@@ -165,6 +156,9 @@ public class DriveSubsystem extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
         builder.addDoubleProperty("Heading", this::getHeading, null);
+        builder.addDoubleProperty("Vx", ()->currentChassisSpeeds.vxMetersPerSecond, null);
+        builder.addDoubleProperty("Vy", ()->currentChassisSpeeds.vyMetersPerSecond, null);
+        builder.addDoubleProperty("Omega Rad/sec", ()->currentChassisSpeeds.omegaRadiansPerSecond, null);
     }
 
 }
