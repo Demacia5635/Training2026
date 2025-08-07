@@ -22,6 +22,7 @@ public interface MotorInterface {
     double getCurrentVelocity();
     double getCurrentAcceleration();
     double getCurrentVoltage();
+    double getCurrentCurrent();
 
     void setEncoderPosition(double position);
 

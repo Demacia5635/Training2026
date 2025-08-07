@@ -226,6 +226,9 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   public double getCurrentVoltage() {
     return getAppliedOutput() * 12;
   }
+  public double getCurrentCurrent() {
+    return getOutputCurrent();
+  }
 
   /**
    * override the sendable of the talonFX to our costum widget in elastic
@@ -244,6 +247,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
     builder.addDoubleProperty("Position", this::getCurrentPosition, null);
     builder.addDoubleProperty("Velocity", this::getCurrentVelocity, null);
     builder.addDoubleProperty("Voltage", this::getCurrentVoltage, null);
+    builder.addDoubleProperty("Current", this::getCurrentCurrent, null);
     builder.addDoubleProperty("CloseLoop Error", this::getCurrentClosedLoopError, null);
     if (config.isDegreesMotor || config.isRadiansMotor) {
       builder.addDoubleProperty("Angle", this::getCurrentAngle, null);

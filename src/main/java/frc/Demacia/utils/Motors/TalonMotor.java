@@ -17,6 +17,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -48,6 +49,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     StatusSignalData<AngularVelocity> velocitySignal;
     StatusSignalData<AngularAcceleration> accelerationSignal;
     StatusSignalData<Voltage> voltageSignal;
+    StatusSignalData<Current> currentSignal;
 
     String lastControlMode;
 
@@ -135,6 +137,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         velocitySignal = new StatusSignalData<>(getVelocity(), unitMultiplier);
         accelerationSignal = new StatusSignalData<>(getAcceleration(), unitMultiplier);
         voltageSignal = new StatusSignalData<>(getMotorVoltage());
+        currentSignal = new StatusSignalData<>(getStatorCurrent());
     }
 
     private void addLog() {
@@ -291,6 +294,9 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     public double getCurrentVoltage() {
         return voltageSignal.get();
     }
+    public double getCurrentCurrent() {
+        return currentSignal.get();
+    }
 
     /**
      * creates a widget in elastic of the pid and ff for hot reload
@@ -342,6 +348,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         builder.addDoubleProperty("Velocity", this::getCurrentVelocity, null);
         builder.addDoubleProperty("Acceleration", this::getCurrentAcceleration, null);
         builder.addDoubleProperty("Voltage", this::getCurrentVoltage, null);
+        builder.addDoubleProperty("Current", this::getCurrentCurrent, null);
         if(config.isDegreesMotor || config.isRadiansMotor) {
             builder.addDoubleProperty("Angle", this::getCurrentAngle, null);
         }
@@ -376,6 +383,9 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     }
     public StatusSignalData<Voltage> getVoltageSignal() {
         return voltageSignal;
+    }
+    public StatusSignalData<Current> getCurrentSignal() {
+        return currentSignal;
     }
 
 }

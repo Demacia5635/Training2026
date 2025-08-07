@@ -15,7 +15,7 @@ public class MotorLogEntry {
                 new LogSupplier(motor.getPositionSignal(), "Position",null),
                 new LogSupplier(motor.getVelocitySignal(), "Velocity",null),
                 new LogSupplier(motor.getAccelerationSignal(), "Acceleration",null),
-                new LogSupplier(new StatusSignalData<Current>(motor.getStatorCurrent()), "Current",null),
+                new LogSupplier(motor.getCurrentSignal(), "Current",null),
                 new LogSupplier(motor.getClosedLoopErrorSignal(), "Error",null),
                 new LogSupplier(motor.getClosedLoopSPSignal(), "SetPoint",null)
                             },
