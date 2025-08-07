@@ -45,7 +45,7 @@ public class Translation2d
   private double m_x;
   private double m_y;
 
-  private void set(double x, double y) {
+  public void set(double x, double y) {
     m_x = x;
     m_y = y;
   }
