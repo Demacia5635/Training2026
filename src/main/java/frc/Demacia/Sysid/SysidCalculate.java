@@ -132,7 +132,7 @@ public class SysidCalculate {
                 for(int e = 0; e < error.getNumRows(); e++) {
                     MotorTimeData md = dataArray.get(e);
                     double val = Math.abs(error.get(e, 0) / md.voltage);
-                    if(val > avgErr * 4) {
+                    if(val > 0.5 && val > avgErr * 4) {
                         Sysid.msg(String.format("error %4.2f%% for %s", val, md.toString()));
                     }
                 }
