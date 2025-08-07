@@ -21,10 +21,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.Demacia.utils.XboxUtils;
+import frc.Demacia.utils.DriverUtils;
 import frc.Demacia.utils.Motors.MotorCommands;
 import frc.Demacia.utils.Motors.MotorInterface;
-import frc.Demacia.utils.XboxUtils.JoystickSide;
+import frc.Demacia.utils.DriverUtils.JoystickSide;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -79,9 +79,9 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     private void drive() {
-        targetChassisSpeeds.vxMetersPerSecond = XboxUtils.getJSvalue(controller, JoystickSide.RightY) * Constants.MAX_SPEED;
-        targetChassisSpeeds.vyMetersPerSecond = -XboxUtils.getJSvalue(controller, JoystickSide.RightX) * Constants.MAX_SPEED;
-        targetChassisSpeeds.omegaRadiansPerSecond = XboxUtils.getNormalized(controller.getLeftTriggerAxis() - controller.getRightTriggerAxis()) * Constants.MAX_OMEGA;
+        targetChassisSpeeds.vxMetersPerSecond = DriverUtils.getJSvalue(controller, JoystickSide.RightY) * Constants.MAX_SPEED;
+        targetChassisSpeeds.vyMetersPerSecond = -DriverUtils.getJSvalue(controller, JoystickSide.RightX) * Constants.MAX_SPEED;
+        targetChassisSpeeds.omegaRadiansPerSecond = DriverUtils.getNormalized(controller.getLeftTriggerAxis() - controller.getRightTriggerAxis()) * Constants.MAX_OMEGA;
         setSpeeds(targetChassisSpeeds);
     }
 
