@@ -20,14 +20,11 @@ import java.util.function.Consumer;
 public class Sysid implements Consumer<File> {
     JFrame frame = new JFrame("Sysid");
     FileChooserPanel fileChooser = new FileChooserPanel(this);
-    JList<LogEentryHirerchy> motorList = new JList<>();
-    JList<LogDataEntry> motorListNew = new JList<>();
+    JList<LogDataEntry> motorList = new JList<>();
     SysidResultPanel result = new SysidResultPanel(this);
     JTextArea msgArea = new JTextArea();
     JScrollPane msgPane = new JScrollPane(msgArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     LogReader log;
-
-    static boolean newLog = true;
 
     private static Sysid sysid = null;
 
@@ -45,11 +42,7 @@ public class Sysid implements Consumer<File> {
         motorList.setMinimumSize(new Dimension(300,400));
         motorList.setBorder(BorderFactory.createEtchedBorder());
         pane.add(fileChooser, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 0), 5, 5));
-        if(newLog) {
-            pane.add(motorListNew, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 0), 5, 5));
-        } else {
-            pane.add(motorList, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 0), 5, 5));
-        }
+        pane.add(motorList, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 0), 5, 5));
         pane.add(msgPane, new GridBagConstraints(1, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 0), 5, 5));
         pane.add(result, new GridBagConstraints(1, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 0), 5, 5));
         frame.pack();
@@ -70,15 +63,10 @@ public class Sysid implements Consumer<File> {
         System.out.println(" file set to " + file);
         try {
             log = new LogReader(file.getAbsolutePath());
-            if(newLog) {
-                for(LogDataEntry m : MotorDataNew.motors) {
-                    m.getMotorData();
-                }
-                motorListNew.setListData(MotorDataNew.motors);
-            } else {
-                var motors = log.motors();
-                motorList.setListData(motors);
+            for(LogDataEntry m : MotorData.motors) {
+                m.getMotorData();
             }
+            motorList.setListData(MotorData.motors);
             msg("file " + file.getName() + " loaded");
         } catch (IOException e) {
             msg(" IO error - for file " + file + " error=" + e);
@@ -88,19 +76,11 @@ public class Sysid implements Consumer<File> {
     }
 
     public MotorData getMotor() {
-        if(newLog) {
-            var s = motorListNew.getSelectedValue();
-            if(s != null) {
-                return s.motorData;
-            }
-            return null;
-        } else {
-            var s = motorList.getSelectedValue();
-            if(s != null) {
-                return s.motorData;
-            }
-            return null;
+        var s = motorList.getSelectedValue();
+        if(s != null) {
+            return s.motorData;
         }
+        return null;
     }
 
     public static void main(String[] args) {

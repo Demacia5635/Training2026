@@ -1,54 +1,43 @@
 package frc.Demacia.Sysid;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import edu.wpi.first.util.datalog.DataLogRecord;
 
-public class MotorData {
-    LogEentryHirerchy motor;
+public class MotorData  {
+
+    protected static Vector<LogDataEntry> motors = new Vector<>();
+
+    LogDataEntry entry;
     ArrayList<MotorTimeData> data = new ArrayList<>();
-    LogEentryHirerchy[] entries = new LogEentryHirerchy[LogReader.MotorFields.length + 1];
     double maxVelocity = 0;
 
-    public MotorData(LogEentryHirerchy motor) {
-        this.motor = motor;
-        if(motor != null) {
-            for(int i = 0; i < LogReader.MotorFields.length; i++) {
-                String s = LogReader.MotorFields[i];
-                LogEentryHirerchy e = motor.child(s);
-                entries[i] = e;
-            }
-            createData();        
-        }
+
+    public MotorData(LogDataEntry entry) {
+        this.entry = entry;
+        createData();
     }
-
     private void createData() {
-        DataLogRecord[] records = new DataLogRecord[LogReader.MotorFields.length+1];
-        DataLogRecord[] precords = new DataLogRecord[LogReader.MotorFields.length+1];
-        for(int i = 0; i < records.length; i++) {
-            if(entries[i] != null) {
-                entries[i].entryData.resetIterator();
-                records[i] = entries[i].entryData.next();
-                precords[i] = records[i];
-            } else {
-                records[i] = null;
-                precords[i] = null;
-            }
-        }
-
-        while(records[0] != null) {
-            // move all to vel time
-            long time = records[0].getTimestamp();
-            for(int i = 1; i < records.length; i++) {
-                while(records[i] != null && records[i].getTimestamp() < time + 15) {
-                    precords[i] = records[i];
-                    records[i] = entries[i].entryData.next();
+        entry.resetIterator();
+        double maxVolt = 0;
+        DataLogRecord record = entry.next();
+        while(record != null) {
+            try {
+                float[] d = record.getFloatArray();
+                data.add(new MotorTimeData(d[2], d[1],d[3],d[0],record.getTimestamp()));
+                if(Math.abs(d[2]) > maxVelocity) {
+                    maxVelocity = Math.abs(d[2]);
                 }
+                if(Math.abs(d[0]) > maxVolt) {
+                    maxVolt = Math.abs(d[0]);
+                }
+            } catch (Exception e) {
+                System.err.println("Error getting double array for " + entry.name  +  " after " + data.size() + "  : " + e);
             }
-            data.add(new MotorTimeData(precords[1].getDouble(), records[0].getDouble(), precords[3] != null? precords[3].getDouble():0, precords[2].getDouble(), time));  
-            //System.out.println(" added - times = " + precords[1].getTimestamp() + " " + records[0].getTimestamp() + " " + precords[3].getTimestamp() + " " + precords[2].getTimestamp());
-            records[0] = entries[0].entryData.next();
+            record = entry.next();
         }
         updateAcceleration();
+        System.out.println("max volt = " + maxVolt);
     }
 
     private void updateAcceleration() {
@@ -71,8 +60,6 @@ public class MotorData {
     public ArrayList<MotorTimeData> data() {
         return data;
     }
-
-
 
 
     public class MotorTimeData {
@@ -104,4 +91,5 @@ public class MotorData {
             }
         }
     }
+ 
 }

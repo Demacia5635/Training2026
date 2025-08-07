@@ -1,7 +1,6 @@
 package frc.Demacia.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.ctre.phoenix6.StatusSignal;
 
