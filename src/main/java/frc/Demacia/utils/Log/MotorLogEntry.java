@@ -1,7 +1,6 @@
 package frc.Demacia.utils.Log;
 
-import edu.wpi.first.units.measure.Current;
-import frc.Demacia.utils.StatusSignalData;
+import frc.Demacia.utils.Log.LogManager.LOG_TARGET;
 import frc.Demacia.utils.Motors.SparkMotor;
 import frc.Demacia.utils.Motors.TalonMotor;
 
@@ -19,7 +18,7 @@ public class MotorLogEntry {
                 new LogSupplier(motor.getClosedLoopErrorSignal(), "Error",null),
                 new LogSupplier(motor.getClosedLoopSPSignal(), "SetPoint",null)
                             },
-            2, 
+            LOG_TARGET.LOG_AND_NT, 
             "Motor", 
             "Talon", 
             "GearRatio:" + motor.gearRatio());
@@ -37,7 +36,7 @@ public class MotorLogEntry {
                 new LogSupplier(motor::getCurrentClosedLoopError, "Error",null),
                 new LogSupplier(motor::getCurrentClosedLoopSP, "SetPoint",null)
                             },
-            2, 
+            LOG_TARGET.LOG_AND_NT, 
             "Motor", 
             "Spark", 
             "GearRatio:" + motor.gearRatio());

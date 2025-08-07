@@ -1,7 +1,5 @@
 package frc.Demacia.utils.Log;
 
-import static frc.Demacia.utils.constants.UtilsContants.*;
-
 import java.util.ArrayList;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -11,9 +9,12 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Demacia.utils.constants.UtilsContants.ConsoleConstants;
 
 public class LogManager extends SubsystemBase {
 
+  public static enum LOG_TARGET {LOG_AND_NT, LOG_ONLY, LOG_NOT_COMPETIION, LOG_NT_NOT_COMPETIION}
+  
   public static LogManager logManager = new LogManager(); // singelton reference
 
   DataLog log;
@@ -41,7 +42,7 @@ public class LogManager extends SubsystemBase {
   public static void removeInComp() {
     for (int i = 0; i < LogManager.logManager.logEntries.size(); i++) {
       LogManager.logManager.logEntries.get(i).removeInComp();
-      if (LogManager.logManager.logEntries.get(i).logLevel == 1) {
+      if (LogManager.logManager.logEntries.get(i).logTarget == LOG_TARGET.LOG_NOT_COMPETIION) {
         LogManager.logManager.logEntries.remove(LogManager.logManager.logEntries.get(i));
         i--;
       }

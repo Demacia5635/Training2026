@@ -10,6 +10,7 @@ import frc.Demacia.utils.StatusSignalData;
 import frc.Demacia.utils.Log.LogEntry;
 import frc.Demacia.utils.Log.LogManager;
 import frc.Demacia.utils.Log.LogSupplier;
+import frc.Demacia.utils.Log.LogManager.LOG_TARGET;
 
 public class Cancoder extends CANcoder {
 
@@ -53,7 +54,7 @@ public class Cancoder extends CANcoder {
                 new LogSupplier(absPositionSignal, "AbsPosition",null),
                 new LogSupplier(velocitySignal, "Velocity",null),
                             },
-            2, 
+            LOG_TARGET.LOG_AND_NT, 
             "Cancoder", 
             "", 
             ""
