@@ -41,14 +41,14 @@ public class SwerveModule implements Sendable {
     }
 
     public SwerveModuleState refreshState() {
-        state.angle.set(Math.toRadians(steer.getCurrentPosition()));
+        state.angle.setDegrees(steer.getCurrentPosition());
         state.speedMetersPerSecond = drive.getCurrentVelocity();
         return state;
     }
 
     public SwerveModulePosition refreshPosition() {
         double steerPosition = steer.getCurrentPosition();
-        position.angle.set(Math.toRadians(lastSteerPosition + steerPosition)/2);
+        position.angle.setDegrees((lastSteerPosition + steerPosition)/2);
         lastSteerPosition = steerPosition;
         position.distanceMeters = drive.getCurrentPosition() + steerPosition * Constants.STEER_TO_DISTANCE_RATIO;
         return position;
