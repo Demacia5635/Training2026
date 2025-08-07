@@ -86,8 +86,9 @@ public class MotorData  {
             if(prev == null) {
                 return String.format("volt=%4.2f  vel=%5.2f  acc=%5.2f  pos=%6.2f", voltage, velocity, rawAcceleration, position);
             } else {
+                int deltaTime  = (int)((time - prev.time)/1000.0);
                 return String.format("volt=%4.2f-%4.2f  vel=%5.2f-%5.2f  acc=%5.2f-%5.2f  pos=%6.2f-%6.2f  timeDiff=%d", 
-                    prev.voltage, voltage, prev.velocity, velocity, prev.rawAcceleration, rawAcceleration, prev.position, position, (time - prev.time));
+                    prev.voltage, voltage, prev.velocity, velocity, prev.rawAcceleration, rawAcceleration, prev.position, position, deltaTime);
             }
         }
     }
