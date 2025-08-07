@@ -96,14 +96,17 @@ public class Rotation2d
     m_sin = 0.0;
   }
 
-  public Rotation2d set(double value) {
-    m_value = value;
-    m_cos = Math.cos(value);
-    m_sin = Math.sin(value);
+  public Rotation2d set(double radians) {
+    m_value = radians;
+    m_cos = Math.cos(m_value);
+    m_sin = Math.sin(m_value);
     return this;
 
   }
-  public Rotation2d set(double x, double y) {
+  public Rotation2d setDegrees(double degrees) {
+    return set(Math.toRadians(degrees));
+  }
+    public Rotation2d set(double x, double y) {
     double magnitude = Math.hypot(x, y);
     if (magnitude > 1e-6) {
       m_cos = x / magnitude;
