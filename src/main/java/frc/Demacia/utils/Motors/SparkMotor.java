@@ -242,7 +242,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
    */
   @Override
   public void initSendable(SendableBuilder builder) {
-    builder.setSmartDashboardType("SparkMotor");
+    builder.setSmartDashboardType("Spark Motor");
     builder.addStringProperty("ControlMode", this::getCurrentControlMode, null);
     builder.addDoubleProperty("Position", this::getCurrentPosition, null);
     builder.addDoubleProperty("Velocity", this::getCurrentVelocity, null);
