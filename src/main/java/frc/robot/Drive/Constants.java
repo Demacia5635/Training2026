@@ -44,8 +44,7 @@ public class Constants {
             .withPID(0.05, 0, 0, 0.14, 0.005, 0.0004, 0)
             .withRampTime(0.2)
             .withMotionParam(1000, 2000, 3000)
-            .withVolts(8)
-            .withMaxPositionError(0.7);
+            .withVolts(8);
     public static final TalonConfig BASE_DRIVE_CONFIG = new TalonConfig(0, Canbus.Rio, "BASE_DRIVE")
             .withBrake(true)
             .withCurrent(30)
