@@ -6,6 +6,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.Demacia.utils.Motors.MotorCommands;
 import frc.Demacia.utils.Motors.MotorInterface;
 import frc.Demacia.utils.Motors.TalonMotor;
 import frc.Demacia.utils.Sensors.Cancoder;
@@ -18,8 +20,6 @@ public class SwerveModule implements Sendable {
     protected SwerveModuleState state = new SwerveModuleState();
     protected SwerveModulePosition position = new SwerveModulePosition();
     private double lastSteerPosition = 0;
-
-    
 
     SwerveModule(Constants.ModuleConfig config) {
         this.config = config;
@@ -40,18 +40,16 @@ public class SwerveModule implements Sendable {
         return absEncoder.getCurrentAbsPosition();
     }
 
-    public SwerveModuleState refreshState() {
+    public void refreshState() {
         state.angle.setDegrees(steer.getCurrentPosition());
         state.speedMetersPerSecond = drive.getCurrentVelocity();
-        return state;
     }
 
-    public SwerveModulePosition refreshPosition() {
+    public void refreshPosition() {
         double steerPosition = steer.getCurrentPosition();
         position.angle.setDegrees((lastSteerPosition + steerPosition)/2);
         lastSteerPosition = steerPosition;
         position.distanceMeters = drive.getCurrentPosition() + steerPosition * Constants.STEER_TO_DISTANCE_RATIO;
-        return position;
     }
 
     public void setState(SwerveModuleState state) {
@@ -100,6 +98,15 @@ public class SwerveModule implements Sendable {
     public void showConfigPID() {
         steer.showConfigPIDFSlotCommand(0);
         drive.showConfigPIDFSlotCommand(0);
+        steer.showConfigMotionVelocitiesCommand();
+        drive.showConfigMotionVelocitiesCommand();
+    }
+
+    public void showBaseCommands(Subsystem subsystem) {
+        MotorCommands.showRandomPowerCommand(config.name + " Steer Random Power",-0.6, 0.6, 0.2, subsystem, steer);
+        MotorCommands.showRandomPowerCommand(config.name + " Drive Random Power",-1, 1, 0.2, subsystem, drive);
+        MotorCommands.showMotionCommand(config.name + " Steer Angle",subsystem, steer);
+        MotorCommands.showVelocityCommand(config.name + " Drive Velocity",subsystem, drive);
     }
 
     protected MotorInterface steerMotor() {

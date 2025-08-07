@@ -6,7 +6,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.Demacia.utils.Motors.MotorCommands;
 
 public class SingleModuleSubsystem extends SubsystemBase {
 
@@ -26,13 +25,9 @@ public class SingleModuleSubsystem extends SubsystemBase {
             moduleState[i] = modules[i].state;
             modulePositions[i] = modules[i].position;
             modules[i].showConfigPID();
+            modules[i].showBaseCommands(this);
         }
         SmartDashboard.putData("SingleModule", this);
-        MotorCommands.showRandomPowerCommand("Steer Random Power",-0.6, 0.6, 0.2, this, modules[0].steerMotor());
-        MotorCommands.showRandomPowerCommand("Drive Random Power",-1, 1, 0.2, this, modules[0].driveMotor());
-        MotorCommands.showMotionCommand("Steer Angle",this, modules[0].steerMotor());
-        MotorCommands.showVelocityCommand("Drive Velocity",this, modules[0].driveMotor());
-
     }
 
     @Override
