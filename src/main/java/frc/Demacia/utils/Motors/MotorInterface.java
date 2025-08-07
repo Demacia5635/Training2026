@@ -18,6 +18,7 @@ public interface MotorInterface {
     double getCurrentClosedLoopSP();
     double getCurrentClosedLoopError();
     double getCurrentPosition();
+    double getCurrentAngle(); // for radians and degrees motor
     double getCurrentVelocity();
     double getCurrentAcceleration();
     double getCurrentVoltage();

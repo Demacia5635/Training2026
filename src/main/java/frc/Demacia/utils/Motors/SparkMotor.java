@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
@@ -60,10 +61,13 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   }
 
   private void updatePID(boolean apply) {
-    cfg.closedLoop.pidf(config.pid[0].kp(), config.pid[0].ki(), config.pid[0].kd(), config.pid[0].kv(), ClosedLoopSlot.kSlot0);
-    cfg.closedLoop.pidf(config.pid[1].kp(), config.pid[1].ki(), config.pid[1].kd(), config.pid[1].kv(), ClosedLoopSlot.kSlot1);
-    cfg.closedLoop.pidf(config.pid[2].kp(), config.pid[2].ki(), config.pid[2].kd(), config.pid[2].kv(), ClosedLoopSlot.kSlot2);
-    if(apply) {
+    cfg.closedLoop.pidf(config.pid[0].kp(), config.pid[0].ki(), config.pid[0].kd(), config.pid[0].kv(),
+        ClosedLoopSlot.kSlot0);
+    cfg.closedLoop.pidf(config.pid[1].kp(), config.pid[1].ki(), config.pid[1].kd(), config.pid[1].kv(),
+        ClosedLoopSlot.kSlot1);
+    cfg.closedLoop.pidf(config.pid[2].kp(), config.pid[2].ki(), config.pid[2].kd(), config.pid[2].kv(),
+        ClosedLoopSlot.kSlot2);
+    if (apply) {
       this.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     }
   }
@@ -183,10 +187,10 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
    * @param slot the slot of the close loop perams (from 0 to 2)
    */
   public void showConfigPIDFSlotCommand(int slot) {
-        CloseLoopParam p = config.pid[slot];
-        if(p != null) {
-            UpdateArray.show(name + " PID " + slot , CloseLoopParam.names, p.toArray(),(double[] array)->updatePID(true));
-        }
+    CloseLoopParam p = config.pid[slot];
+    if (p != null) {
+      UpdateArray.show(name + " PID " + slot, CloseLoopParam.names, p.toArray(), (double[] array) -> updatePID(true));
+    }
 
   }
 
@@ -194,9 +198,18 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
     return encoder.getPosition();
   }
 
+  public double getCurrentAngle() {
+    if (config.isRadiansMotor) {
+      return MathUtil.angleModulus(getCurrentPosition());
+    } else if (config.isDegreesMotor) {
+      return MathUtil.inputModulus(getCurrentPosition(), -180, 180);
+    }
+    return 0;
+  }
+
   public double getCurrentVelocity() {
     double velocity = encoder.getVelocity();
-    if(lastCycleNum != RobotContainer.N_CYCLE) {
+    if (lastCycleNum != RobotContainer.N_CYCLE) {
       lastCycleNum = RobotContainer.N_CYCLE;
       double time = Timer.getFPGATimestamp();
       lastAcceleration = (velocity - lastVelocity) / (time - lastTime);
@@ -232,6 +245,10 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
     builder.addDoubleProperty("Velocity", this::getCurrentVelocity, null);
     builder.addDoubleProperty("Voltage", this::getCurrentVoltage, null);
     builder.addDoubleProperty("CloseLoop Error", this::getCurrentClosedLoopError, null);
+    if (config.isDegreesMotor || config.isRadiansMotor) {
+      builder.addDoubleProperty("Angle", this::getCurrentAngle, null);
+    }
+
   }
 
   public double gearRatio() {
@@ -262,14 +279,13 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   @Override
   public void showConfigMotionVelocitiesCommand() {
     UpdateArray.show(name + "MOTION PARAM",
-      new String[] {"Velocity", "Acceleration"},
-      new double[] {config.maxVelocity, config.maxAcceleration},
-      (double[] array)->{
-        config.maxVelocity = array[0];
-        config.maxAcceleration = array[1];
-        cfg.closedLoop.maxMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration);
-        configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-      }
-    );
+        new String[] { "Velocity", "Acceleration" },
+        new double[] { config.maxVelocity, config.maxAcceleration },
+        (double[] array) -> {
+          config.maxVelocity = array[0];
+          config.maxAcceleration = array[1];
+          cfg.closedLoop.maxMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration);
+          configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+        });
   }
 }

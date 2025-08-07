@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -270,6 +271,14 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     public double getCurrentPosition() {
         return positionSignal.get();
     }
+    public double getCurrentAngle() {
+        if(config.isRadiansMotor) {
+            return MathUtil.angleModulus(getCurrentPosition());
+        } else if(config.isDegreesMotor) {
+            return MathUtil.inputModulus(getCurrentPosition(), -180, 180);
+        }
+        return 0;
+    }
 
     public double getCurrentVelocity() {
         return velocitySignal.get();
@@ -333,6 +342,9 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         builder.addDoubleProperty("Velocity", this::getCurrentVelocity, null);
         builder.addDoubleProperty("Acceleration", this::getCurrentAcceleration, null);
         builder.addDoubleProperty("Voltage", this::getCurrentVoltage, null);
+        if(config.isDegreesMotor || config.isRadiansMotor) {
+            builder.addDoubleProperty("Angle", this::getCurrentAngle, null);
+        }
     }
 
     public double gearRatio() {
