@@ -1,5 +1,6 @@
 package frc.Demacia.utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.ctre.phoenix6.StatusSignal;
@@ -7,7 +8,7 @@ import com.ctre.phoenix6.StatusSignal;
 public class StatusSignalData<T> {
 
     @SuppressWarnings("rawtypes")
-    private static StatusSignal[] signals = null;
+    private static ArrayList<StatusSignalData> signals = new ArrayList<>();
 
 
     StatusSignal<T> signal;
@@ -18,7 +19,7 @@ public class StatusSignalData<T> {
         this.signal = signal;
         signal.refresh();
         lastValue = signal.getValueAsDouble();
-        add();
+        signals.add(this);
     }
     public StatusSignalData(StatusSignal<T> signal, double multiplier) {
         this(signal);
@@ -50,18 +51,14 @@ public class StatusSignalData<T> {
         return signal;
     }
 
-    private void add() {
-        if(signals == null) {
-            signals = new StatusSignal[1];
-            signals[0] = signal;
-        } else {
-            signals = Arrays.copyOf(signals, signals.length + 1);
-            signals[signals.length-1] = signal;
-        }
-    }
-
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void refreshAll() {
-        StatusSignal.refreshAll(signals);
+        for(StatusSignalData s : signals) {
+            s.signal.refresh();
+            if(s.signal.getStatus().isOK()) {
+                s.lastValue = s.signal.getValueAsDouble();
+            }
+        }
     }
 
 }
