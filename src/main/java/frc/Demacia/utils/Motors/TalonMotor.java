@@ -341,8 +341,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
      */
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("TalonMotor");
-        super.initSendable(builder);
+        builder.setSmartDashboardType("Talon Motor");
         builder.addDoubleProperty("CloseLoopError", this::getCurrentClosedLoopError, null);
         builder.addDoubleProperty("Position", this::getCurrentPosition, null);
         builder.addDoubleProperty("Velocity", this::getCurrentVelocity, null);
