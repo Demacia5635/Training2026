@@ -21,11 +21,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
-  private final Command steer90 = new GoToAngle(subsystem,90);
-  private final Command drive1 = new Drive(subsystem, 100);
-  private final Command steer135 = new GoToAngle(subsystem,135);
-  private final Command drive_1 = new Drive(subsystem, -100);
-  private final Command steer0 = new GoToAngle(subsystem,0);
+  private final Command steer90 = new GoToAngle(subsystem,0, 0.013, 0.0065, 0.0004);
+  private final Command drive1 = new Drive(subsystem, 100, 0.01, 0.0, 0.0);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -53,7 +50,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return steer90.andThen(drive1.alongWith(steer135)).andThen(drive_1.alongWith(steer0));
+    return steer90;
 
     
 

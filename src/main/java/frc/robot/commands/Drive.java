@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import javax.sound.sampled.TargetDataLine;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
@@ -18,11 +19,19 @@ public class Drive extends Command {
   MyFirstSubsystem subsystem;
   private double targetDistance;
   private double targetPosition;
+  private double sumError = 0;
+  private double kp;
+  private double ki;
+  private double kd;
+  private double lastError;
 
-  public Drive(MyFirstSubsystem subsystem, double targetDistance) {
+  public Drive(MyFirstSubsystem subsystem, double targetDistance, double kp, double ki, double kd) {
     // Use addRequirements() here to declare subsystem dependencies.
         this.subsystem = subsystem;
         this.targetDistance = targetDistance;
+        this.kp = kp;
+        this.ki = ki;
+        this.kd = kd;
         double wheelCircumference = Math.PI * OperatorConstants.wheelDiameter;
         double rotations = targetDistance / wheelCircumference; 
         double targetPosition = rotations*360+subsystem.getDPosition();
@@ -35,15 +44,18 @@ public class Drive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    double dCurrnt = subsystem.getDPosition();
-    double dError = targetPosition - dCurrnt;
-    double dPower = 0.3*Math.signum(dError);
-    SmartDashboard.putNumber("drive Error", dError);
-    SmartDashboard.putNumber("drive angle", dCurrnt);
+    double currnt = subsystem.getDPosition();
+    double error = targetPosition - currnt;
+    sumError += error;
+      double p = kp * error;
+      double i = ki * sumError;
+      double d = kd * (lastError - error);
+      double power = MathUtil.clamp(p+i+d,-0.5, 0.5);
+    SmartDashboard.putNumber("drive Error", error);
+    SmartDashboard.putNumber("drive angle", currnt);
     SmartDashboard.putNumber("drive Target ", targetPosition);
-    subsystem.setDPower(dPower);
-    SmartDashboard.putNumber("drive Power", dPower);
+    subsystem.setDPower(power);
+    SmartDashboard.putNumber("drive Power", power);
     SmartDashboard.putNumber("drive velocity", subsystem.driveMotor.getVelocity().getValueAsDouble());
   }
 
@@ -54,7 +66,7 @@ public class Drive extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean isFinished = Math.abs(targetPosition - subsystem.getDPosition()) < 10;
+    boolean isFinished = Math.abs(targetPosition - subsystem.getDPosition()) < 3;
     return isFinished;
   }
 }
