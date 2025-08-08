@@ -18,26 +18,6 @@ import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class Example {
-    public static final TalonConfig TALON_CONFIG = new TalonConfig(7, Canbus.Rio, "talon example motor")
-          .withBrake(true)
-          .withCurrent(20)
-          .withInvert(true)
-          .withMeterMotor(12.7, 4*0.0254)
-          .withMotionParam(3, 6, 10)
-          .withPID(1, 0, 0, 0.12, 3.7, 1.2, 0)
-          .withRampTime(0.3)
-          .withVolts(6);
-    public static final SparkConfig SPARKMOTOR_CONFIG = new SparkConfig(8, "spark example motor")
-        .withBrake(true)
-        .withCurrent(20)
-        .withInvert(false)
-        .withPID(2,   0.2,   0, 0.1)
-        .withDegreesMotor(8.4)
-        .withMotionParam(900, 1800, 3000)
-        .withRampTime(0.2)
-        .withVolts(8);
-  }
 
   public static class ModuleConstants {
     public static final int STEER_ID = 1;

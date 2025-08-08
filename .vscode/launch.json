@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "WindowBuilder",
+      "request": "launch",
+      "mainClass": "WindowBuilder",
+      "projectName": "Training2026"
+    },
+    {
+      "type": "java",
       "name": "RandomPowerGenerator",
       "request": "launch",
       "mainClass": "frc.Demacia.utils.Motors.RandomPowerGenerator",
