@@ -76,7 +76,22 @@ public class MotorCommands {
             });
     }
     public static Command getRandomPowerCommand(String name, double minPower, double maxPower, double rampTime, Subsystem subsystem, MotorInterface...motors) {
-        RandomPowerGenerator generator = new RandomPowerGenerator(minPower,maxPower,rampTime);
+        SlowPowerGenerator generator = new SlowPowerGenerator(minPower,maxPower,rampTime);
+        return new RunCommand(()->{
+            double p = generator.next();
+            for(MotorInterface motor : motors) {
+                motor.setDuty(p);
+            }
+        }, subsystem)
+            .finallyDo((boolean b)-> {
+                for(MotorInterface motor : motors) {
+                    motor.setDuty(0);
+                }
+    
+            });
+    }
+    public static Command getSlowPowerCommand(String name, double minPower, double deltaPower, double waitTime, Subsystem subsystem, MotorInterface...motors) {
+        SlowPowerGenerator generator = new SlowPowerGenerator(minPower, deltaPower, waitTime);
         return new RunCommand(()->{
             double p = generator.next();
             for(MotorInterface motor : motors) {
@@ -109,6 +124,9 @@ public class MotorCommands {
 
     public static void showPowerCommand(String name, Subsystem subsystem, MotorInterface...motors) {
         SmartDashboard.putData(name, getPowerCommand(name, subsystem, motors));
+    }
+    public static void showSlowPowerCommand(String name, double minPower, double stepPower, double waitTime, Subsystem subsystem, MotorInterface...motors) {
+        SmartDashboard.putData(name, getSlowPowerCommand(name, minPower, stepPower, waitTime, subsystem, motors));
     }
 
 }

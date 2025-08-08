@@ -11,6 +11,7 @@ public class MotorData  {
     LogDataEntry entry;
     ArrayList<MotorTimeData> data = new ArrayList<>();
     double maxVelocity = 0;
+    double minPowerToMove = 12;
 
 
     public MotorData(LogDataEntry entry) {
@@ -48,6 +49,10 @@ public class MotorData  {
                 double deltaTime = (m.time - prev.time)/1000.0;
                 double acc = (m.velocity - prev.velocity) / deltaTime;
                 m.acceleration = (m.acceleration * deltaTime + acc * 0.02) / (deltaTime + 0.02);
+                double absVolt = Math.abs(m.voltage);
+                if(prev.velocity == 0 && m.velocity != 0 && absVolt > 0.01 && (m.velocity*m.voltage) > 0  && absVolt < minPowerToMove) {
+                    minPowerToMove = absVolt;   
+                }
                 m.prev = prev;
             }
             prev = m;

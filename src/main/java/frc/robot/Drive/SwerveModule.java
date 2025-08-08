@@ -105,6 +105,8 @@ public class SwerveModule implements Sendable {
     public void showBaseCommands(Subsystem subsystem) {
         MotorCommands.showRandomPowerCommand(config.name + " Steer Random Power",-0.6, 0.6, 0.2, subsystem, steer);
         MotorCommands.showRandomPowerCommand(config.name + " Drive Random Power",-1, 1, 0.2, subsystem, drive);
+        MotorCommands.showSlowPowerCommand(config.name + " Steer Slow Power",0.07, 0.01, 1, subsystem, steer);
+        MotorCommands.showSlowPowerCommand(config.name + " Drive Slow Power",0.01, 0.01, 1, subsystem, drive);
         MotorCommands.showMotionCommand(config.name + " Steer Angle",subsystem, steer);
         MotorCommands.showVelocityCommand(config.name + " Drive Velocity",subsystem, drive);
     }

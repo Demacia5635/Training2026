@@ -82,20 +82,8 @@ public class RandomPowerGenerator {
         return lastPower;
     }
 
-    public static Command getRandomPowerCommand(MotorInterface motor, RandomPowerGenerator generator, Subsystem subsystem) {
+    public static Command getRandomPowerCommand(MotorInterface motor, SlowPowerGenerator generator, Subsystem subsystem) {
         return new RunCommand(()->motor.setDuty(generator.next()), subsystem);
-    }
-
-    public static void main(String[] args) {
-        RandomPowerGenerator r = new RandomPowerGenerator(-0.5,0.6,0.3);
-        for(int i = 0; i < 100; i++) {
-            System.out.printf("%3d: %3.2f s=%s %.3f %.3f %.3f\n", i, r.next(), r.strategy, r.lastTime, r.stepEndTime, r.maxChange);
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
  
 }

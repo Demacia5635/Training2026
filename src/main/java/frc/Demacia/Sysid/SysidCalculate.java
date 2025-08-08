@@ -138,6 +138,7 @@ public class SysidCalculate {
                 }
             }
         }
+        Sysid.msg(String.format("Min Power to Move = %.3f",motorData.minPowerToMove));
     }
 
     public double getRange(VelocityRange range) {

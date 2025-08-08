@@ -62,6 +62,7 @@ public class Sysid implements Consumer<File> {
     public void accept(File file) {
         System.out.println(" file set to " + file);
         try {
+            MotorData.motors.clear();
             log = new LogReader(file.getAbsolutePath());
             for(LogDataEntry m : MotorData.motors) {
                 m.getMotorData();
