@@ -1,6 +1,7 @@
 package frc.robot.Drive;
 
-import static edu.wpi.first.units.Units.Degrees;
+
+import static edu.wpi.first.units.Units.Radians;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -36,12 +37,13 @@ public class DriveSubsystem extends SubsystemBase {
     MotorInterface[] steerMotors;
     MotorInterface[] driveMotors;
     SwerveModulePosition[] modulePositions;
-    SwerveModuleState[] moduleState;
+    SwerveModuleState[] moduleStates;
     StatusSignal<Angle> gyroSignal;
     Pose2d pose;
     ChassisSpeeds currentChassisSpeeds;
     CommandXboxController controller;
     ChassisSpeeds targetChassisSpeeds = new ChassisSpeeds();
+    Rotation2d gyroRotation = new Rotation2d();
 
     public DriveSubsystem(CommandXboxController controller) {
         super();
@@ -49,13 +51,13 @@ public class DriveSubsystem extends SubsystemBase {
         modules = new SwerveModule[Constants.CONFIGS.length];
         Translation2d[] modulePositionOnRobot = new Translation2d[modules.length];
         modulePositions = new SwerveModulePosition[modules.length];
-        moduleState = new SwerveModuleState[modules.length];
+        moduleStates = new SwerveModuleState[modules.length];
         steerMotors = new MotorInterface[modules.length];
         driveMotors = new MotorInterface[modules.length];
         for(int i = 0; i < modules.length; i++) {
             modules[i] = new SwerveModule(Constants.CONFIGS[i]);
             modulePositionOnRobot[i] = modules[i].config.positionRelativeToRobotCenter;
-            moduleState[i] = modules[i].state;
+            moduleStates[i] = modules[i].state;
             modulePositions[i] = modules[i].position;
             steerMotors[i] = modules[i].steerMotor();
             driveMotors[i] = modules[i].driveMotor();
@@ -68,47 +70,56 @@ public class DriveSubsystem extends SubsystemBase {
         robotField = new Field2d();
         SmartDashboard.putData("Drive", this);
         SmartDashboard.putData("Robot Position", robotField);
-        MotorCommands.showRandomPowerCommand("Steers Random Power", -0.6, 0.6, 0.3, this, steerMotors);
-        MotorCommands.showRandomPowerCommand("Drives Random Power", -0.9, 0.9, 0.2, this, driveMotors);
-        MotorCommands.showMotionCommand("Set Steer Angle",this, steerMotors);
-        MotorCommands.showVelocityCommand("Set Drive Velocity",this, driveMotors);
         SmartDashboard.putData("Set Drive Brake", new InstantCommand(()-> {for(SwerveModule m : modules) m.setBrake();}).ignoringDisable(true));
         SmartDashboard.putData("Set Drive Coast", new InstantCommand(()-> {for(SwerveModule m : modules) m.setCoast();}).ignoringDisable(true));
+        SmartDashboard.putData("Reset Heading", new InstantCommand(this::setFieldHeading, (SubsystemBase)null).ignoringDisable(true));
+        controller.start().onTrue(new InstantCommand(this::setFieldHeading, (SubsystemBase)null).ignoringDisable(true));
         setDefaultCommand(new RunCommand(this::drive, this));
-        controller.start().onTrue(new InstantCommand(this::setFieldHeading, this).ignoringDisable(true));
+        showBaseCommands();
+    }
+
+    private void showBaseCommands() {
+        MotorCommands.showRandomPowerCommand("Steers Random Power", -0.6, 0.6, 0.3, this, steerMotors);
+        MotorCommands.showRandomPowerCommand("Drives Random Power", -0.9, 0.9, 0.2, this, driveMotors);
+        MotorCommands.showSlowPowerCommand("Steers Slow Power", 0.05, 0.01, 1, this, steerMotors);
+        MotorCommands.showSlowPowerCommand("Drives Slow Power", 0.03, 0.01, 1, this, driveMotors);
+        MotorCommands.showMotionCommand("Set Steer Angle",this, steerMotors);
+        MotorCommands.showVelocityCommand("Set Drive Velocity",this, driveMotors);
+
     }
 
     private void drive() {
         targetChassisSpeeds.vxMetersPerSecond = DriverUtils.getJSvalue(controller, JoystickSide.RightY) * Constants.MAX_SPEED;
         targetChassisSpeeds.vyMetersPerSecond = -DriverUtils.getJSvalue(controller, JoystickSide.RightX) * Constants.MAX_SPEED;
-        targetChassisSpeeds.omegaRadiansPerSecond = DriverUtils.getNormalized(controller.getLeftTriggerAxis() - controller.getRightTriggerAxis()) * Constants.MAX_OMEGA;
+        targetChassisSpeeds.omegaRadiansPerSecond = DriverUtils.getTriggerValue(controller) * Constants.MAX_OMEGA;
         setSpeeds(targetChassisSpeeds);
     }
 
     public void setFieldHeading() {
         resetPose(pose.getTranslation(), Rotation2d.kZero);
     }
+    public Rotation2d getGyroRotation() {
+        gyroSignal.refresh();
+        gyroRotation.set(gyroSignal.getValue().in(Radians));
+        return gyroRotation;
+    }
 
     public double getGyroHeading() {
-        gyroSignal.refresh();
-        return gyroSignal.getValue().in(Degrees);
+        return getGyroRotation().getDegrees();
+    }
+
+    public Rotation2d getHeadingRotation() {
+        return pose.getRotation();
+    }
+
+    public double getHeading() {
+        return getHeadingRotation().getDegrees();
     }
 
     public void resetPose(Translation2d translation2d, Rotation2d rotation2d) {
         poseEstimator.resetPose(new Pose2d(translation2d, rotation2d));
     }
 
-    public double getHeading() {
-        return pose.getRotation().getDegrees();
-    }
-    public Rotation2d getHeadingRotation() {
-        return pose.getRotation();
-    }
-
-    public Rotation2d getGyroRotation() {
-        gyroSignal.refresh();
-        return new Rotation2d(gyroSignal.getValue());
-    }
 
     public void setSpeeds(ChassisSpeeds speeds) {
         ChassisSpeeds robotRelativSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getHeadingRotation());
@@ -145,7 +156,7 @@ public class DriveSubsystem extends SubsystemBase {
             m.refreshPosition();
             m.refreshState();
         }
-        currentChassisSpeeds = kinematics.toChassisSpeeds(moduleState);
+        currentChassisSpeeds = kinematics.toChassisSpeeds(moduleStates);
         poseEstimator.update(getGyroRotation(), modulePositions);
         pose = poseEstimator.getEstimatedPosition();
         robotField.setRobotPose(pose);
@@ -158,7 +169,7 @@ public class DriveSubsystem extends SubsystemBase {
         builder.addDoubleProperty("Heading", this::getHeading, null);
         builder.addDoubleProperty("Vx", ()->currentChassisSpeeds.vxMetersPerSecond, null);
         builder.addDoubleProperty("Vy", ()->currentChassisSpeeds.vyMetersPerSecond, null);
-        builder.addDoubleProperty("Omega Rad/sec", ()->currentChassisSpeeds.omegaRadiansPerSecond, null);
+        builder.addDoubleProperty("Omega Rad Per Sec", ()->currentChassisSpeeds.omegaRadiansPerSecond, null);
     }
 
 }
