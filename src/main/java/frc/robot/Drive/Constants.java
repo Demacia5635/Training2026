@@ -33,6 +33,7 @@ public class Constants {
     public static final double STEER_TO_DISTANCE_RATIO = 0.14/360.0; // 14 cm for 1 steer rotation
 
     public static double MAX_SET_STATE_STEER_ADDITION = 5.0;
+    public static double STATE_STEER_ADDITION = 1.7;
 
     public static boolean CANCODER_INVERTED = false;
 
