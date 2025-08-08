@@ -38,7 +38,6 @@ public class MotorData  {
             record = entry.next();
         }
         updateAcceleration();
-        System.out.println("max volt = " + maxVolt);
     }
 
     private void updateAcceleration() {
