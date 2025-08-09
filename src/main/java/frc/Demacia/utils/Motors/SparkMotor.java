@@ -16,6 +16,7 @@ import frc.Demacia.utils.Elastic.UpdateArray;
 import frc.Demacia.utils.Log.LogManager;
 import frc.Demacia.utils.Log.MotorLogEntry;
 import frc.robot.RobotContainer;
+import frc.robot.Utilities;
 
 public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
 
@@ -130,7 +131,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   }
 
   public void setVelocity(double velocity) {
-    setVelocity(velocity, 0);
+    setVelocity(velocity, config.pid[slot.value].ks()*Math.signum(velocity));
   }
 
   public void setPositionVoltage(double position, double feedForward) {
@@ -272,7 +273,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
 
   @Override
   public void setMotion(double position) {
-    setMotion(position, 0);
+    setMotion(position, config.pid[slot.value].ks()*Utilities.signumWithDeadband(position - getCurrentPosition(), 0.5));
   }
 
   @Override
