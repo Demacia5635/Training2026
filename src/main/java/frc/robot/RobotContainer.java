@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.Drive.SingleModuleSubsystem;
+import frc.robot.subsystems.DemaciaMotorExample;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -25,8 +25,9 @@ public class RobotContainer {
 
 //  private final CommandXboxController controller = new CommandXboxController(0);
 //  public DriveSubsystem driveSubsystem = new DriveSubsystem(controller);
-  public SingleModuleSubsystem singleModuleSubsystem = new SingleModuleSubsystem();
+//  public SingleModuleSubsystem singleModuleSubsystem = new SingleModuleSubsystem();
   
+  public DemaciaMotorExample demaciaMotorExample = new DemaciaMotorExample();
   //public final ModuleSubsystem module = new ModuleSubsystem();
   //public final MotorExampleSubsytem motorExample = new MotorExampleSubsytem();
 

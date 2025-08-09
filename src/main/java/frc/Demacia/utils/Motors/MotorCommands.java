@@ -76,13 +76,14 @@ public class MotorCommands {
             });
     }
     public static Command getRandomPowerCommand(String name, double minPower, double maxPower, double rampTime, Subsystem subsystem, MotorInterface...motors) {
-        SlowPowerGenerator generator = new SlowPowerGenerator(minPower,maxPower,rampTime);
+        RandomPowerGenerator generator = new RandomPowerGenerator(minPower,maxPower,rampTime);
         return new RunCommand(()->{
             double p = generator.next();
             for(MotorInterface motor : motors) {
-                motor.setDuty(p);
+                motor.setDuty(p/12.0);
             }
         }, subsystem)
+            .beforeStarting(()->generator.reset(), subsystem)
             .finallyDo((boolean b)-> {
                 for(MotorInterface motor : motors) {
                     motor.setDuty(0);
@@ -95,9 +96,10 @@ public class MotorCommands {
         return new RunCommand(()->{
             double p = generator.next();
             for(MotorInterface motor : motors) {
-                motor.setDuty(p);
+                motor.setDuty(p/12.0);
             }
         }, subsystem)
+            .beforeStarting(()->generator.reset(), subsystem)
             .finallyDo((boolean b)-> {
                 for(MotorInterface motor : motors) {
                     motor.setDuty(0);

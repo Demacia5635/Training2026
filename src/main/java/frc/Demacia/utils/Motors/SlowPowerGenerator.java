@@ -1,5 +1,6 @@
 package frc.Demacia.utils.Motors;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -22,8 +23,9 @@ public class SlowPowerGenerator {
     }
 
 
+
     double time() {
-        return System.currentTimeMillis()/1000.0;
+        return Timer.getFPGATimestamp();
     }
 
     public double next() {
@@ -37,8 +39,15 @@ public class SlowPowerGenerator {
         return lastPower;
     }
 
+    public void reset() {
+        stepEndTime = 0;
+        lastPower = 0;
+    }
+
     public static Command getSlowPowerCommand(MotorInterface motor, SlowPowerGenerator generator, Subsystem subsystem) {
-        return new RunCommand(()->motor.setDuty(generator.next()), subsystem);
+        return new RunCommand(()->motor.setVoltage(generator.next()), subsystem)
+            .beforeStarting(()->generator.reset(), subsystem)
+            .finallyDo(()->motor.setDuty(0));
     }
 
 }

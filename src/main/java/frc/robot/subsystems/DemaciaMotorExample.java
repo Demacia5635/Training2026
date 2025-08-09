@@ -60,7 +60,7 @@ public class DemaciaMotorExample extends SubsystemBase {
         motor = new TalonMotor(Example.MOTOR_CONFIG);
         // commands
         MotorCommands.showSlowPowerCommand("Slow Power", 0.04, 0.01, 1, this, motor);
-        MotorCommands.showRandomPowerCommand("Random Power", -0.5, 0.5, 0.3, this, motor);
+        MotorCommands.showRandomPowerCommand("Random Power", -7, 7, 0.4, this, motor);
         MotorCommands.showMotionCommand("Goto Position", this, motor);
         // pid and motion configration
         motor.showConfigMotionVelocitiesCommand();
@@ -68,13 +68,13 @@ public class DemaciaMotorExample extends SubsystemBase {
     }
 
     public static class Example { // Should be in Constants file
-        public static final TalonConfig MOTOR_CONFIG = new TalonConfig(10, Canbus.Rio, "Talon Example")
+        public static final TalonConfig MOTOR_CONFIG = new TalonConfig(11, Canbus.Rio, "Talon Example")
           .withBrake(true)
           .withCurrent(20) // Maximum current in ASpmpers
           .withInvert(true)
           .withDegreesMotor(12.8) // the motor gear ratio - all data is in degrees
-          .withMotionParam(720, 1440, 2900) // set the motion parametrs
-          .withPID(0.04, 0, 0, 0.1, 0.004,0.0008, 0) // the PID gains
+          .withMotionParam(1000, 2000, 2900) // set the motion parametrs
+          .withPID(0.01, 0, 0, 0.15, 0.003,0.001, 0) // the PID gains
           .withRampTime(0.3) // time from 0 to full power
           .withVolts(7);
   }

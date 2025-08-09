@@ -2,6 +2,7 @@ package frc.Demacia.utils.Motors;
 
 import java.util.Random;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -17,6 +18,7 @@ public class RandomPowerGenerator {
     Strategy strategy;
     double maxChange;
     double lastPower;
+    double direction;
     double nextTarget;
     double stepEndTime;
     double lastTime;
@@ -27,12 +29,20 @@ public class RandomPowerGenerator {
         minPower = min;
         maxRiseTime = ramp;
         random = new Random(System.currentTimeMillis());
-        maxChange = 0.02/ramp;
+        maxChange = 0.02/ramp*12;
         strategy = nextStrategy();
         lastPower = 0;
+        direction = 1;
         nextTarget = maxPower;
         lastTime = time();
         stepEndTime = lastTime;
+    }
+
+    public void reset() {
+        lastPower = 0;
+        lastTime = time();
+        stepEndTime = lastTime;
+        direction = 1;
     }
 
     private Strategy nextStrategy() {
@@ -41,21 +51,29 @@ public class RandomPowerGenerator {
     }
 
     double time() {
-        return System.currentTimeMillis()/1000.0;
+        return Timer.getFPGATimestamp();
     }
 
     private void nextTarget() {
-        nextTarget = maxPower == nextTarget ? minPower : maxPower;
+        if(direction == 1.0) {
+            direction = -1;
+            nextTarget = minPower;
+        } else {
+            direction = 1.0;
+            nextTarget = maxPower;
+        }
+
         strategy = nextStrategy();
+        stepEndTime = time();
     }
 
-    private double nextChange(double direction) {
+    private double nextChange() {
         return (random.nextDouble()*1.5 - 0.5) * maxChange * direction;
     }
 
     public double next() {
-        double direction = Math.signum(nextTarget - lastPower);
-        if(direction == 0) {
+        if((lastPower >= nextTarget && direction > 0) || 
+            (lastPower <= minPower && direction < 0 )) {
             nextTarget();
             return lastPower;
         }
@@ -63,7 +81,7 @@ public class RandomPowerGenerator {
         double time = time();
         switch (strategy) {
             case Random:
-                lastPower = MathUtil.clamp(lastPower + nextChange(direction) , minPower, maxPower);
+                lastPower = lastPower + nextChange();
                 break;
             case Step:
                 if(time > stepEndTime) {
@@ -83,7 +101,7 @@ public class RandomPowerGenerator {
     }
 
     public static Command getRandomPowerCommand(MotorInterface motor, SlowPowerGenerator generator, Subsystem subsystem) {
-        return new RunCommand(()->motor.setDuty(generator.next()), subsystem);
+        return new RunCommand(()->motor.setVoltage(generator.next()), subsystem);
     }
  
 }
