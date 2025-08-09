@@ -3,6 +3,9 @@ package frc.Demacia.utils.Motors;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public interface MotorInterface {
+
+    String name();
+
     void changeSlot(int slot);    // change the slot used in the motor for PID/FF calculation
     void setNeutralMode(boolean isBrake);
     void setDuty(double power); // power -1 to 1
