@@ -85,7 +85,6 @@ public class Sysid implements Consumer<File> {
     }
 
     public static void main(String[] args) {
-        new Sysid();
         Sysid app = new Sysid();
         app.show();        
     }
