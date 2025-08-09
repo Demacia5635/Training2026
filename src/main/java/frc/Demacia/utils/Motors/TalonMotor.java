@@ -34,13 +34,14 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     TalonFXConfiguration cfg;
 
     double unitMultiplier = 1.0;
+    int slot = 0;
 
     DutyCycleOut dutyCycle = new DutyCycleOut(0);
     VoltageOut voltageOut = new VoltageOut(0);
-    VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
-    MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
-    MotionMagicExpoVoltage motionMagicExpoVoltage = new MotionMagicExpoVoltage(0).withSlot(0);
-    PositionVoltage positionVoltage = new PositionVoltage(0).withSlot(0);
+    VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(slot);
+    MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0).withSlot(slot);
+    MotionMagicExpoVoltage motionMagicExpoVoltage = new MotionMagicExpoVoltage(0).withSlot(slot);
+    PositionVoltage positionVoltage = new PositionVoltage(0).withSlot(slot);
 
     StatusSignalData<ControlModeValue> controlModeSignal;
     StatusSignalData<Double> closedLoopSPSignal;
@@ -90,8 +91,8 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         cfg.MotionMagic.MotionMagicAcceleration = config.maxAcceleration / unitMultiplier;
         cfg.MotionMagic.MotionMagicCruiseVelocity = config.maxVelocity / unitMultiplier;
         cfg.MotionMagic.MotionMagicJerk = config.maxJerk / unitMultiplier;
-        cfg.MotionMagic.MotionMagicExpo_kA = config.pid[0].ka();
-        cfg.MotionMagic.MotionMagicExpo_kV = config.pid[0].kv();
+        cfg.MotionMagic.MotionMagicExpo_kA = config.pid[slot].ka();
+        cfg.MotionMagic.MotionMagicExpo_kV = config.pid[slot].kv();
 
         getConfigurator().apply(cfg);
     }
@@ -161,6 +162,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
             LogManager.log("slot is not between 0 and 2", AlertType.kError);
             return;
         }
+        this.slot = slot;
         velocityVoltage.withSlot(slot);
         motionMagicVoltage.withSlot(slot);
         motionMagicExpoVoltage.withSlot(slot);
