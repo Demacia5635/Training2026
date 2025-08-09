@@ -1,5 +1,7 @@
 package frc.Demacia.utils.Motors;
 
+import edu.wpi.first.wpilibj2.command.Subsystem;
+
 public interface MotorInterface {
     void changeSlot(int slot);    // change the slot used in the motor for PID/FF calculation
     void setNeutralMode(boolean isBrake);
@@ -28,5 +30,6 @@ public interface MotorInterface {
 
     void showConfigPIDFSlotCommand(int slot);
     void showConfigMotionVelocitiesCommand();
+    void showSysidCommands(Subsystem subsystem);
 
 }

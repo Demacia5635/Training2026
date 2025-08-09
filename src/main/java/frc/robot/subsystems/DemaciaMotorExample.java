@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
-import frc.Demacia.utils.Motors.MotorCommands;
 import frc.Demacia.utils.Motors.MotorInterface;
 import frc.Demacia.utils.Motors.TalonConfig;
 import frc.Demacia.utils.Motors.TalonMotor;
@@ -58,13 +57,7 @@ public class DemaciaMotorExample extends SubsystemBase {
     public DemaciaMotorExample() {
         super();
         motor = new TalonMotor(Example.MOTOR_CONFIG);
-        // commands
-        MotorCommands.showSlowPowerCommand("Slow Power", 0.04, 0.01, 1, this, motor);
-        MotorCommands.showRandomPowerCommand("Random Power", -7, 7, 0.4, this, motor);
-        MotorCommands.showMotionCommand("Goto Position", this, motor);
-        // pid and motion configration
-        motor.showConfigMotionVelocitiesCommand();
-        motor.showConfigPIDFSlotCommand(0);
+        motor.showSysidCommands(this);
     }
 
     public static class Example { // Should be in Constants file

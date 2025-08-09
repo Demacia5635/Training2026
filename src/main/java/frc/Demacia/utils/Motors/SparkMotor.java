@@ -12,6 +12,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.Demacia.utils.Elastic.UpdateArray;
 import frc.Demacia.utils.Log.LogManager;
 import frc.Demacia.utils.Log.MotorLogEntry;
@@ -293,4 +294,17 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
           configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
         });
   }
+
+  @Override
+  public void showSysidCommands(Subsystem subsystem) {
+    showConfigMotionVelocitiesCommand();
+    showConfigPIDFSlotCommand(0);
+    MotorCommands.showRandomPowerCommand(name + " Random Power", config.minVolt, config.maxVolt, Math.max(0.2,config.rampUpTime), subsystem, this);
+    if(config.isMeterMotor) {
+      MotorCommands.showVelocityCommand(name + " Velocity Command", subsystem, this);
+    } else {}
+      MotorCommands.showSlowPowerCommand(name + " Slow Power", 0.0, 0.01, 1, subsystem, this);
+      MotorCommands.showMotionCommand(name + " Motion Command", subsystem, this);
+  }
+
 }
