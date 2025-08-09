@@ -73,7 +73,7 @@ public class GoToAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean isFinished = Math.abs(subsystem.getSPosition() - targetAngle) < 3;
+    boolean isFinished = Math.abs(subsystem.getSPosition() - targetAngle) < 1;
     return isFinished;
   }
 
