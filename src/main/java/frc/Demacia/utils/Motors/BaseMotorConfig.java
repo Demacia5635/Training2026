@@ -225,31 +225,6 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
         pid[slot] = new CloseLoopParam(kp, ki, kd, ks, kv, ka, kg);
         return (T)this;
     }
-    /** 
-     * Set pid
-     * @param slot
-     * @param kp
-     * @param ki
-     * @param kd
-     * @param kf
-     * @return TalonConfig
-     */
-    @SuppressWarnings("unchecked")
-    public T withPID(int slot, double kp, double ki, double kd, double kf) {
-        pid[slot] = new CloseLoopParam(kp, ki, kd, kf);
-        return (T)this;
-    }
-    /** 
-     * Set pid
-     * @param kp
-     * @param ki
-     * @param kd
-     * @param kf
-     * @return TalonConfig
-     */
-    public T withPID(double kp, double ki, double kd, double kf) {
-        return (T)withPID(0, kp, ki, kd, kf);
-    }
 
     @SuppressWarnings("unchecked")
     public T withCanbus(Canbus canbus) {

@@ -54,13 +54,15 @@ public final class Constants {
         .withBrake(true)
         .withCurrent(40)
         .withRampTime(0.3)
-        .withVolts(12);
+        .withVolts(12)
+        .withPID(0, 0, 0, 0, 0, 0, 0);
 
     public static final SparkConfig BASE_SPARK_CONFIG = new SparkConfig(0, "base")
         .withBrake(true)
         .withCurrent(40)
         .withRampTime(0.3)
-        .withVolts(12);
+        .withVolts(12)
+        .withPID(0, 0, 0, 0, 0, 0, 0);
   }
 
   public static class OperatorConstants {
