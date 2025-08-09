@@ -278,6 +278,15 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   }
 
   @Override
+  public void setAngle(double angle, double feedForward) {
+    setMotion(MotorUtils.getPositionForAngle(getCurrentPosition(), angle, config.isRadiansMotor), feedForward);
+  }
+  @Override
+  public void setAngle(double angle) {
+    setMotion(MotorUtils.getPositionForAngle(getCurrentPosition(), angle, config.isRadiansMotor));
+  }
+
+  @Override
   public void setEncoderPosition(double position) {
     encoder.setPosition(position);
   }
@@ -297,14 +306,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
 
   @Override
   public void showSysidCommands(Subsystem subsystem) {
-    showConfigMotionVelocitiesCommand();
-    showConfigPIDFSlotCommand(0);
-    MotorCommands.showRandomPowerCommand(name + " Random Power", config.minVolt, config.maxVolt, Math.max(0.2,config.rampUpTime), subsystem, this);
-    if(config.isMeterMotor) {
-      MotorCommands.showVelocityCommand(name + " Velocity Command", subsystem, this);
-    } else {}
-      MotorCommands.showSlowPowerCommand(name + " Slow Power", 0.0, 0.01, 1, subsystem, this);
-      MotorCommands.showMotionCommand(name + " Motion Command", subsystem, this);
+    MotorUtils.showSysidCommands(this, config, subsystem);
   }
 
 }

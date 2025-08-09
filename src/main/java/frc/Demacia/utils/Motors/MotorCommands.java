@@ -24,6 +24,22 @@ public class MotorCommands {
     
             });
     }
+    public static Command getAngleCommand(String name, Subsystem subsystem, MotorInterface...motors) {
+        String fldName = name + ":";
+        SmartDashboard.putNumber(fldName, 0);
+        return new RunCommand(()->{
+            double p = SmartDashboard.getNumber(fldName, 0);
+            for(MotorInterface motor : motors) {
+                motor.setAngle(p);
+            }
+        }, subsystem)
+            .finallyDo((boolean b)-> {
+                for(MotorInterface motor : motors) {
+                    motor.setDuty(0);
+                }
+    
+            });
+    }
 
     public static Command getMotionCommand(String name, Subsystem subsystem, MotorInterface...motors) {
         String fldName = name + ":";
@@ -114,6 +130,10 @@ public class MotorCommands {
     }
     public static void showPositionCommand(String name, Subsystem subsystem, MotorInterface...motors) {
         SmartDashboard.putData(name, getPositionCommand(name, subsystem, motors));
+    }
+
+    public static void showAngleCommand(String name, Subsystem subsystem, MotorInterface...motors) {
+        SmartDashboard.putData(name, getAngleCommand(name, subsystem, motors));
     }
 
     public static void showMotionCommand(String name, Subsystem subsystem, MotorInterface...motors) {

@@ -14,6 +14,8 @@ public interface MotorInterface {
     void setVelocity(double velocity);
     void setMotion(double position, double feedForward); // position profiled motion in motor with feedForward value calculated in roborio
     void setMotion(double position);
+    void setAngle(double angle, double feedForward); // position profiled motion in motor with feedForward value calculated in roborio
+    void setAngle(double angle);
     void setPositionVoltage(double position, double feedForward);
     void setPositionVoltage(double position);
     void setVelocityWithFeedForward(double velocity);
