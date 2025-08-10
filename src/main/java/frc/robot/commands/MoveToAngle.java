@@ -13,31 +13,41 @@ import frc.robot.subsystems.MyFirstSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveToAngle extends Command {
   /** Creates a new MoveToAngle. */
-  MyFirstSubsystem sub;
-  double angle;
+  private MyFirstSubsystem sub;
+  private double wantedAngle;
+  private double currentAngle;
+  private PIDController pid =new PIDController(0.005, 0, 0);
   public MoveToAngle(MyFirstSubsystem sub) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.sub = sub;
-    //this.angle = angle;
+    SmartDashboard.putNumber("WantedAngle", 0);
+    this.wantedAngle=SmartDashboard.getNumber("WantedAngle", 90);
+    pid.setTolerance(2);
+    pid.enableContinuousInput(-180, 180);
     addRequirements(sub);
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    sub.setPower(0.05, 0);
+    pid.reset();
+    pid.setSetpoint(wantedAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    angle = SmartDashboard.getNumber("WantedAngle", 90);
-    if(angle > sub.getMotorAngle()){
-      sub.setPower(0.05,0);
-    }
-    else{
-      sub.setPower(-0.05, 0);
-    }
+    wantedAngle = SmartDashboard.getNumber("WantedAngle", 90);
+    currentAngle = sub.getMotorAngle();
+    sub.setPower(pid.calculate(currentAngle, wantedAngle), 0);
+    
+    // if(wantedAngle > sub.getMotorAngle()){
+    //   sub.setPower(0.05,0);
+    // }
+    // else{
+    //   sub.setPower(-0.05, 0);
+    // }
 
   }
 
@@ -50,6 +60,7 @@ public class MoveToAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(angle - sub.getMotorAngle()) < 5;
+    return pid.atSetpoint();
+    //return Math.abs(wantedAngle - sub.getMotorAngle()) < 5;
   }
 }

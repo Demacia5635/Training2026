@@ -17,17 +17,16 @@ public class MoveInSameVelocity extends Command {
   private MyFirstSubsystem sub3= new MyFirstSubsystem();
   private double wantedSpeed;
   private double currentSpeed;
-  private double startTime;
   private PIDController pid = new PIDController(0.2, 0, 0);
   
   public MoveInSameVelocity(MyFirstSubsystem sub3) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.sub3=sub3;
     pid.setTolerance(0.1);
+    SmartDashboard.putNumber("Wanted Velcity", 0);
     this.wantedSpeed = SmartDashboard.getNumber("Wanted Velcity", 2);
     // pid.enableContinuousInput(-180, 180);
     addRequirements(sub3);
-    SmartDashboard.putNumber("Wanted Velcity", 0);
   }
 
   // Called when the command is initially scheduled.
@@ -43,7 +42,6 @@ public class MoveInSameVelocity extends Command {
     wantedSpeed=SmartDashboard.getNumber("Wanted Velcity", 2);
     currentSpeed = sub3.getDriveMotorVelocity();
     sub3.setPower(0, pid.calculate(currentSpeed,wantedSpeed));
-    startTime = Timer.getFPGATimestamp();
   }
 
   // Called once the command ends or is interrupted.
@@ -55,6 +53,6 @@ public class MoveInSameVelocity extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pid.atSetpoint() && Timer.getFPGATimestamp()> startTime + 10 ;
+    return pid.atSetpoint();
   }
 }
