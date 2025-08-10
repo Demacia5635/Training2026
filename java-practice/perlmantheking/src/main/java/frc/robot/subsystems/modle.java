@@ -4,20 +4,22 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class modle extends SubsystemBase {
+public class Modle extends SubsystemBase {
   private TalonFX driveMotor;
   private TalonFX steerMotor;
   
   /** Creates a new modle. */
-  public modle() {
+  public Modle() {
     driveMotor= new TalonFX(Constants.driveMotor);
     steerMotor= new TalonFX(Constants.steerMotor);
+    driveMotor.getConfigurator().apply(new TalonFXConfiguration());
   }
   public double getSteerPosition(){
     return steerMotor.getPosition().getValueAsDouble()/Constants.geerRatio*360;
@@ -28,7 +30,7 @@ public class modle extends SubsystemBase {
   public void setDrivePower(double power){
     driveMotor.set(power);
   }
-  
+
   public void initSendable(SendableBuilder builder){
     builder.addDoubleProperty("wanted angle",this::getSteerPosition,null);
     builder.addDoubleProperty("velocity", this::getMotorVelocity, null);

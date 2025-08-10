@@ -5,10 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.FeedForward;
 import frc.robot.commands.MoveMotorPerTime;
 import frc.robot.commands.goToPid;
 import frc.robot.subsystems.Motor;
-import frc.robot.subsystems.modle;
+import frc.robot.subsystems.Modle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -25,12 +26,16 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   Motor motor = new Motor();
   Command moveMotor = new MoveMotorPerTime(2, 0.2, motor);
-  modle subsystem = new modle();
-  Command goToPid = new goToPid(subsystem);
+  Modle subsystem = new Modle();
+  Command goToPid;
+  Command FeedForward;
+ 
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    new goToPid(subsystem);
+    new FeedForward(subsystem);
     // Configure the trigger bindings
     configureBindings();
   }
@@ -60,5 +65,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return goToPid;
+  }
+  public Command getCaculation(){
+    return FeedForward;
   }
 }

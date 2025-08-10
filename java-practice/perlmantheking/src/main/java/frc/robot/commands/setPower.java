@@ -6,14 +6,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.modle;
+import frc.robot.subsystems.Modle;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class setPower extends Command {
-  private modle subsystem;
+  private Modle subsystem;
   private double power;
   /** Creates a new setPower. */
-  public setPower(double power, modle subsystem) {
+  public setPower(double power, Modle subsystem) {
     this.power = power;
     this.subsystem = subsystem;
 

@@ -23,4 +23,6 @@ public final class Constants {
   public static final double KP = 1;
   public static final double KI = 0;
   public static final double KD = 0;
+  public static final double KS = 0.001;
+  public static final double KV = 0.0095;
 }
