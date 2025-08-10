@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.MoveWithPID;
 import frc.robot.commands.MyFirstSubsystemCommand;
 import frc.robot.subsystems.MyFirstSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,6 +21,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
   private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, 0.1, 0.1,  11.0);
+  private final MoveWithPID cmd = new MoveWithPID(subsystem);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -47,6 +49,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return autoCommand;
+    return cmd;
   }
 }

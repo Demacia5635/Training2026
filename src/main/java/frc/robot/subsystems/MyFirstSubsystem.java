@@ -30,6 +30,7 @@ public class MyFirstSubsystem extends SubsystemBase {
     public void setPower2(double power) {
         motor2Talon.set(power);
     }
+    
     // Method to stop the motor
     public void stop() {
         setPower(0);
@@ -44,16 +45,16 @@ public class MyFirstSubsystem extends SubsystemBase {
         builder.addDoubleProperty("angle",this::spinToAngle,null);
         builder.addDoubleProperty("meter",this::moveToMeter,null);
 
+
     }
     @Override
     public void periodic(){
         SmartDashboard.putData("MyFirstSubsystem", this);
     }
-
     public double spinToAngle(){
         return motor.getPosition().getValueAsDouble()/12.8*360%360;
     }
-
+    
     public double moveToMeter(){
         return motor2Talon.getPosition().getValueAsDouble()/8.4*0.1016*Math.PI;
     }
@@ -66,6 +67,6 @@ public class MyFirstSubsystem extends SubsystemBase {
         return motor2Talon.getVelocity().getValueAsDouble();
     }
     
-   
+    
    }
 
