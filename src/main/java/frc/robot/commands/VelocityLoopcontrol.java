@@ -30,6 +30,8 @@ public class VelocityLoopcontrol extends Command {
     this.targetV = targetV;
     this.subsystem = subsystem;
     addRequirements(subsystem);
+    SmartDashboard.putNumber("target velocity", targetV);
+    SmartDashboard.putNumber("velocity", subsystem.driveMotor.getVelocity().getValueAsDouble());
     
     
 
@@ -51,7 +53,10 @@ public class VelocityLoopcontrol extends Command {
         double feedforwardOutput = feedforward.calculateWithVelocities(currentVelocity, targetV);
         double pidOutput = pidController.calculate(currentVelocity, targetV);
         double totalOutput = feedforwardOutput + pidOutput;        
-        subsystem.driveMotor.set(totalOutput);
+        subsystem.setDVelocityRPS(totalOutput);
+        SmartDashboard.putNumber("target velocity", targetV);
+    SmartDashboard.putNumber("velocity", subsystem.driveMotor.getVelocity().getValueAsDouble());
+    
 
   }
 

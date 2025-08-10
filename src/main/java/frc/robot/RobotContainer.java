@@ -23,9 +23,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
- private final Command Velocity = new VelocityLoopcontrol(subsystem, 0.5, 0.1, 0.1, 0.1, 0.0, 0.0);
+ private final Command Velocity = new VelocityLoopcontrol(subsystem, 100, 0.005, 5- 129/26, 3/26, 0.0, 0.0);
   private final Command drive1 = new Drive(subsystem, 100, 0.01, 0.0, 0.0);
-  private final Command Pizza = new KsAkvCalc(subsystem);
+  private final Command Pizza = new KsAkvCalc(subsystem, 8);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -53,7 +53,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return Pizza;
+    return Velocity;
 
     
 

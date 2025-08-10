@@ -17,12 +17,14 @@ public final class Constants {
     public static final int SMOTOR_ID = 11;
     public static final String MOTOR_CAN = "rio";
     public static final int DMOTOR_ID = 10;
+    
   }
 
   public static class OperatorConstants {
     public static final int DriverControllerPort = 0;
     public static final double SgearRatio = 12.8;
     public static final double DgearRatio = 8.14 ;
+    public static final double maxSpeedCMpS = 480;
     public static final double wheelDiameter = 10.16;
   }
 }

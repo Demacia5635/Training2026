@@ -53,6 +53,13 @@ public double getDPosition() {
     double DMotorPosition = driveMotor.getPosition().getValueAsDouble();
     return (DMotorPosition/OperatorConstants.DgearRatio)*360;
 }
+public void setDVelocityRPS(double velocity) {
+    double wheelMaxRPS = OperatorConstants.maxSpeedCMpS/(OperatorConstants.wheelDiameter * Math.PI);
+    
+    double motorMaxRPS = wheelMaxRPS*OperatorConstants.DgearRatio;
+    double power = velocity / motorMaxRPS;
+    setDPower(power);
+}
  @Override
  public void initSendable(SendableBuilder builder){
     super.initSendable(builder);
