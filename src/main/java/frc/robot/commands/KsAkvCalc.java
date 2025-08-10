@@ -35,11 +35,10 @@ public class KsAkvCalc extends Command {
   @Override
   public void execute() {
       subsystem.driveMotor.setVoltage(volt);
-      SmartDashboard.putNumber("drive velocity1", subsystem.driveMotor.getVelocity().getValueAsDouble());
+      SmartDashboard.putNumber("drive velocity1", subsystem.DgetSpeedinMpSpizza());
       SmartDashboard.putNumber("drive voltage1", volt);
    
     }
-  
 
   // Called once the command ends or is interrupted.
   @Override

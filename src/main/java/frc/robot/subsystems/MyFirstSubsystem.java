@@ -30,6 +30,7 @@ public class MyFirstSubsystem extends SubsystemBase {
         driveMotor = new TalonFX(Constants.MyFirstSubsystemConstants.DMOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
         steerMotor.getConfigurator().apply(new TalonFXConfiguration());
         driveMotor.getConfigurator().apply(new TalonFXConfiguration());
+        SmartDashboard.putData("FirstSub", this);
     }   
 
     // Method to set the motor speed
@@ -53,18 +54,19 @@ public double getDPosition() {
     double DMotorPosition = driveMotor.getPosition().getValueAsDouble();
     return (DMotorPosition/OperatorConstants.DgearRatio)*360;
 }
-public void setDVelocityRPS(double velocity) {
-    double wheelMaxRPS = OperatorConstants.maxSpeedCMpS/(OperatorConstants.wheelDiameter * Math.PI);
-    
-    double motorMaxRPS = wheelMaxRPS*OperatorConstants.DgearRatio;
-    double power = velocity / motorMaxRPS;
-    setDPower(power);
+public double DgetSpeedinMpSpizza(){
+    double wheelCircumference = (Math.PI * OperatorConstants.wheelDiameter);
+    double rotationsPers = driveMotor.getVelocity().getValueAsDouble();
+    return (rotationsPers/OperatorConstants.DgearRatio) * wheelCircumference; // Speed in meters per second
+}
+public void setDVelocityMPS(double velocityMPS) {
+    double power123 = velocityMPS / OperatorConstants.maxSpeedMpS;
+    setDPower(power123);
 }
  @Override
  public void initSendable(SendableBuilder builder){
     super.initSendable(builder);
-    builder.addDoubleProperty("drive angle", () -> getDPosition(), null);
-    builder.addDoubleProperty("steering angle", () -> getSPosition(), null);
+    builder.addDoubleProperty("drive velocity", () -> DgetSpeedinMpSpizza(), null);
  }
 //  public void drive(double distanceInCm, double power){
 //     double wheelCircumference = Math.PI * OperatorConstants.wheelDiameter;
