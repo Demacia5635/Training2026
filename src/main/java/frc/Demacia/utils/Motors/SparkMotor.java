@@ -193,7 +193,6 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
     if (p != null) {
       UpdateArray.show(name + " PID " + slot, CloseLoopParam.names, p.toArray(), (double[] array) -> updatePID(true));
     }
-
   }
 
   public double getCurrentPosition() {

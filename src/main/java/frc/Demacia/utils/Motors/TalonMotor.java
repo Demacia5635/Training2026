@@ -88,14 +88,29 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         updatePID(false);
         cfg.Voltage.PeakForwardVoltage = config.maxVolt;
         cfg.Voltage.PeakReverseVoltage = config.minVolt;
+        configureMotionMagic(false);
 
+
+        getConfigurator().apply(cfg);
+    }
+
+    private void configureMotionMagic(boolean apply) {
         cfg.MotionMagic.MotionMagicAcceleration = config.maxAcceleration / unitMultiplier;
         cfg.MotionMagic.MotionMagicCruiseVelocity = config.maxVelocity / unitMultiplier;
         cfg.MotionMagic.MotionMagicJerk = config.maxJerk / unitMultiplier;
-        cfg.MotionMagic.MotionMagicExpo_kA = config.pid[slot].ka();
-        cfg.MotionMagic.MotionMagicExpo_kV = config.pid[slot].kv();
-
-        getConfigurator().apply(cfg);
+        if(config.maxAcceleration > 0) {
+            cfg.MotionMagic.MotionMagicExpo_kA = 12.0 / config.maxAcceleration;
+        } else {
+            cfg.MotionMagic.MotionMagicExpo_kA = config.pid[slot].ka();
+        }
+        if(config.maxVelocity > 0) {
+            cfg.MotionMagic.MotionMagicExpo_kV = 12.0 / config.maxVelocity;
+        } else {
+            cfg.MotionMagic.MotionMagicExpo_kA = config.pid[slot].kv();
+        }
+        if(apply) {
+            getConfigurator().apply(cfg.MotionMagic);
+        }
     }
 
     private void updatePID(boolean apply) {
@@ -333,11 +348,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
                 config.maxVelocity = array[0];
                 config.maxAcceleration = array[1];
                 config.maxJerk = array[2];
-                cfg.MotionMagic.MotionMagicCruiseVelocity = config.maxVelocity / unitMultiplier;
-                cfg.MotionMagic.MotionMagicAcceleration = config.maxAcceleration / unitMultiplier;
-                cfg.MotionMagic.MotionMagicJerk = config.maxJerk / unitMultiplier;
-    
-                getConfigurator().apply(cfg.MotionMagic);
+                configureMotionMagic(true);
             });
     }
 

@@ -62,7 +62,7 @@ public class DemaciaMotorExample extends SubsystemBase {
       .withCurrent(20) // Maximum current in Apmpers
       .withInvert(true)
       .withDegreesMotor(12.8) // the motor gear ratio - all data in degrees
-      .withMotionParam(500, 1000, 1500) // set the motion parametrs
+      .withMotionParam(1500, 4000, 5000) // set the motion parametrs
       .withPID(0.01, 0, 0, 0.1, 0.0045,0.0005, 0) // the PID/FF gains
       .withRampTime(0.2) // time from 0 to full power
       .withVolts(7);
