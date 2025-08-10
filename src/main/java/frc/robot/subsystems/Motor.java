@@ -26,4 +26,8 @@ public class Motor extends SubsystemBase {
     public void stop() {
         motor.set(0);
     }
+
+    public double getPosition() {
+        return motor.getPosition().getValueAsDouble();
+    }
 } 

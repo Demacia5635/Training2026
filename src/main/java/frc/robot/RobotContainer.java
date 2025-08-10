@@ -35,7 +35,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     motorsubsystem = new Modula();
-    startCommend = new StartMotorDriveAndSteer(motorsubsystem, 0.3, -0.3, 10.0);
+    startCommend = new StartModulaByTime(motorsubsystem, 0.3, -0.3, 10.0);
     // Configure the trigger bindings
     configureBindings();
   }

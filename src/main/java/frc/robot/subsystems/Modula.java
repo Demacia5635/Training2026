@@ -33,4 +33,12 @@ public class Modula extends SubsystemBase {
     public void stopToDrive() {
         driveMotor.stop();
     }
+    
+    public double getDrivePosition() {
+        return driveMotor.getPosition();
+    }
+
+    public double getSteerPosition() {
+        return steerMotor.getPosition();
+    }
 }
