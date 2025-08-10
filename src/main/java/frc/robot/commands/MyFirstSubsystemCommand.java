@@ -24,7 +24,8 @@ public class MyFirstSubsystemCommand extends Command {
     }
     @Override
     public void execute() {
-      subsystem.setPower(power);
+      subsystem.setPowerDriveMotor(3);
+      subsystem.setPowerSteerMotor(6);
     }
     @Override
     public void end(boolean interrupted) {
@@ -34,7 +35,7 @@ public class MyFirstSubsystemCommand extends Command {
     @Override
     public boolean isFinished() {
       return duration > 0 && Timer.getFPGATimestamp() > duration + startTime;
-    }
+    } 
 
   }
   

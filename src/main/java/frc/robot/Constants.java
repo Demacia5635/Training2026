@@ -21,4 +21,7 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int DriverControllerPort = 0;
   }
+  public static final int STEER_MOTOR_ID = 0;
+  public static final int DRIVE_MOTOR_ID = 0;
+
 }

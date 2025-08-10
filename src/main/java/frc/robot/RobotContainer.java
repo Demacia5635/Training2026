@@ -20,9 +20,12 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
   private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, 0.4, 10.0);
+  private MyFirstSubsystemCommand myFirstSubsystemCommand;
+  private MyFirstSubsystem myFirstSubsystem;
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    myFirstSubsystemCommand = new MyFirstSubsystemCommand(subsystem, 0, 0);
     configureBindings();
   }
 

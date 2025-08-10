@@ -6,21 +6,29 @@ import frc.robot.Constants;
 
 public class MyFirstSubsystem extends SubsystemBase {
     // Define the motor 
-    TalonFX motor;
-    double v = 0.0; 
+    private TalonFX driveMotor;
+    private TalonFX steerMotor;
+    private double v = 0.0; 
 
     // Constructor
     public MyFirstSubsystem() {
         super();
-        motor = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
+        driveMotor = new TalonFX(Constants.DRIVE_MOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
+        steerMotor = new TalonFX(Constants.STEER_MOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
+
     }
 
     // Method to set the motor speed
-    public void setPower(double power) {
-        motor.set(power);
+    public void setPowerDriveMotor(double power) {
+        driveMotor.set(power);
+    }
+    public void setPowerSteerMotor(double power) {
+        steerMotor.set(power);
     }
     // Method to stop the motor
     public void stop() {
-        setPower(0);
+        driveMotor.set(0);
+        steerMotor.set(0);
+
     }
-}   
+}
