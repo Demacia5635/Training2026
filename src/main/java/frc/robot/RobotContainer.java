@@ -4,8 +4,9 @@
 
 package frc.robot;
 
-import frc.robot.commands.setPower;
-import frc.robot.subsystems.modle;
+import frc.robot.commands.FeedForward;
+import frc.robot.commands.goToPid;
+import frc.robot.subsystems.Modle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -20,11 +21,16 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  modle subsystem = new modle();
-  setPower set = new setPower(0.4, subsystem);
+  Modle subsystem = new Modle();
+  Command goToPid;
+  Command FeedForward;
+ 
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    new goToPid(subsystem);
+    new FeedForward(subsystem);
     // Configure the trigger bindings
     configureBindings();
   }
@@ -46,13 +52,16 @@ public class RobotContainer {
 
   }
 
-  /**
+  /** 
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return set;
+    return goToPid;
+  }
+  public Command getCaculation(){
+    return FeedForward;
   }
 }
