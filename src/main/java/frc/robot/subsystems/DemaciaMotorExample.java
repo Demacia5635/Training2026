@@ -57,13 +57,13 @@ import frc.Demacia.utils.Motors.TalonMotor;
 public class DemaciaMotorExample extends SubsystemBase {
 
   public static class Example { // Should be in Constants file
-    public static final TalonConfig MOTOR_CONFIG = new TalonConfig(11, Canbus.Rio, "Talon Example")
+    public static final TalonConfig MOTOR_CONFIG = new TalonConfig(11, Canbus.Rio, "TalonExample")
       .withBrake(true)
       .withCurrent(20) // Maximum current in Apmpers
       .withInvert(true)
       .withDegreesMotor(12.8) // the motor gear ratio - all data in degrees
       .withMotionParam(1500, 4000, 5000) // set the motion parametrs
-      .withPID(0.01, 0, 0, 0.1, 0.0045,0.0005, 0) // the PID/FF gains
+      .withPID(0.01, 0, 0, 0.13, 0.0045,0.0005, 0) // the PID/FF gains
       .withRampTime(0.2) // time from 0 to full power
       .withVolts(7);
 }
