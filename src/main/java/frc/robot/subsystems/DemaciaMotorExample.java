@@ -66,15 +66,34 @@ public class DemaciaMotorExample extends SubsystemBase {
       .withPID(0.01, 0, 0, 0.13, 0.0045,0.0005, 0) // the PID/FF gains
       .withRampTime(0.2) // time from 0 to full power
       .withVolts(7);
+  
+
+      public static final TalonConfig JOEL_MOTOR_CONFIG = new TalonConfig(10, Canbus.Rio, "JoelTalonExample")
+      .withBrake(true)
+      .withCurrent(10) // Maximum current in Apmpers
+      .withInvert(true)
+      .withDegreesMotor(12.88) // the motor gear ratio - all data in degrees
+      .withMotionParam(1555, 4444, 5555) // set the motion parametrs
+      .withPID(0.011, 0, 0, 0.133, 0.00455,0.00055, 0) // the PID/FF gains
+      .withRampTime(0.2) // time from 0 to full power
+      .withVolts(7.7);
+
+
 }
 
     // Define the motor 
     MotorInterface motor;
+    MotorInterface joelMotor;
 
     // Constructor
     public DemaciaMotorExample() {
         super();
         motor = new TalonMotor(Example.MOTOR_CONFIG);
         motor.showSysidCommands(this);
+        joelMotor = new TalonMotor(Example.JOEL_MOTOR_CONFIG);
+        joelMotor.showSysidCommands(this);
     }
-}   
+    }
+     
+
+ 
