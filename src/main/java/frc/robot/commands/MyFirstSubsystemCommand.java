@@ -6,26 +6,27 @@ import frc.robot.subsystems.MyFirstSubsystem;
 
 public class MyFirstSubsystemCommand extends Command {
     private final MyFirstSubsystem subsystem;
-    private final double power;
+    private final double steerPower;
+    private final double drivePower;
     private final double duration;
     private double startTime;
 
     /** Activate motor for a duration*/
-    public MyFirstSubsystemCommand (MyFirstSubsystem  subsystem, double power, double duration) {
+    public MyFirstSubsystemCommand (MyFirstSubsystem  subsystem, double drivePower, double steerPower, double duration) {
       this.subsystem = subsystem;
-      this.power = power;
+      this.drivePower = drivePower;
+      this.steerPower = steerPower;
       this.duration = duration;
       addRequirements(subsystem);
     }
     @Override
     public void initialize() {
       startTime = Timer.getFPGATimestamp();
-      System.out.println("Command strted at: " + startTime + " seconds for " + duration + " seconds with power: " + power);
     }
     @Override
     public void execute() {
-      subsystem.setPowerDriveMotor(3);
-      subsystem.setPowerSteerMotor(6);
+      subsystem.setPowerDriveMotor(drivePower);
+      subsystem.setPowerSteerMotor(steerPower);
     }
     @Override
     public void end(boolean interrupted) {

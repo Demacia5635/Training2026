@@ -18,14 +18,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
-  private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, 0.4, 10.0);
-  private MyFirstSubsystemCommand myFirstSubsystemCommand;
-  private MyFirstSubsystem myFirstSubsystem;
+  public MyFirstSubsystem dieIdoDie;
+  public MyFirstSubsystemCommand goToHellIdo;
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    myFirstSubsystemCommand = new MyFirstSubsystemCommand(subsystem, 0, 0);
+    dieIdoDie = new MyFirstSubsystem();
+    goToHellIdo = new MyFirstSubsystemCommand(dieIdoDie, 3, 6, 3);
     configureBindings();
   }
 
@@ -50,6 +49,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return autoCommand;
+    return goToHellIdo;
   }
 }
