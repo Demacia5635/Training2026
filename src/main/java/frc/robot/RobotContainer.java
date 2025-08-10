@@ -4,11 +4,8 @@
 
 package frc.robot;
 
-import frc.robot.commands.MoveToAngle;
-import frc.robot.commands.MyFirstSubsystemCommand;
-import frc.robot.commands.PidTest;
-import frc.robot.subsystems.Motor;
-import frc.robot.subsystems.MyFirstSubsystem;
+import frc.robot.subsystems.ModuleSubsystem;
+import frc.robot.subsystems.MotorExampleSubsytem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,12 +18,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
-  private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, 0.4, 10.0);
-  Motor motor = new Motor();
-  PidTest pidTest = new PidTest(motor);
-  MoveToAngle cmd = new MoveToAngle(motor);
+//  private final MotorExampleSubsytem motorExample = new MotorExampleSubsytem();
+//  private final Command autoCommand = new MotorExampleCommand(motorExample);
+  public final ModuleSubsystem module = new ModuleSubsystem();
+  public final MotorExampleSubsytem motorExample = new MotorExampleSubsytem();
+
+  //  private final CommandXboxController controller = new CommandXboxController(0);
   
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     configureBindings();
@@ -41,8 +40,9 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
-    //controller.a().onTrue(new MyFirstSubsystemCommand(subsystem, 0.5, 2.0));
+
+   private void configureBindings() {
+//    controller.a().onTrue(aCommand);
   }
 
   /**
@@ -51,8 +51,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    
-    return cmd;
+    return null;
   }
 }
