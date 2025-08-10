@@ -13,8 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.SparkConfig;
-import frc.robot.utils.SparkMotor;
+import frc.Demacia.utils.Motors.SparkConfig;
+import frc.Demacia.utils.Motors.SparkMotor;
+
 import static frc.robot.Constants.ModuleConstants.*;
 
 public class ModuleSubsystem extends SubsystemBase {
@@ -40,13 +41,15 @@ public class ModuleSubsystem extends SubsystemBase {
                 .withCurrent(MAX_STEER_AMPS)
                 .withInvert(STEER_INVERTED)
                 .withRampTime(STEER_RAMP)
-                .withVolts(MAX_STEER_VOLTS, -MAX_STEER_VOLTS)
-                .withDegreesMotor(STEER_GERA_RATIO));
+                .withVolts(MAX_STEER_VOLTS)
+                .withDegreesMotor(STEER_GERA_RATIO)
+                .withPID(STEER_KP, STEER_KI, STEER_KD, STEER_KS, STEER_KV, STEER_KA, 0));
         driveMotor = new SparkMotor(new SparkConfig(DRIVE_ID,"DriveMotor")
                 .withBrake(true)
                 .withInvert(DRIVE_INVERTED)
                 .withRampTime(DRIVE_RAMP)
-                .withMeterMotor(DRIVE_GERA_RATIO,WHEEL_CIRCUMFERENCE));
+                .withMeterMotor(DRIVE_GERA_RATIO,WHEEL_CIRCUMFERENCE)
+                .withPID(DRIVE_KP, DRIVE_KI, DRIVE_KD, DRIVE_KS, DRIVE_KV, DRIVE_KA, 0));
         absEncoder = new CANcoder(CANBCODER_ID);
 
         // for simulation

@@ -1,4 +1,4 @@
-package frc.robot.utils.Log;
+package frc.Demacia.utils.Log;
 
 
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DataLogEntry;
 import edu.wpi.first.util.datalog.FloatArrayLogEntry;
 import edu.wpi.first.util.datalog.FloatLogEntry;
+import frc.Demacia.utils.Log.LogManager.LOG_TARGET;
 
 /*
    * class for a single data entry
@@ -41,7 +42,7 @@ import edu.wpi.first.util.datalog.FloatLogEntry;
      * 3 -> log and add to network tables if not in a compition
      * 4 -> log and add to network tables
      */
-    public int logLevel;
+    public LOG_TARGET logTarget;
 
     private static ArrayList<LogEntry> logEntries = new ArrayList<>();
 
@@ -54,30 +55,36 @@ import edu.wpi.first.util.datalog.FloatLogEntry;
     /*
      * Constructor with the suppliers and boolean if add to network table
      */
-    LogEntry(String name, LogSupplier[] suplliers, int logLevel, String type, String subType, String meta) {
+    public LogEntry(String name, LogSupplier[] suplliers, LOG_TARGET logTarget, String type, String subType, String meta) {
 
       this.logManager = LogManager.logManager;
       this.name = name;
-      this.logLevel = logLevel;
+      this.logTarget = logTarget;
       this.suppliers = suplliers;
       this.meta = "Type:" + type + ";Subtype:" + subType + ";" + meta;
-      updateNetworkTable = (logLevel == 4 || logLevel == 3);
-      isDouble = suplliers[0].isFloat();
-      isArray = suplliers.length > 1;
+      updateNetworkTable = (logTarget == LOG_TARGET.LOG_AND_NT || logTarget == LOG_TARGET.LOG_NT_NOT_COMPETIION);
+      if(suplliers == null) {
+        isDouble = true;
+        isArray = false;
+
+      } else {
+        isDouble = suplliers[0].isFloat();
+        isArray = suplliers.length > 1;
+      }
       if(updateNetworkTable) {
         ntPublisher = new Publisher[suplliers.length];
       }
       if(!isArray) {
         if(isDouble) { // Single Double
             entry = new FloatLogEntry(logManager.log, name, this.meta);
-            floatData = new float[] {suplliers[0].getFloat()};
+            floatData = new float[] {0};
             if(updateNetworkTable) {
                 DoubleTopic dt = this.logManager.table.getDoubleTopic(name);
                 ntPublisher[0] = dt.publish();
             }
         } else { // Single Boolean
             entry = new BooleanLogEntry(logManager.log, name, this.meta);
-            booleanData = new boolean[] {suplliers[0].getBoolean()};
+            booleanData = new boolean[] {true};
             if(updateNetworkTable) {
                 BooleanTopic bt = this.logManager.table.getBooleanTopic(name);
                 ntPublisher[0] = bt.publish();
@@ -109,6 +116,11 @@ import edu.wpi.first.util.datalog.FloatLogEntry;
       }
       logEntries.add(this);
     }
+
+    public LogEntry(String name, LOG_TARGET logTarget) {
+        this(name, null, logTarget, "data", "", "");
+    }
+
 
     /*
      * perform a periodic log
@@ -156,7 +168,7 @@ import edu.wpi.first.util.datalog.FloatLogEntry;
     }
     
     public void removeInComp() {
-      if (logLevel == 3) {
+      if (logTarget == LOG_TARGET.LOG_NT_NOT_COMPETIION) {
         updateNetworkTable = false;
       }
     }

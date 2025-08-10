@@ -1,5 +1,4 @@
-package frc.robot.utils;
-
+package frc.Demacia.utils.Motors;
 
 /** 
  * Class to hold all Spark motor configuration
@@ -14,10 +13,11 @@ public class SparkConfig extends BaseMotorConfig<SparkConfig> {
      */
     public SparkConfig(int id, String name) {
         super(id, name);
+        motorType = MotorControllerType.SparkMax;
     }
 
     public SparkConfig(int id, String name, SparkConfig config) {
-        super(id, name);
+        this(id,name);
         copyBaseFields(config);
     }
 

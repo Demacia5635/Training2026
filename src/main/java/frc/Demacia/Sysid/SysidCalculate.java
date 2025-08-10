@@ -40,7 +40,7 @@ public class SysidCalculate {
         double v = Math.abs(data.velocity);
         int i = v < vRange[0] ? 0 : v < vRange[1] ? 1 : 2;
         
-        if(valid(v, 0.1) && valid(data.voltage, 0.2)) {
+        if(valid(v, 0.1) && valid(data.voltage, 0.05)) {
             if(data.prev != null) {
                 if(valid(data.prev.velocity, 0.1) && valid(data.prev.voltage, 0.2)) {
                     return i;
@@ -132,12 +132,13 @@ public class SysidCalculate {
                 for(int e = 0; e < error.getNumRows(); e++) {
                     MotorTimeData md = dataArray.get(e);
                     double val = Math.abs(error.get(e, 0) / md.voltage);
-                    if(val > avgErr * 4) {
+                    if(val > 0.5 && val > avgErr * 4) {
                         Sysid.msg(String.format("error %4.2f%% for %s", val, md.toString()));
                     }
                 }
             }
         }
+        Sysid.msg(String.format("Min Power to Move = %.3f",motorData.minPowerToMove));
     }
 
     public double getRange(VelocityRange range) {

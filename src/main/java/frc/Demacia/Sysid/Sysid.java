@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 public class Sysid implements Consumer<File> {
     JFrame frame = new JFrame("Sysid");
     FileChooserPanel fileChooser = new FileChooserPanel(this);
-    JList<LogEentryHirerchy> motorList = new JList<>();
+    JList<LogDataEntry> motorList = new JList<>();
     SysidResultPanel result = new SysidResultPanel(this);
     JTextArea msgArea = new JTextArea();
     JScrollPane msgPane = new JScrollPane(msgArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -62,9 +62,12 @@ public class Sysid implements Consumer<File> {
     public void accept(File file) {
         System.out.println(" file set to " + file);
         try {
+            MotorData.motors.clear();
             log = new LogReader(file.getAbsolutePath());
-            var motors = log.motors();
-            motorList.setListData(motors);
+            for(LogDataEntry m : MotorData.motors) {
+                m.getMotorData();
+            }
+            motorList.setListData(MotorData.motors);
             msg("file " + file.getName() + " loaded");
         } catch (IOException e) {
             msg(" IO error - for file " + file + " error=" + e);
@@ -73,12 +76,15 @@ public class Sysid implements Consumer<File> {
 
     }
 
-    public LogEentryHirerchy getMotor() {
-        return motorList.getSelectedValue();
+    public MotorData getMotor() {
+        var s = motorList.getSelectedValue();
+        if(s != null) {
+            return s.motorData;
+        }
+        return null;
     }
 
     public static void main(String[] args) {
-        new Sysid();
         Sysid app = new Sysid();
         app.show();        
     }

@@ -4,9 +4,10 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.CANBus;
-import frc.robot.utils.SparkConfig;
-import frc.robot.utils.TalonConfig;
+
+import frc.Demacia.utils.Motors.SparkConfig;
+import frc.Demacia.utils.Motors.TalonConfig;
+import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -17,26 +18,6 @@ import frc.robot.utils.TalonConfig;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class Example {
-    public static final TalonConfig TALON_CONFIG = new TalonConfig(7,new CANBus("rio"), "talon example motor")
-          .withBrake(true)
-          .withCurrent(20)
-          .withInvert(true)
-          .withMeterMotor(12.7, 4*0.0254)
-          .withVelocities(3, 6, 10)
-          .withPID(1, 0, 0, 0.12, 3.7, 1.2, 0)
-          .withRampTime(0.3)
-          .withVolts(6, -6);
-    public static final SparkConfig SPARKMOTOR_CONFIG = new SparkConfig(8, "spark example motor")
-        .withBrake(true)
-        .withCurrent(20)
-        .withInvert(false)
-        .withPID(2,   0.2,   0, 0.1)
-        .withRadiansMotor(8.4)
-        .withVelocities(20, 0, 30)
-        .withRampTime(0.2)
-        .withVolts(8, -8);
-  }
 
   public static class ModuleConstants {
     public static final int STEER_ID = 1;
@@ -69,17 +50,19 @@ public final class Constants {
   }
 
   public static class BaseConfigs {
-    public static final TalonConfig BASE_TALON_CONFIG = new TalonConfig(0, new CANBus("rio"), "base")
+    public static final TalonConfig BASE_TALON_CONFIG = new TalonConfig(0, Canbus.Rio, "base")
         .withBrake(true)
         .withCurrent(40)
         .withRampTime(0.3)
-        .withVolts(12, -12);
+        .withVolts(12)
+        .withPID(0, 0, 0, 0, 0, 0, 0);
 
     public static final SparkConfig BASE_SPARK_CONFIG = new SparkConfig(0, "base")
         .withBrake(true)
         .withCurrent(40)
         .withRampTime(0.3)
-        .withVolts(12, -12);
+        .withVolts(12)
+        .withPID(0, 0, 0, 0, 0, 0, 0);
   }
 
   public static class OperatorConstants {

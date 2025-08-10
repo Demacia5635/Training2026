@@ -15,6 +15,8 @@ public class LogDataEntry {
     StartRecordData startRecord; // the start record - name, type, meta
     ArrayList<DataLogRecord> records = new ArrayList<>(); // array of data records - time/data
     String name = null;
+    boolean isMotor = false;
+    MotorData motorData = null;
     private Iterator<DataLogRecord> iterator; // an iterator to iterate over the data
 
     /**
@@ -24,6 +26,11 @@ public class LogDataEntry {
      */
     LogDataEntry(StartRecordData start) {
         startRecord = start;
+        name = start.name;
+        isMotor = start.metadata != null && start.metadata.length() > 10 && start.metadata.startsWith("Type:Motor;");
+        if(isMotor) {
+            MotorData.motors.add(this);
+        }
     }
 
     /**
@@ -32,6 +39,13 @@ public class LogDataEntry {
      */
     void add(DataLogRecord record) {
         records.add(record);
+    }
+
+    public MotorData getMotorData() {
+        if(isMotor && motorData == null) {
+            motorData = new MotorData(this);
+        }
+        return motorData;
     }
 
     /**

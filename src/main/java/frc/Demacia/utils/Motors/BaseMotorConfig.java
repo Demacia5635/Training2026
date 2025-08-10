@@ -1,11 +1,26 @@
-package frc.robot.utils;
+package frc.Demacia.utils.Motors;
+
+import com.ctre.phoenix6.CANBus;
 
 /**
  * Abstract base class for motor configurations
  * Contains common fields and methods shared between different motor controller types
  */
 public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
+
+    public static enum Canbus { Rio("rio"), CANIvore("CANIvore");
+    
+        public CANBus canbus;
+        private Canbus(String name) {
+            this.canbus = new CANBus(name);
+        }
+    } 
+
+    public static enum MotorControllerType { TalonFX, SparkMax};
+
     public int id;                  // CAN bus ID
+    public Canbus canbus = Canbus.Rio;
+    public MotorControllerType motorType  = MotorControllerType.TalonFX;
     public String name;             // Name of the motor - used for logging
 
     public double maxVolt = 12;     // Max Volt allowed
@@ -20,53 +35,20 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
     public double maxVelocity = 0;
     public double maxAcceleration = 0;
     public double maxJerk = 0;
+    public double maxPositionError = 0.5;
 
-    public closeLoopParam pid = new closeLoopParam(0, 0, 0, 0, 0, 0, 0); // close loop argument - PID + FF
-    public closeLoopParam pid1 = null; // pid for slot 1
-    public closeLoopParam pid2 = null; // pid for slot 2
+    public CloseLoopParam[] pid = {new CloseLoopParam(), new CloseLoopParam(), new CloseLoopParam()};
 
+    public boolean isMeterMotor = false;
+    public boolean isDegreesMotor = false;
+    public boolean isRadiansMotor = false;
 
     // enhanced ff
     public double kv2 = 0;
     public double kSin = 0;
     public double posToRad = 0;
 
-        /** 
-    * Class to hold closed loop param
-    *  */
-    static class closeLoopParam { // calculate volts - not -1 to 1 !!!
-        double kp;  
-        double ki;
-        double kd;
-        double ks;
-        double kv;
-        double ka;
-        double kg;
-        double kf;
-
-        closeLoopParam(double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
-            this.ka = ka;
-            this.kd = kd;
-            this.ki = ki;
-            this.kp = kp;
-            this.ks = ks;
-            this.kv = kv;
-            this.kg = kg;
-            this.kf = 0;
-        }
-        closeLoopParam(double kp, double ki, double kd, double kf) {
-            this.ka = 0;
-            this.kd = kd;
-            this.ki = ki;
-            this.kp = kp;
-            this.ks = 0;
-            this.kv = 0;
-            this.kg = 0;
-            this.kf = kf;
-        }
-    }
-
-    /**
+        /**
      * Constructor
      * @param id - CAN bus ID
      * @param name - name of motor for logging
@@ -75,17 +57,20 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
         this.id = id;
         this.name = name;
     }
+    public BaseMotorConfig(int id, String name, Canbus canbus) {
+        this(id,name);
+        this.canbus = canbus;
+    }
 
     /**
      * Set voltage limits
      * @param maxVolt maximum voltage
-     * @param minVolt minimum voltage
      * @return this config for chaining
      */
     @SuppressWarnings("unchecked")
-    public T withVolts(double maxVolt, double minVolt) {
+    public T withVolts(double maxVolt) {
         this.maxVolt = maxVolt;
-        this.minVolt = minVolt;
+        this.minVolt = -maxVolt;
         return (T) this;
     }
 
@@ -129,8 +114,11 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
      * @return this config for chaining
      */
     @SuppressWarnings("unchecked")
-    public T withMeterMotor(double gearRatio, double circumference) {
-        this.motorRatio = gearRatio / circumference;
+    public T withMeterMotor(double gearRatio, double diameter) {
+        this.motorRatio = gearRatio / (diameter * Math.PI);
+        isMeterMotor = true;
+        isRadiansMotor = false;
+        isDegreesMotor = false;
         return (T) this;
     }
 
@@ -142,6 +130,9 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
     @SuppressWarnings("unchecked")
     public T withRadiansMotor(double gearRatio) {
         this.motorRatio = gearRatio / (Math.PI * 2);
+        isMeterMotor = false;
+        isRadiansMotor = true;
+        isDegreesMotor = false;
         return (T) this;
     }
 
@@ -153,6 +144,16 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
     @SuppressWarnings("unchecked")
     public T withDegreesMotor(double gearRatio) {
         this.motorRatio = gearRatio / 360;
+        isMeterMotor = false;
+        isRadiansMotor = false;
+        isDegreesMotor = true;
+        return (T) this;
+    }
+
+    
+    @SuppressWarnings("unchecked")
+    public T withMaxPositionError(double maxPositionError) {
+        this.maxPositionError = maxPositionError;
         return (T) this;
     }
 
@@ -173,7 +174,7 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
      * @return this config for chaining
      */
     @SuppressWarnings("unchecked")
-    public T withVelocities(double maxVelocity, double maxAcceleration, double maxJerk) {
+    public T withMotionParam(double maxVelocity, double maxAcceleration, double maxJerk) {
         this.maxVelocity = maxVelocity;
         this.maxAcceleration = maxAcceleration;
         this.maxJerk = maxJerk;
@@ -205,7 +206,7 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
      * @return TalonConfig
      */
     public T withPID(double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
-        return (T)withPID(1, kp, ki, kd, ks, kv, ka, kg);
+        return (T)withPID(0, kp, ki, kd, ks, kv, ka, kg);
     }
     /** 
      * Set pid
@@ -221,65 +222,22 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
      */
     @SuppressWarnings("unchecked")
     public T withPID(int slot, double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
-        switch(slot) {
-            case 1:
-                pid = new closeLoopParam(kp, ki, kd, ks, kv, ka, kg);
-                break;
-            case 2:
-                pid1 = new closeLoopParam(kp, ki, kd, ks, kv, ka, kg);
-                break;
-            case 3:
-                pid2 = new closeLoopParam(kp, ki, kd, ks, kv, ka, kg);
-                break;
-            default:
-
-        }
+        pid[slot] = new CloseLoopParam(kp, ki, kd, ks, kv, ka, kg);
         return (T)this;
     }
-    /** 
-     * Set pid
-     * @param slot
-     * @param kp
-     * @param ki
-     * @param kd
-     * @param kf
-     * @return TalonConfig
-     */
+
     @SuppressWarnings("unchecked")
-    public T withPID(int slot, double kp, double ki, double kd, double kf) {
-        switch(slot) {
-            case 1:
-                pid = new closeLoopParam(kp, ki, kd, kf);
-                break;
-            case 2:
-                pid1 = new closeLoopParam(kp, ki, kd, kf);
-                break;
-            case 3:
-                pid2 = new closeLoopParam(kp, ki, kd, kf);
-                break;
-            default:
-
-        }
+    public T withCanbus(Canbus canbus) {
+        this.canbus = canbus;
         return (T)this;
     }
-    /** 
-     * Set pid
-     * @param kp
-     * @param ki
-     * @param kd
-     * @param kf
-     * @return TalonConfig
-     */
-    public T withPID(double kp, double ki, double kd, double kf) {
-        return (T)withPID(id, kp, ki, kf);
-    }
-
 
     /**
      * Copy common fields from another BaseMotorConfig
      * @param other the config to copy from
      */
     protected void copyBaseFields(BaseMotorConfig<?> other) {
+        this.canbus = other.canbus;
         this.maxVolt = other.maxVolt;
         this.minVolt = other.minVolt;
         this.maxCurrent = other.maxCurrent;
@@ -294,8 +252,12 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
         this.maxAcceleration = other.maxAcceleration;
         this.maxVelocity = other.maxVelocity;
         this.maxJerk = other.maxJerk;
-        this.pid = other.pid;
-        this.pid1 = other.pid1;
-        this.pid2 = other.pid2;
+        this.pid[0].set(other.pid[0]);
+        this.pid[1].set(other.pid[1]);
+        this.pid[2].set(other.pid[2]);
+        this.maxPositionError = other.maxPositionError;
+        this.isDegreesMotor = other.isDegreesMotor;
+        this.isMeterMotor = other.isMeterMotor;
+        this.isRadiansMotor = other.isRadiansMotor;
    }
 }

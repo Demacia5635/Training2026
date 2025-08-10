@@ -79,9 +79,8 @@ public class SysidResultPanel extends JPanel {
         applyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LogEentryHirerchy motor = app.getMotor();
-                if(motor != null) {
-                    MotorData motorData = motor.getMotorData();
+                MotorData motorData = app.getMotor();
+                if(motorData != null) {
                     SysidCalculate calculate = new SysidCalculate(motorData, getSelectedTypes());
                     velLabels[1].setText(String.format("0 - %4.2f",calculate.getRange(VelocityRange.SLOW)));
                     velLabels[2].setText(String.format("%4.2f - %4.2f",calculate.getRange(VelocityRange.SLOW),calculate.getRange(VelocityRange.MID)));
@@ -96,7 +95,7 @@ public class SysidResultPanel extends JPanel {
                         countLabels[i].setText(Integer.toString(calculate.getCount(range)));
                         avgErrorLabels[i].setText(String.format("%4.2f%%", calculate.getAverageError(range)));
                         maxErrorLabels[i].setText(String.format("%4.2f%%", calculate.getMaxError(range)));
-                        kp[i].setText(String.format("%4.2f", calculate.getKP(range)));
+                        kp[i].setText(String.format("%.5f", calculate.getKP(range)));
                     }
                 } else {
                     Sysid.msg("No motor selected");
