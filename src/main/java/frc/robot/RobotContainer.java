@@ -29,8 +29,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    new goToPid(subsystem);
-    new FeedForward(subsystem);
+    goToPid = new goToPid(subsystem);
+    FeedForward = new FeedForward(subsystem);
     // Configure the trigger bindings
     configureBindings();
   }
