@@ -19,6 +19,7 @@ public class FeedForward extends Command {
    private Modle modle;
    private PIDController theSecondPid;
  
+ 
 
   /** Creates a new FeedForward. */
   public FeedForward(Modle modle) {
