@@ -4,14 +4,11 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.StartMotorDriveAndSteer;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Modula;
+import frc.robot.commands.StartMotorToPosition;
 import frc.robot.subsystems.Motor;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -23,19 +20,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
-  private Modula motorsubsystem;
-  public StartMotorDriveAndSteer startCommend;
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private Motor driveMotor;
+  private Motor steerMotor;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    motorsubsystem = new Modula();
-    startCommend = new StartModulaByTime(motorsubsystem, 0.3, -0.3, 10.0);
+    driveMotor = new Motor(Constants.MotorConstants.DriveMotorID);
+    steerMotor = new Motor(Constants.MotorConstants.SteerMotorID);
     // Configure the trigger bindings
     configureBindings();
   }
@@ -66,6 +57,19 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return startCommend;
+    //return startCommend;
+    return new SequentialCommandGroup(
+      new StartMotorToPosition(steerMotor, 0.3, 90, Constants.MotorConstants.SteerRatio),
+
+      new ParallelCommandGroup(
+        new StartMotorToPosition(steerMotor, 0.3, 135, Constants.MotorConstants.SteerRatio),
+        new StartMotorToPosition(driveMotor, 0.3, 1, Constants.MotorConstants.DriveRatio) 
+      ),
+
+      new ParallelCommandGroup(
+        new StartMotorToPosition(steerMotor, 0.3, 0, Constants.MotorConstants.SteerRatio),
+        new StartMotorToPosition(driveMotor, -0.3, 135, Constants.MotorConstants.DriveRatio)
+      )
+    );
   }
 }

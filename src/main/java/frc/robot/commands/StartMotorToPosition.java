@@ -5,12 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Motor;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class StartMotor extends Command {
-  /** Creates a new StartMotor. */
-  public StartMotor() {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class StartMotorToPosition extends Command {
+  private final Motor subsystem;
+  private final double power;
+  private final double targetPosition;
+  private final double ratio;
+
+  public StartMotorToPosition(Motor subsystem, double power, double targetPosition, double ratio) {
+    this.subsystem = subsystem;
+    this.power = power;
+    this.targetPosition = targetPosition;
+    this.ratio = ratio;
+    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -19,15 +28,19 @@ public class StartMotor extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    subsystem.setPower(power);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    subsystem.stop();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs((targetPosition - subsystem.getPosition()) * ratio) < 0.01;
   }
 }
