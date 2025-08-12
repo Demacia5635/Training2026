@@ -12,13 +12,11 @@ public class StartMotorToPosition extends Command {
   private final Motor subsystem;
   private final double power;
   private final double targetPosition;
-  private final double ratio;
 
-  public StartMotorToPosition(Motor subsystem, double power, double targetPosition, double ratio) {
+  public StartMotorToPosition(Motor subsystem, double power, double targetPosition) {
     this.subsystem = subsystem;
     this.power = power;
     this.targetPosition = targetPosition;
-    this.ratio = ratio;
     addRequirements(subsystem);
   }
 
@@ -41,6 +39,6 @@ public class StartMotorToPosition extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs((targetPosition - subsystem.getPosition()) * ratio) < 0.01;
+    return Math.abs((targetPosition - subsystem.getPosition())) < 0.01;
   }
 }

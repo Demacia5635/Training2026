@@ -5,7 +5,8 @@
 package frc.robot;
 
 import frc.robot.commands.StartMotorToPosition;
-import frc.robot.subsystems.Motor;
+import frc.robot.subsystems.DriveMotor;
+import frc.robot.subsystems.SteerMotor;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -20,13 +21,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
-  private Motor driveMotor;
-  private Motor steerMotor;
+  private DriveMotor driveMotor;
+  private SteerMotor steerMotor;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    driveMotor = new Motor(Constants.MotorConstants.DriveMotorID);
-    steerMotor = new Motor(Constants.MotorConstants.SteerMotorID);
+    driveMotor = new DriveMotor(Constants.MotorConstants.DriveMotorID);
+    steerMotor = new SteerMotor(Constants.MotorConstants.SteerMotorID);
     // Configure the trigger bindings
     configureBindings();
   }
@@ -59,16 +60,16 @@ public class RobotContainer {
     // An example command will be run in autonomous
     //return startCommend;
     return new SequentialCommandGroup(
-      new StartMotorToPosition(steerMotor, 0.3, 90, Constants.MotorConstants.SteerRatio),
+      new StartMotorToPosition(steerMotor, 0.3, 90),
 
       new ParallelCommandGroup(
-        new StartMotorToPosition(steerMotor, 0.3, 135, Constants.MotorConstants.SteerRatio),
-        new StartMotorToPosition(driveMotor, 0.3, 1, Constants.MotorConstants.DriveRatio) 
+        new StartMotorToPosition(steerMotor, 0.3, 135),
+        new StartMotorToPosition(driveMotor, 0.3, 1) 
       ),
 
       new ParallelCommandGroup(
-        new StartMotorToPosition(steerMotor, 0.3, 0, Constants.MotorConstants.SteerRatio),
-        new StartMotorToPosition(driveMotor, -0.3, 135, Constants.MotorConstants.DriveRatio)
+        new StartMotorToPosition(steerMotor, 0.3, 0),
+        new StartMotorToPosition(driveMotor, -0.3, 135)
       )
     );
   }
