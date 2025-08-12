@@ -15,7 +15,7 @@ import frc.robot.Constants;
 /** Add your docs here. */
 public class Motor extends SubsystemBase {
 
-    private final TalonFX motor;
+    protected final TalonFX motor;
 
     public Motor(int MotorID){
         super();

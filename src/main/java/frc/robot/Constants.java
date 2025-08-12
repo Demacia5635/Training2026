@@ -17,7 +17,8 @@ public final class Constants {
     public static final int DriveMotorID = 10;
     public static final int SteerMotorID = 11;
     public static final double SteerRatio = 12.8;
-    public static final double DriveRatio = 0.3141;
+    public static final double DriveRatio = 8.14;
+    public static final double WheelRadius = 0.05;
     public static final String MotorCANbus = "rio";
   }
 }
