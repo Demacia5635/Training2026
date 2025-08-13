@@ -5,11 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.ModuleFrog;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TurnWheelForASecondBcPerelmanIsForcingUsAginstOurWill extends Command {
-  /** Creates a new TurnWheelForASecondBcPerelmanIsForcingUsAginstOurWill. */
-  public TurnWheelForASecondBcPerelmanIsForcingUsAginstOurWill() {
+public class MoveMotorsCat extends Command {
+  private ModuleFrog frog;
+  /** Creates a new MoveMotorsCat. */
+  public MoveMotorsCat(ModuleFrog frog) {
+    this.frog = frog;
+    addRequirements(frog);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -19,7 +24,10 @@ public class TurnWheelForASecondBcPerelmanIsForcingUsAginstOurWill extends Comma
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    frog.setDrivePowerFrog(0.2);
+    frog.setSteerPowerFrog(-0.2);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
