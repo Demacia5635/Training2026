@@ -16,7 +16,7 @@ public class MoveToAngle extends Command {
   private MyFirstSubsystem sub;
   private double wantedAngle;
   private double currentAngle;
-  private PIDController pid =new PIDController(0.005, 0, 0);
+  private PIDController pid =new PIDController(0.01, 0, 0);
   public MoveToAngle(MyFirstSubsystem sub) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.sub = sub;

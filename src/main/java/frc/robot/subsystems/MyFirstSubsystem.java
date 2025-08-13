@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Num;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -18,9 +19,9 @@ public class MyFirstSubsystem extends SubsystemBase {
     double v = 0.0; 
     double angle = 0;
     double length;
-    double NumberOfWheelCyclesIn1Sec=8.14;
+    public static final double NumberOfWheelCyclesIn1Sec=8.14;
+    public static final double SteerGearRetio=12.8;
     double diameterWheel = 0.1016;
-    double AllDegreesInCircle=360;
 
     // Constructor
     public MyFirstSubsystem() {
@@ -57,10 +58,10 @@ public class MyFirstSubsystem extends SubsystemBase {
         this.v=speed;
     }
     public double getDriveMotorVelocity(){
-        return motorDrive.getVelocity().getValueAsDouble()*diameterWheel*Math.PI;
+        return (motorDrive.getVelocity().getValueAsDouble()/NumberOfWheelCyclesIn1Sec)*diameterWheel*Math.PI;
     }
     public double getSteerMotorVelocity(){
-        return motorSteer.getVelocity().getValueAsDouble()*diameterWheel*Math.PI;
+        return (motorSteer.getVelocity().getValueAsDouble()/NumberOfWheelCyclesIn1Sec)*diameterWheel*Math.PI;
     }
     public double getMeter(){
         return (motorDrive.getPosition().getValueAsDouble()/NumberOfWheelCyclesIn1Sec)*diameterWheel*Math.PI;
@@ -72,7 +73,8 @@ public class MyFirstSubsystem extends SubsystemBase {
         this.length=length;
     }
     public double getMotorAngle(){
-        return motorSteer.getPosition().getValueAsDouble()/NumberOfWheelCyclesIn1Sec*AllDegreesInCircle%AllDegreesInCircle;
+        return  MathUtil.inputModulus(
+                motorSteer.getPosition().getValueAsDouble()/SteerGearRetio*360, -180, 180);
     }
     public double getWantedAngle(){
         return angle;

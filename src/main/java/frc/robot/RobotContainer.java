@@ -57,6 +57,7 @@ public class RobotContainer {
     // An example command will be run in autonomous
     
     // return DriveMotorcmd.andThen(SteerMotorcmd);
-    return MovingInSameVelocity;
+    //return MovingInSameVelocity;
+    return SteerMotorcmd;
   }
 }

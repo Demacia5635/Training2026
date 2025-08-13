@@ -17,7 +17,7 @@ public class MoveInSameVelocity extends Command {
   private MyFirstSubsystem sub3= new MyFirstSubsystem();
   private double wantedSpeed;
   private double currentSpeed;
-  private PIDController pid = new PIDController(0.2, 0, 0);
+  private PIDController pid = new PIDController(0.07, 1.5, 0);
   
   public MoveInSameVelocity(MyFirstSubsystem sub3) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -53,6 +53,6 @@ public class MoveInSameVelocity extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pid.atSetpoint();
+    return false;
   }
 }
