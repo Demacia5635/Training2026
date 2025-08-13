@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+
+import frc.Demacia.utils.Motors.SparkConfig;
+import frc.Demacia.utils.Motors.TalonConfig;
+import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
