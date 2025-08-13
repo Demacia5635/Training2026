@@ -23,53 +23,59 @@ public class  MoveWithPID extends Command {
   private double wantedAngle;
   private double power;
   private PIDController velocityController = new PIDController(0.0001, 0.0, 0.00001);
-  
-  public MoveWithPID(MyFirstSubsystem sub) {
-    this.sub = sub;
-    this.power = 0.1;
-    SmartDashboard.putData("Subsystem 1", this);
-    addRequirements(sub);
+  private TalonFX motor2Talon;
+  private PIDController driveFF;
+  private PIDController drivePID;
+        
+        public MoveWithPID(MyFirstSubsystem sub) {
+          this.sub = sub;
+          this.power = 0.1;
+          SmartDashboard.putData("Subsystem 1", this);
+          addRequirements(sub);
+      }
+        
+        @Override
+        public boolean isFinished() {
+          return Math.abs(sub.spinToAngle() - wantedAngle) < 5; 
+        }
+        public void setAngle(double angle) {
+          this.wantedAngle = angle;
+      }
+        @Override
+          public void initSendable(SendableBuilder builder){
+            builder.addDoubleProperty("Angle", this::getAngle, this::setAngle);
+      
+          }
+          public double getAngle() {
+            return this.wantedAngle;
+        }
+        // Called every time the scheduler runs while the command is scheduled.
+        @Override
+        public void execute() {
+          if (wantedAngle > 0) {
+            double currentAngle = sub.spinToAngle(); // conversion
+            double Power = velocityController.calculate(currentAngle, wantedAngle);
+            sub.setPower2(Power);
+        } else {
+            sub.setPower(power);
+        }
+        }
+        
+        // Called once the command ends or is interrupted.
+        @Override
+        public void end(boolean interrupted) {
+          power = 0;
+        }
+        public void setDriveVelocity(double velocityMetersPerSecond) {
+          double currentVelocity = getDriveVelocity(); // במטר לשנייה
+          double pidOutput = drivePID.calculate(currentVelocity, velocityMetersPerSecond);
+          double ffOutput = driveFF.calculate(velocityMetersPerSecond);
+          double totalVoltage = pidOutput + ffOutput;
+          motor2Talon.setVoltage(totalVoltage); // הדרייב
 }
-  
-  @Override
-  public boolean isFinished() {
-    return Math.abs(sub.spinToAngle() - wantedAngle) < 5; 
-  }
-  public void setAngle(double angle) {
-    this.wantedAngle = angle;
-}
-  @Override
-    public void initSendable(SendableBuilder builder){
-      builder.addDoubleProperty("Angle", this::getAngle, this::setAngle);
-
-    }
-    public double getAngle() {
-      return this.wantedAngle;
-  }
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    if (wantedAngle > 0) {
-      double currentAngle = sub.spinToAngle(); // conversion
-      double Power = velocityController.calculate(currentAngle, wantedAngle);
-      sub.setPower2(Power);
-  } else {
-      sub.setPower(power);
-  }
-  }
-  
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    power = 0;
-  }
-  public void setDriveVelocity(double velocityMetersPerSecond) {
-    double currentVelocity = getDriveVelocity(); // במטר לשנייה
-    double pidOutput = drivePID.calculate(currentVelocity, velocityMetersPerSecond);
-    double ffOutput = driveFF.calculate(velocityMetersPerSecond);
-    double totalVoltage = pidOutput + ffOutput;
-
-    motor2Talon.setVoltage(totalVoltage); // הדרייב
+        private double getDriveVelocity() {
+        
+          throw new UnsupportedOperationException("Unimplemented method 'getDriveVelocity'");
 }
 
 }

@@ -17,7 +17,6 @@ public class PrintStatusCommand extends InstantCommand {
     System.out.println("Position: " + sub.moveToMeter());
     System.out.println("Velocity Steer: " + sub.getSteerVelocity());
     System.out.println("Velocity Drive: " + sub.getDriveVelocity());
-    // כאן תוכל להוסיף שליחה ל־Elastic אם תרצה
   }
 }
 

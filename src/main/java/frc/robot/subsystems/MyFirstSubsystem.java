@@ -16,17 +16,15 @@ public class MyFirstSubsystem extends SubsystemBase {
     // Define the motor 
     TalonFX motor;
     TalonFX motor2Talon;
-     private CANcoder cancoder;
-
+    private CANcoder cancoder;
+    
     private double steerOffset = 0.0;
     // Constructor
     public MyFirstSubsystem() {
         super();
         motor = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
         motor2Talon = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR2Talon_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
-        cancoder = new CANcoder(Constants.MyFirstSubsystemConstants.CANCODER_ID);
-        steerOffset = Preferences.getDouble("SteerOffset", 0.0); // טוען את הכיול מהזיכרון
-
+        cancoder = new CANcoder(Constants.MyFirstSubsystemConstants.CANCODER_ID);        
     }
 
     // Method to set the motor speed
@@ -35,10 +33,6 @@ public class MyFirstSubsystem extends SubsystemBase {
     }
     public void setPower2(double power) {
         motor2Talon.set(power);
-    }
-    public void calibrateSteerAngle() {
-        steerOffset = getAbsoluteAngleDegrees(); // קובע את הזווית הנוכחית כאפס
-        Preferences.setDouble("SteerOffset", steerOffset); // שומר בזיכרון
     }
     
     // Method to stop the motor
@@ -60,6 +54,7 @@ public class MyFirstSubsystem extends SubsystemBase {
     public double getSteerAngleRelativeToZero() {
         return (getAbsoluteAngleDegrees() - steerOffset + 360) % 360;
     }
+    
     
     @Override
     public void initSendable(SendableBuilder builder)
@@ -108,6 +103,11 @@ public void setSteerAngle(double desiredAngle) {
     // הגבלת מתח למנוע steer
     steerPower = Math.max(Math.min(steerPower, 0.5), -0.5);
     setPower(steerPower); // steer = motor
+}
+
+public void setDriveVelocity(double forwardSpeed) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setDriveVelocity'");
 }
 
     
