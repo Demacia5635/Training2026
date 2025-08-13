@@ -22,8 +22,8 @@ public class RobotContainer {
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
   private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, 0.1, 0.1,  11.0);
   private final MoveWithPID cmd = new MoveWithPID(subsystem);
-  moduleSubsystem = new ModuleSubsystem();  // ייתכן שכבר קיים
-  moduleSubsystem.calibrateSteerAngle();   // קריאה לכיול
+  MyFirstSubsystem = new MyFirstSubsystem();  // ייתכן שכבר קיים
+  MyFirstSubsystem.calibrateSteerAngle();   // קריאה לכיול
   
 
 
