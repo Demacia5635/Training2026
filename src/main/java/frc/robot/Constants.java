@@ -14,8 +14,9 @@ package frc.robot;
  */
 public final class Constants {
   public static class MyFirstSubsystemConstants {
-    public static final int MOTOR_ID = 7;
+    public static final int MOTOR_ID = 10;
     public static final String MOTOR_CAN = "rio";
+    public static final double MOTOR_GEAR_RATIO = 8.14; // Example gear ratio
   }
 
   public static class OperatorConstants {

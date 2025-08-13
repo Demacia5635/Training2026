@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.MyFirstSubsystemCommand;
+import frc.robot.commands.pid;
 import frc.robot.subsystems.MyFirstSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -18,11 +19,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
-  private final Command autoCommand = new MyFirstSubsystemCommand(subsystem, 0.4, 10.0);
-  
+  private MyFirstSubsystem subsystem;
+  private  Command autoCommand;
+  private pid pidCommand;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    subsystem = new MyFirstSubsystem();
+    autoCommand = new MyFirstSubsystemCommand(subsystem, 0.4, 10.0);
+    pidCommand = new pid(subsystem, 2);
     configureBindings();
   }
 
@@ -47,6 +51,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return autoCommand;
+    return pidCommand;
   }
 }
