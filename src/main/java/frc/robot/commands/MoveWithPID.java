@@ -5,6 +5,8 @@
 package frc.robot.commands;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -27,7 +29,7 @@ public class  MoveWithPID extends Command {
     this.power = 0.1;
     SmartDashboard.putData("Subsystem 1", this);
     addRequirements(sub);
-  }
+}
   
   @Override
   public boolean isFinished() {
@@ -61,4 +63,13 @@ public class  MoveWithPID extends Command {
   public void end(boolean interrupted) {
     power = 0;
   }
+  public void setDriveVelocity(double velocityMetersPerSecond) {
+    double currentVelocity = getDriveVelocity(); // במטר לשנייה
+    double pidOutput = drivePID.calculate(currentVelocity, velocityMetersPerSecond);
+    double ffOutput = driveFF.calculate(velocityMetersPerSecond);
+    double totalVoltage = pidOutput + ffOutput;
+
+    motor2Talon.setVoltage(totalVoltage); // הדרייב
+}
+
 }
