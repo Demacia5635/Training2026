@@ -211,13 +211,10 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
 
   public double getCurrentVelocity() {
     double velocity = encoder.getVelocity();
-    if (lastCycleNum != RobotContainer.N_CYCLE) {
-      lastCycleNum = RobotContainer.N_CYCLE;
       double time = Timer.getFPGATimestamp();
       lastAcceleration = (velocity - lastVelocity) / (time - lastTime);
       lastTime = time;
       lastVelocity = velocity;
-    }
     return velocity;
   }
 

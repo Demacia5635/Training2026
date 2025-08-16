@@ -9,9 +9,9 @@ import frc.robot.subsystems.Motor;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class StartMotorToPosition extends Command {
-  private final Motor subsystem;
+  protected final Motor subsystem;
   private final double power;
-  private final double targetPosition;
+  protected final double targetPosition;
 
   public StartMotorToPosition(Motor subsystem, double power, double targetPosition) {
     this.subsystem = subsystem;
@@ -39,6 +39,6 @@ public class StartMotorToPosition extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs((targetPosition - subsystem.getPosition())) < 0.01;
+    return Math.abs((targetPosition - subsystem.getPosition())) < 1;
   }
 }

@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.Constants;
 
 /** Add your docs here. */
@@ -15,6 +16,13 @@ public class SteerMotor extends Motor{
 
     @Override
     public double getPosition() {
-        return motor.getPosition().getValueAsDouble() * 360 * Constants.MotorConstants.SteerRatio;
+        return motor.getPosition().getValueAsDouble() * 360 / Constants.MotorConstants.SteerRatio;
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        super.initSendable(builder);
+        builder.addDoubleProperty("Position steer", this::getPosition, null);
+        builder.addDoubleProperty("Velocity steer", this::getVelocity, null);
     }
 }
