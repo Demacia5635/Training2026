@@ -23,7 +23,17 @@ public final class Constants {
     public static final String MOTOR_CAN = "rio";
     public static final int DMOTOR_ID = 10;
   }
-
+public static class MotorsConfig {
+  public static final TalonConfig TALON_CONFIG = new TalonConfig(Constants.MyFirstSubsystemConstants.DMOTOR_ID, Canbus.Rio, "driveMexicana")
+          .withBrake(true)
+          .withCurrent(20)   						// Current Limit
+          .withInvert(true)
+          .withMeterMotor(OperatorConstants.DgearRatio, OperatorConstants.wheelDiameter*0.0254) 				// Gear Ratio and Wheel Circumference
+          .withVelocities(3, 6, 10) 					// max velocity,acceleration, jerk for profiled motion
+          .withPID(1, 0, 0, 0.12, 3.7, 1.2, 0) 			// kp, ki, kd, ks, kv, ka, kg
+          .withRampTime(0.3) 						// time from zero to max power in seconds
+          .withVolts(6); 						// max volt
+}
   public static class ModuleConstants {
     public static final int STEER_ID = 1;
     public static final int DRIVE_ID = 2;
