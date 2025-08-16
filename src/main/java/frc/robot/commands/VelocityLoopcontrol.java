@@ -8,30 +8,23 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.MyFirstSubsystem;
+import frc.Demacia.utils.Motors.MotorInterface;
+import frc.robot.subsystems.PizzaMotor;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class VelocityLoopcontrol extends Command {
-  private final double kp;
-  private final double ks;
-  private final double kv;
-  private final double ka;
-  private final double kg;
+
   private final double targetV;
-  private final MyFirstSubsystem subsystem;
+  private final PizzaMotor subsystem;
   
   /** Creates a new VelocityLoopcontrol. */
-  public VelocityLoopcontrol(MyFirstSubsystem subsystem, double targetV,double kp, double ks, double kv, double ka, double kg) {
-    this.kp = kp;
-    this.ks = ks;
-    this.kv = kv;
-    this.ka = ka;
-    this.kg = kg;
-    this.targetV = targetV;
+  public VelocityLoopcontrol(PizzaMotor subsystem, double targetV) {
     this.subsystem = subsystem;
+    this.targetV = targetV;
     addRequirements(subsystem);
     SmartDashboard.putNumber("target velocity", targetV);
-    
+    SmartDashboard.putNumber("velocity error", 0);
+
     
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -46,14 +39,10 @@ public class VelocityLoopcontrol extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    final SimpleMotorFeedforward feedforward =  new SimpleMotorFeedforward(ks,kv,ka);
-  final PIDController pidController = new PIDController(kp, 0.0, 0.0);
-    double currentVelocity = subsystem.DgetSpeedinMpSpizza();
-        double feedforwardOutput = feedforward.calculateWithVelocities(currentVelocity, targetV);
-        double pidOutput = pidController.calculate(currentVelocity, targetV);
-        double totalOutput = feedforwardOutput + pidOutput;        
-        subsystem.setDVelocityMPS(totalOutput);
+    subsystem.driveMotor.setVelocityWithFeedForward(targetV);
+    double error = targetV - subsystem.driveMotor.getCurrentVelocity();
         SmartDashboard.putNumber("target velocity", targetV);
+        SmartDashboard.putNumber("velocity error", error);
     
 
   }

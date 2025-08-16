@@ -29,8 +29,7 @@ public static class MotorsConfig {
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
           .withMeterMotor(OperatorConstants.DgearRatio, OperatorConstants.wheelDiameter*0.0254) 				// Gear Ratio and Wheel Circumference
-          .withVelocities(3, 6, 10) 					// max velocity,acceleration, jerk for profiled motion
-          .withPID(1, 0, 0, 0.12, 3.7, 1.2, 0) 			// kp, ki, kd, ks, kv, ka, kg
+          .withPID(0.001, 0, 0, -0.1, 1.3, 0, 0) 			// kp, ki, kd, ks, kv, ka, kg
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
 }

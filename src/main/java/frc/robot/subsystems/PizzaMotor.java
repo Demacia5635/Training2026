@@ -13,7 +13,7 @@ import frc.Demacia.utils.Motors.TalonConfig;
 import frc.Demacia.utils.Motors.TalonMotor;
 
 public class PizzaMotor extends SubsystemBase {
-    MotorInterface driveMotor; 
+    public MotorInterface driveMotor; 
 
   public PizzaMotor() {
     super();

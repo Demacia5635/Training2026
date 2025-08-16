@@ -9,18 +9,21 @@ import frc.robot.commands.GoToAngle;
 import frc.robot.commands.KsAkvCalc;
 import frc.robot.commands.VelocityLoopcontrol;
 import frc.robot.subsystems.MyFirstSubsystem;
+import frc.robot.subsystems.PizzaMotor;
 import frc.robot.subsystems.DemaciaMotorExample;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
- private final Command Velocity1 = new VelocityLoopcontrol(subsystem, 1, 0.001, -0.1, 1.3, 0.0, 0.0);
- private final Command Velocity2= new VelocityLoopcontrol(subsystem, 2, 0.001, -0.1, 1.3, 0.0, 0.0);
- private final Command Velocity_1 = new VelocityLoopcontrol(subsystem, -1, 0.001, -0.1, 1.3, 0.0, 0.0);
- private final Command Velocity_2 = new VelocityLoopcontrol(subsystem, -2, 0.001, -0.1, 1.3, 0.0, 0.0);
+  private final PizzaMotor PizzaMotor = new PizzaMotor();
+ //private final Command Velocity1 = new VelocityLoopcontrol(subsystem, 1, 0.001, -0.1, 1.3, 0.0, 0.0);
+ //private final Command Velocity2= new VelocityLoopcontrol(subsystem, 2, 0.001, -0.1, 1.3, 0.0, 0.0);
+ //private final Command Velocity_1 = new VelocityLoopcontrol(subsystem, -1, 0.001, -0.1, 1.3, 0.0, 0.0);
+ //private final Command Velocity_2 = new VelocityLoopcontrol(subsystem, -2, 0.001, -0.1, 1.3, 0.0, 0.0);
   private final Command drive1 = new Drive(subsystem, 100, 0.01, 0.0, 0.0);
   private final Command Pizza = new KsAkvCalc(subsystem, 5);
+  private final Command Pizza2 = new VelocityLoopcontrol(PizzaMotor, 2.0);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -46,7 +49,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return Velocity2;
+    return Pizza2;
 
     
 
