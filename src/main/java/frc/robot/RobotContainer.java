@@ -14,6 +14,9 @@ import frc.robot.subsystems.DemaciaMotorExample;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RobotContainer {
+  public static int N_CYCLE = 0;
+  public static double CYCLE_TIME = 0.02;
+  
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
   private final PizzaMotor PizzaMotor = new PizzaMotor();
