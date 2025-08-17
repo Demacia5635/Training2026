@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.commands.StartDriveMotorToPosition;
 import frc.robot.commands.StartSteerMotorToPosition;
+import frc.robot.commands.SteerWithPID;
 import frc.robot.subsystems.DriveMotor;
 import frc.robot.subsystems.SteerMotor;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -60,18 +61,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return startCommend;
-    return new SequentialCommandGroup(
-      new StartSteerMotorToPosition(steerMotor, -0.3, 90),
-
-      new ParallelCommandGroup(
-        new StartSteerMotorToPosition(steerMotor, 0.3, 135),
-        new StartDriveMotorToPosition(driveMotor, 0.3, 1) 
-      ),
-
-      new ParallelCommandGroup(
-        new StartSteerMotorToPosition(steerMotor, -0.3, 0),
-        new StartDriveMotorToPosition(driveMotor, -0.3, -1)
-      )
-    );
+    return new SteerWithPID(steerMotor);
   }
 }

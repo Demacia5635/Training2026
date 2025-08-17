@@ -10,6 +10,8 @@ import frc.robot.Constants;
 /** Add your docs here. */
 public class SteerMotor extends Motor{
 
+    private double targetPosition = 0;
+
     public SteerMotor(int MotorID) {
         super(MotorID);
     }
@@ -19,10 +21,19 @@ public class SteerMotor extends Motor{
         return motor.getPosition().getValueAsDouble() * 360 / Constants.MotorConstants.SteerRatio;
     }
 
+    public void setTargetAngle(double angle) {
+        targetPosition = angle * Constants.MotorConstants.SteerRatio / 360;
+    }
+
+    public double getTargetAngle() {
+        return targetPosition * 360 / Constants.MotorConstants.SteerRatio;
+    }
+
     @Override
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
         builder.addDoubleProperty("Position steer", this::getPosition, null);
         builder.addDoubleProperty("Velocity steer", this::getVelocity, null);
+        builder.addDoubleProperty("Target angle", this::getTargetAngle, this::setTargetAngle);
     }
 }

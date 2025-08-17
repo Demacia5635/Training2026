@@ -58,6 +58,12 @@ public final class Constants {
     public static final String MotorCANbus = "rio";
   }
 
+  public static class PIDConstants {
+    public static final double STEER_KP = 0.002;
+    public static final double STEER_KI = 0.0002;
+    public static final double STEER_KD = 0.00002;
+  }
+
   public static class BaseConfigs {
     public static final TalonConfig BASE_TALON_CONFIG = new TalonConfig(0, Canbus.Rio, "base")
         .withBrake(true)
