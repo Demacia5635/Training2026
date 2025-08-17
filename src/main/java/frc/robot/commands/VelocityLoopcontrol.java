@@ -14,15 +14,14 @@ import frc.robot.subsystems.PizzaMotor;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class VelocityLoopcontrol extends Command {
 
-  private final double targetV;
-  private final PizzaMotor subsystem;
+  private  double targetV;
+  private  PizzaMotor subsystem;
   
   /** Creates a new VelocityLoopcontrol. */
-  public VelocityLoopcontrol(PizzaMotor subsystem, double targetV) {
+  public VelocityLoopcontrol(PizzaMotor subsystem) {
     this.subsystem = subsystem;
-    this.targetV = targetV;
-    addRequirements(subsystem);
-    SmartDashboard.putNumber("target velocity", targetV);
+     addRequirements(subsystem);
+   double targetV = SmartDashboard.getNumber("target velocity", subsystem.driveMotor.getCurrentVelocity());
     SmartDashboard.putNumber("velocity error", 0);
 
     
@@ -41,10 +40,9 @@ public class VelocityLoopcontrol extends Command {
   public void execute() {
     subsystem.driveMotor.setVelocityWithFeedForward(targetV);
     double error = targetV - subsystem.driveMotor.getCurrentVelocity();
-        SmartDashboard.putNumber("target velocity", targetV);
+        targetV = SmartDashboard.getNumber("target velocity", targetV);
         SmartDashboard.putNumber("velocity error", error);
-    
-
+        
   }
 
   // Called once the command ends or is interrupted.

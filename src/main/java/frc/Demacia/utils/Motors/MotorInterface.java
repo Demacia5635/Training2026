@@ -20,7 +20,6 @@ public interface MotorInterface {
     void setPositionVoltage(double position);
     void setVelocityWithFeedForward(double velocity);
     void setMotionWithFeedForward(double velocity);
-
     String getCurrentControlMode();
     double getCurrentClosedLoopSP();
     double getCurrentClosedLoopError();

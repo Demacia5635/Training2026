@@ -4,31 +4,25 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.MyFirstSubsystem;
+import frc.robot.subsystems.PizzaMotor;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 
 public class GoToAngle extends Command {
-    MyFirstSubsystem subsystem;
+    PizzaMotor subsystem;
     private double targetAngle;
-    private double kp;
-    private double ki;
-    private double kd;
-    private double sumError = 0;
 
-    public GoToAngle(MyFirstSubsystem subsystem,  double targetAngle, double kp, double ki, double kd) {
-        this.targetAngle = targetAngle;
+
+    public GoToAngle(PizzaMotor subsystem) {
+        double targetAngle = SmartDashboard.getNumber("steering Target ", subsystem.steerMotor.getCurrentPosition());
         this.subsystem = subsystem;
-        this.kp = kp;
-        this.ki = ki;
-        this.kd = kd;
+      
 
-        double sumError = 0;
   //       PIDController Spid = new PIDController(kp,ki,kd);
   //       SmartDashboard.putData("My steering PID", Spid);
-        addRequirements(subsystem);
+
     //     SmartDashboard.putNumber("Target Angle",90);
     //     SmartDashboard.putNumber("drive Error", 0);
     //     SmartDashboard.putNumber("drive angle", subsystem.getDPosition());
@@ -50,32 +44,25 @@ public class GoToAngle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute () {
-    double currnt = subsystem.getSPosition();
+    subsystem.steerMotor.setPositionVoltage(targetAngle);
+    double currnt = subsystem.steerMotor.getCurrentPosition();
     double error = targetAngle - currnt;
-    double lastError = error;
-    sumError += error;
-            double p = kp * error;
-            double i = ki * sumError;
-            double d = kd * (lastError - error);
-    double power = MathUtil.clamp(p+i+d,-0.5, 0.5);
     SmartDashboard.putNumber("steering Error", error);
     SmartDashboard.putNumber("steering angle", currnt);
-    SmartDashboard.putNumber("steering Target ", targetAngle);
-    subsystem.setSPower(power);
-    SmartDashboard.putNumber("steering Power", power);
-    SmartDashboard.putNumber("steering velocity", subsystem.steerMotor.getVelocity().getValueAsDouble());
+    targetAngle = SmartDashboard.getNumber("steering Target ", targetAngle);
+    //SmartDashboard.putNumber("steering velocity", subsystem.steerMotor.getVelocity().getValueAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    subsystem.stop();
+    subsystem.steerMotor.setVoltage(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean isFinished = Math.abs(subsystem.getSPosition() - targetAngle) < 1;
+    boolean isFinished = Math.abs(subsystem.steerMotor.getCurrentPosition() - targetAngle) < 1;
     return isFinished;
   }
 
