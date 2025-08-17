@@ -23,7 +23,8 @@ public final class Constants {
     public static final int MOTOR2Talon_ID = 11;
     public static final String MOTOR_CAN = "rio";
     public static final int CANCODER_ID = 0;
-
+  }
+  
   public static class ModuleConstants {
     public static final int STEER_ID = 1;
     public static final int DRIVE_ID = 2;

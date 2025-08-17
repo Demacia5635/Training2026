@@ -35,7 +35,6 @@ public class RobotContainer {
   }
 
   public void periodic() {
-    N_CYCLE++;
   }
 
   public Command getAutonomousCommand() {

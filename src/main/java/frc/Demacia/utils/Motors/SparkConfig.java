@@ -21,4 +21,9 @@ public class SparkConfig extends BaseMotorConfig<SparkConfig> {
         copyBaseFields(config);
     }
 
+    public SparkConfig copy() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'copy'");
+    }
+
 }
