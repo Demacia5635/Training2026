@@ -21,27 +21,23 @@ public class VelocityLoopcontrol extends Command {
   public VelocityLoopcontrol(PizzaMotor subsystem) {
     this.subsystem = subsystem;
      addRequirements(subsystem);
-    SmartDashboard.putNumber("pizza velocity error", 0);
-    targetV = SmartDashboard.getNumber("target velocity", 0);
-
-    
-
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  
+    SmartDashboard.putNumber("pizza velocity error", 0);
+     SmartDashboard.putNumber("pizza target velocity", 2);
 }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsystem.driveMotor.setVelocityWithFeedForward(targetV);
-    double error = 2 -0;
+    subsystem.driveMotor.setVelocityWithFeedForward(SmartDashboard.getNumber("pizza target velocity",0));
+    double error = targetV - subsystem.driveMotor.getCurrentVelocity();
      SmartDashboard.putNumber("pizza velocity error", error);
-    targetV = SmartDashboard.getNumber("target velocity", targetV);  
+    SmartDashboard.putNumber("target velocity", targetV);  
   }
 
   // Called once the command ends or is interrupted.
