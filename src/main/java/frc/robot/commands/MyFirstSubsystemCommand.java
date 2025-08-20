@@ -1,40 +1,42 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.MyFirstSubsystem;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 public class MyFirstSubsystemCommand extends Command {
     private final MyFirstSubsystem subsystem;
-    private final double power;
-    private final double duration;
-    private double startTime;
-
+    double sumOfEror;
+    double lastError;
+ 
     /** Activate motor for a duration*/
-    public MyFirstSubsystemCommand (MyFirstSubsystem  subsystem, double power, double duration) {
+    public MyFirstSubsystemCommand (MyFirstSubsystem  subsystem) {
       this.subsystem = subsystem;
-      this.power = power;
-      this.duration = duration;
+      this.sumOfEror=0;
+      this.lastError=0;
       addRequirements(subsystem);
     }
     @Override
     public void initialize() {
-      startTime = Timer.getFPGATimestamp();
-      System.out.println("Command strted at: " + startTime + " seconds for " + duration + " seconds with power: " + power);
     }
     @Override
     public void execute() {
-      subsystem.setPower(power);
+      subsystem.turnToAngle(SmartDashboard.getNumber("degree",45.0););
     }
     @Override
     public void end(boolean interrupted) {
       subsystem.stop();
-      System.out.println("Command ended at: " + Timer.getFPGATimestamp() + " seconds");
     }
     @Override
     public boolean isFinished() {
-      return duration > 0 && Timer.getFPGATimestamp() > duration + startTime;
+      return (SmartDashboard.getNumber("degree",45.0)-subsystem.GetPositiony())<2&&(SmartDashboard.getNumber("degree",45.0)-subsystem.GetPositiony())<-2
     }
+    
 
   }
   
