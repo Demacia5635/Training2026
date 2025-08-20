@@ -59,6 +59,9 @@ public double DgetSpeedinMpSpizza(){
     double rotationsPers = driveMotor.getVelocity().getValueAsDouble();
     return (rotationsPers/OperatorConstants.DgearRatio) * wheelCircumference; // Speed in meters per second
 }
+public void setVoltage(double voltage){
+    setDPower(voltage/12.0);
+}
 public void setDVelocityMPS(double velocityMPS) {
     double power123 = velocityMPS / OperatorConstants.maxSpeedMpS;
     setDPower(power123);
