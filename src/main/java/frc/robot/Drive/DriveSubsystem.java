@@ -95,6 +95,10 @@ public class DriveSubsystem extends SubsystemBase {
         setSpeeds(targetChassisSpeeds);
     }
 
+    public void updateVisionPosition(Pose2d pose, double time) {
+        poseEstimator.addVisionMeasurement(pose, time);
+    }
+    
     public void setFieldHeading() {
         resetPose(pose.getTranslation(), Rotation2d.kZero);
     }

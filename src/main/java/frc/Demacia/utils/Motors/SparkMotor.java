@@ -52,22 +52,23 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
     cfg.inverted(config.inverted);
     cfg.idleMode(config.brake ? SparkBaseConfig.IdleMode.kBrake : SparkBaseConfig.IdleMode.kCoast);
     cfg.voltageCompensation(config.maxVolt);
-    cfg.encoder.positionConversionFactor(config.motorRatio);
-    cfg.encoder.velocityConversionFactor(config.motorRatio / 60);
+    cfg.encoder.positionConversionFactor(1/config.motorRatio);
+    cfg.encoder.velocityConversionFactor(1/config.motorRatio / 60);
     updatePID(false);
     if (config.maxVelocity != 0) {
       cfg.closedLoop.maxMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration);
     }
     getEncoder();
+    getClosedLoopController();
     this.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   private void updatePID(boolean apply) {
-    cfg.closedLoop.pidf(config.pid[0].kp(), config.pid[0].ki(), config.pid[0].kd(), config.pid[0].kv(),
+    cfg.closedLoop.pidf(config.pid[0].kp()/12.0, config.pid[0].ki()/12.0, config.pid[0].kd()/12.0, config.pid[0].kv()/12.0,
         ClosedLoopSlot.kSlot0);
-    cfg.closedLoop.pidf(config.pid[1].kp(), config.pid[1].ki(), config.pid[1].kd(), config.pid[1].kv(),
+    cfg.closedLoop.pidf(config.pid[1].kp()/12.0, config.pid[1].ki()/12.0, config.pid[1].kd()/12.0, config.pid[1].kv()/12.0,
         ClosedLoopSlot.kSlot1);
-    cfg.closedLoop.pidf(config.pid[2].kp(), config.pid[2].ki(), config.pid[2].kd(), config.pid[2].kv(),
+    cfg.closedLoop.pidf(config.pid[2].kp()/12.0, config.pid[2].ki()/12.0, config.pid[2].kd()/12.0, config.pid[2].kv()/12.0,
         ClosedLoopSlot.kSlot2);
     if (apply) {
       this.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
@@ -126,13 +127,13 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
    *                    defaults to 0
    */
   public void setVelocity(double velocity, double feedForward) {
-    super.closedLoopController.setReference(velocity, ControlType.kMAXMotionVelocityControl, slot, feedForward);
-    controlType = ControlType.kMAXMotionVelocityControl;
+    super.closedLoopController.setReference(velocity, ControlType.kVelocity, slot, feedForward);
+    controlType = ControlType.kVelocity;
     setPoint = velocity;
   }
 
   public void setVelocity(double velocity) {
-    setVelocity(velocity, config.pid[slot.value].ks()*Math.signum(velocity));
+    setVelocity(velocity, config.pid[slot.value].ks()/12.0*Math.signum(velocity));
   }
 
   public void setPositionVoltage(double position, double feedForward) {
@@ -243,8 +244,8 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
    */
   @Override
   public void initSendable(SendableBuilder builder) {
-    builder.setSmartDashboardType("Spark Motor");
-    builder.addStringProperty("ControlMode", this::getCurrentControlMode, null);
+ //   builder.setSmartDashboardType("Spark Motor");
+//    builder.addStringProperty("ControlMode", this::getCurrentControlMode, null);
     builder.addDoubleProperty("Position", this::getCurrentPosition, null);
     builder.addDoubleProperty("Velocity", this::getCurrentVelocity, null);
     builder.addDoubleProperty("Voltage", this::getCurrentVoltage, null);
