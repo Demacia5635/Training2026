@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.Demacia.utils.DriverUtils;
 import frc.Demacia.utils.Motors.MotorCommands;
 import frc.Demacia.utils.Motors.MotorInterface;
+import frc.Demacia.utils.Log.SwerveLogEntry;
 import frc.Demacia.utils.DriverUtils.JoystickSide;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -38,9 +39,10 @@ public class DriveSubsystem extends SubsystemBase {
     MotorInterface[] driveMotors;
     SwerveModulePosition[] modulePositions;
     SwerveModuleState[] moduleStates;
+    String moduleNames[];
     StatusSignal<Angle> gyroSignal;
     Pose2d pose;
-    ChassisSpeeds currentChassisSpeeds;
+    ChassisSpeeds currentChassisSpeeds = new ChassisSpeeds();
     CommandXboxController controller;
     ChassisSpeeds targetChassisSpeeds = new ChassisSpeeds();
     Rotation2d gyroRotation = new Rotation2d();
@@ -54,6 +56,7 @@ public class DriveSubsystem extends SubsystemBase {
         moduleStates = new SwerveModuleState[modules.length];
         steerMotors = new MotorInterface[modules.length];
         driveMotors = new MotorInterface[modules.length];
+        moduleNames = new String[modules.length];
         for(int i = 0; i < modules.length; i++) {
             modules[i] = new SwerveModule(Constants.CONFIGS[i]);
             modulePositionOnRobot[i] = modules[i].config.positionRelativeToRobotCenter;
@@ -61,6 +64,7 @@ public class DriveSubsystem extends SubsystemBase {
             modulePositions[i] = modules[i].position;
             steerMotors[i] = modules[i].steerMotor();
             driveMotors[i] = modules[i].driveMotor();
+            moduleNames[i] = Constants.CONFIGS[i].name;
         }
         kinematics = new SwerveDriveKinematics(modulePositionOnRobot);
         gyro = new Pigeon2(Constants.GYRO_ID, Constants.GYRO_CANBUS);
@@ -76,6 +80,7 @@ public class DriveSubsystem extends SubsystemBase {
         controller.start().onTrue(new InstantCommand(this::setFieldHeading, (SubsystemBase)null).ignoringDisable(true));
         setDefaultCommand(new RunCommand(this::drive, this));
         showBaseCommands();
+        SwerveLogEntry.add(moduleNames, moduleStates, modulePositions, pose, currentChassisSpeeds, targetChassisSpeeds);
     }
 
     private void showBaseCommands() {
@@ -160,9 +165,12 @@ public class DriveSubsystem extends SubsystemBase {
             m.refreshPosition();
             m.refreshState();
         }
-        currentChassisSpeeds = kinematics.toChassisSpeeds(moduleStates);
+        ChassisSpeeds t = kinematics.toChassisSpeeds(moduleStates);
+        currentChassisSpeeds.vxMetersPerSecond = t.vxMetersPerSecond;
+        currentChassisSpeeds.vyMetersPerSecond = t.vyMetersPerSecond;
+        currentChassisSpeeds.omegaRadiansPerSecond = t.omegaRadiansPerSecond;
         poseEstimator.update(getGyroRotation(), modulePositions);
-        pose = poseEstimator.getEstimatedPosition();
+        pose.set(poseEstimator.getEstimatedPosition());
         robotField.setRobotPose(pose);
 
     }
