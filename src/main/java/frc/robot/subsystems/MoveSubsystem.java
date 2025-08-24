@@ -22,9 +22,7 @@ public class MoveSubsystem extends SubsystemBase {
     }
 
     public void setPower(double power) {
-        motor.set(power);
-        turnController.setTolerance(0.1);
-        turnController.setIntegratorRange(-10, 10);
+        motor.set(0.2);
 
     }
     public void Stop() {

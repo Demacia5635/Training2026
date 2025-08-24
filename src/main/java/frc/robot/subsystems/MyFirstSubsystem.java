@@ -39,10 +39,6 @@ public class MyFirstSubsystem extends SubsystemBase {
     public double GetDegree(){
         return 45.0;
     }
-    public void Stop() {
-        setPower(0.0);
-    }
-
 
     @Override
     public void initSendable(SendableBuilder builder){
