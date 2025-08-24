@@ -18,7 +18,7 @@ public class MoveSubsystem extends SubsystemBase {
                 Constants.MyFirstSubsystemConstants.MOTOR_CAN);
         turnController = new PIDController(Constants.MyFirstSubsystemConstants.kp2,Constants.MyFirstSubsystemConstants.ki2, Constants.MyFirstSubsystemConstants.kd2);
         veloctyTraget = 20.0;
-
+        SmartDashboard.putData("MoveSubsystem", this);
     }
 
     public void setPower(double power) {
@@ -57,6 +57,6 @@ public class MoveSubsystem extends SubsystemBase {
         // Double.parseDouble(motorx.getVelocity().toString()));
         // SmartDashboard.putNumber("motor y v(m/s)",
         // Double.parseDouble(motory.getVelocity().toString()));
-        SmartDashboard.putData("MoveSubsystem", this);
+     
     }
 }
