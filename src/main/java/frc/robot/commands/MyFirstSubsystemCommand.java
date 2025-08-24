@@ -17,8 +17,6 @@ public class MyFirstSubsystemCommand extends Command {
     /** Activate motor for a duration*/
     public MyFirstSubsystemCommand (MyFirstSubsystem  subsystem) {
       this.subsystem = subsystem;
-      this.sumOfEror=0;
-      this.lastError=0;
       addRequirements(subsystem);
     }
     @Override
@@ -26,7 +24,7 @@ public class MyFirstSubsystemCommand extends Command {
     }
     @Override
     public void execute() {
-      subsystem.turnToAngle(SmartDashboard.getNumber("degree",45.0););
+      subsystem.turnToAngle(SmartDashboard.getNumber("degree",45.0));
     }
     @Override
     public void end(boolean interrupted) {
@@ -34,7 +32,7 @@ public class MyFirstSubsystemCommand extends Command {
     }
     @Override
     public boolean isFinished() {
-      return (SmartDashboard.getNumber("degree",45.0)-subsystem.GetPositiony())<2&&(SmartDashboard.getNumber("degree",45.0)-subsystem.GetPositiony())<-2
+      return (SmartDashboard.getNumber("degree",45.0)-subsystem.GetPositiony())<2&&(SmartDashboard.getNumber("degree",45.0)-subsystem.GetPositiony()>-2);
     }
     
 

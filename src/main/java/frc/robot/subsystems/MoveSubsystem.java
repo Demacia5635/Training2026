@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,11 +11,13 @@ import com.ctre.phoenix6.hardware.TalonFX;
 public class MoveSubsystem extends SubsystemBase {
     TalonFX motor;
     private PIDController turnController;
+    double veloctyTraget;
     public MoveSubsystem() {
         super();
         motor = new TalonFX(Constants.MyFirstSubsystemConstants.Drive_MOTOR_ID,
                 Constants.MyFirstSubsystemConstants.MOTOR_CAN);
-        turnController = new PIDController(Constants.MyFirstSubsystemConstants.Kp2,Constants.MyFirstSubsystemConstants.Ki2, Constants.MyFirstSubsystemConstants.Kd2);
+        turnController = new PIDController(Constants.MyFirstSubsystemConstants.kp2,Constants.MyFirstSubsystemConstants.ki2, Constants.MyFirstSubsystemConstants.kd2);
+        veloctyTraget = 20.0;
 
     }
 
@@ -24,11 +27,6 @@ public class MoveSubsystem extends SubsystemBase {
         turnController.setIntegratorRange(-10, 10);
 
     }
-    public void setVelocty(double targetVelocty){
-        double velocty = getVelocity();
-        double MotorPower = velocityController.calculate(velocty, targetVelocty);
-        motor.setPower(MotorPower)
-    }
     public void Stop() {
         setPower(0.0);
     }
@@ -36,12 +34,19 @@ public class MoveSubsystem extends SubsystemBase {
     public double GetVelocity() {
         return motor.getVelocity().getValueAsDouble();
     }
+    public double GetVelocityTarget(){
+        return veloctyTraget;
+    }
+    public double calculateSpeed(double TargetSpeed){
+        double currentSpeed = GetVelocity();
+        return turnController.calculate(currentSpeed,TargetSpeed);
+    }
 
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("velocty", this::GetVelocity, null);
+        builder.addDoubleProperty("veloctyTarget", this::GetVelocityTarget, null);
     }
-    public 
 
     public void periodic() {
         // SmartDashboard.putNumber("motor x pos(m)",

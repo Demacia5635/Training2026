@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,19 +34,23 @@ public class MyFirstSubsystem extends SubsystemBase {
         setPower(0);
     }
     public double GetPositiony(){
-        return ((motor.getPosition().getValueAsDouble()/Constants.MyFirstSubsystemConstants.Deegree_ratio)*360)%360
+        return ((motor.getPosition().getValueAsDouble()/Constants.MyFirstSubsystemConstants.Deegree_ratio)*360)%360;
     }
     public double GetDegree(){
         return 45.0;
+    }
+    public void Stop() {
+        setPower(0.0);
     }
 
 
     @Override
     public void initSendable(SendableBuilder builder){
         builder.addDoubleProperty("degree", this::GetDegree, null);
+        builder.addDoubleProperty("CurrentDegree", this::GetPositiony, null);
     }
         public void turnToAngle(double targetAngle) {
-        double currentAngle = getAngle();
+        double currentAngle = GetPositiony();
         double turnSpeed = turnController.calculate(currentAngle, targetAngle);
         setPower(turnSpeed);
     }

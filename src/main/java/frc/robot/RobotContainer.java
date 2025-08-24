@@ -19,7 +19,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
-  private final Command autoCommand = new MyFirstSubsystemCommand(subsystem);
+  private final MyFirstSubsystemCommand autoCommand = new MyFirstSubsystemCommand(subsystem);
+  private final MyFirstSubsystem subsystemVelocty = new MyFirstSubsystem();
+  private final MyFirstSubsystemCommand autoCommandVelocty = new MyFirstSubsystemCommand(subsystemVelocty);
+
+
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

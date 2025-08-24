@@ -13,8 +13,6 @@ import frc.robot.Constants;
 
 public class SpeedPID extends Command {
     private final MoveSubsystem subsystem;
-    private final double sumEror;
-    private final double lastError;
 
     public SpeedPID(MoveSubsystem subsystem){
         this.subsystem = subsystem;
@@ -23,20 +21,18 @@ public class SpeedPID extends Command {
 
     @Override
     public void initialize() {
-    }
-    public void setTarget(double tergatSpeed){
 
     }
     public void execute() {
-        subsystem.setPower(calcaulateVelocty(lastError, sumEror));
+        subsystem.setPower(subsystem.calculateSpeed(SmartDashboard.getNumber("veloctyTarget",45.0)));
     }
     @Override
     public void end(boolean interrupted) {
-      subsystem.stop();
+      subsystem.Stop();
     }
     @Override
     public boolean isFinished() {
-      return (SmartDashboard.getNumber("velocty",20.0)-subsystem.GetVelocity())<0.1&&(SmartDashboard.getNumber("velocty",20.0)-subsystem.GetVelocity())<-0.1
+      return (SmartDashboard.getNumber("veloctyTarget",20.0)-subsystem.GetVelocity())<0.1&&(SmartDashboard.getNumber("veloctyTarget",20.0)-subsystem.GetVelocity()>-0.1);
     }
 
 
