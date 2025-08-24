@@ -28,7 +28,8 @@ public class VelocityLoopcontrol extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize()  {
+
 }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,7 +38,7 @@ public class VelocityLoopcontrol extends Command {
   //  targetV= SmartDashboard.getNumber("target velocity", targetV);  
     subsystem.driveMotor.setVelocityWithFeedForward(targetV);
     double error = targetV - subsystem.driveMotor.getCurrentVelocity();
-     SmartDashboard.putNumber("pizza velocity error", error);
+    SmartDashboard.putNumber("pizza velocity error", error);
   
   }
 
