@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.Constants;
 
@@ -11,6 +13,9 @@ import frc.robot.Constants;
 public class SteerMotor extends Motor{
 
     private double targetPosition = 0;
+    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.ModuleConstants.STEER_KS, Constants.ModuleConstants.STEER_KV, 0);
+    private PIDController pidController = new PIDController(Constants.ModuleConstants.STEER_KP, Constants.ModuleConstants.STEER_KI, Constants.ModuleConstants.STEER_KD);
+
 
     public SteerMotor(int MotorID) {
         super(MotorID);
@@ -18,15 +23,22 @@ public class SteerMotor extends Motor{
 
     @Override
     public double getPosition() {
-        return motor.getPosition().getValueAsDouble() * 360 / Constants.MotorConstants.SteerRatio;
+        return motor.getPosition().getValueAsDouble() * 360 / Constants.ModuleConstants.STEER_GEAR_RATIO;
     }
 
     public void setTargetAngle(double angle) {
-        targetPosition = angle * Constants.MotorConstants.SteerRatio / 360;
+        targetPosition = angle * Constants.ModuleConstants.STEER_GEAR_RATIO / 360;
     }
 
     public double getTargetAngle() {
-        return targetPosition * 360 / Constants.MotorConstants.SteerRatio;
+        return targetPosition * 360 / Constants.ModuleConstants.STEER_GEAR_RATIO;
+    }
+
+    public void setVelocity(double targetVelocity){
+        double currentVelocity = getVelocity();
+        double power = feedforward.calculateWithVelocities(currentVelocity, targetVelocity);
+        power += pidController.calculate(currentVelocity, targetVelocity);
+        setPower(power);
     }
 
     @Override

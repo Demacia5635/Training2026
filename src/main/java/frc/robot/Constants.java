@@ -20,8 +20,8 @@ import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
 public final class Constants {
 
   public static class ModuleConstants {
-    public static final int STEER_ID = 1;
-    public static final int DRIVE_ID = 2;
+    public static final int STEER_ID = 11;
+    public static final int DRIVE_ID = 10;
     public static final int CANBCODER_ID = 3;
     public static final double MAX_STEER_AMPS = 20;
     public static final double MAX_STEER_VOLTS = 8;
@@ -29,41 +29,32 @@ public final class Constants {
     public static final boolean DRIVE_INVERTED = false;
     public static final double STEER_GERA_RATIO = 150.0/7.0;
     public static final double DRIVE_GERA_RATIO = 6.75;
-    public static final double STEER_KP = 0.1;
-    public static final double STEER_KI = 0.0;
-    public static final double STEER_KD = 0.0;
+    public static final double STEER_KP = 0.002; 
+    public static final double STEER_KI = 0.0000; 
+    public static final double STEER_KD = 0.00000; 
     public static final double STEER_KS = 0.1;
     public static final double STEER_KV = 0.2;
-    public static final double STEER_KA = 0.01;
-    public static final double DRIVE_KP = 0.1;
-    public static final double DRIVE_KI = 0.0;
-    public static final double DRIVE_KD = 0.0;
-    public static final double DRIVE_KS = 0.1;
-    public static final double DRIVE_KV = 0.2;
-    public static final double DRIVE_KA = 0.01;
+    public static final double STEER_KA = 0;
+    public static final double DRIVE_KP = 0.0002;
+    public static final double DRIVE_KI = 0.0000;
+    public static final double DRIVE_KD = 0.00000;
+    public static final double DRIVE_KS = 0;
+    public static final double DRIVE_KV = 0.00935;
+    public static final double DRIVE_KA = 0;
     public static final double STEER_RAMP = 0.2;
     public static final double DRIVE_RAMP = 0.2;
     public static final double WHEEL_CIRCUMFERENCE = Math.PI * 4 * 0.0254;
+    public static final double CYCLE_TIME = 0.02;
 
     public static final double STEER_VELOCITY_P = 2;
     public static final double ABS_ENCODER_OFFSET = 10;
-  }
 
-  public static class MotorConstants {
-    public static final int DriveMotorID = 10;
-    public static final int SteerMotorID = 11;
-    public static final double SteerRatio = 12.8;
-    public static final double DriveRatio = 8.14;
-    public static final double WheelRadius = 0.05;
-    public static final String MotorCANbus = "rio";
+    
+    public static final double STEER_GEAR_RATIO = 12.8; // motor degrees to wheel degrees
+    public static final double DRIVE_GEAR_RATIO = 8.14; // motor degrees to wheel degrees
+    public static final double WHEEL_RADUIS = 0.05; // meters
+    public static final String MOTOR_CANBUS = "rio";
   }
-
-  public static class PIDConstants {
-    public static final double STEER_KP = 0.002;
-    public static final double STEER_KI = 0.0002;
-    public static final double STEER_KD = 0.00002;
-  }
-
   public static class BaseConfigs {
     public static final TalonConfig BASE_TALON_CONFIG = new TalonConfig(0, Canbus.Rio, "base")
         .withBrake(true)

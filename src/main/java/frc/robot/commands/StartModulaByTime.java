@@ -26,8 +26,8 @@ public class StartModulaByTime extends Command {
 
   @Override
   public void execute() {
-    subsystem.setPowerToDrive(drivePower);
-    subsystem.setPowerToSteer(steerPower);
+    subsystem.setDriveVelocity(drivePower);
+    subsystem.setSteerPower(steerPower);
   }
 
   @Override
@@ -37,7 +37,7 @@ public class StartModulaByTime extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    subsystem.stopToDrive();
-    subsystem.stopToSteer();
+    subsystem.stopDrive();
+    subsystem.stopSteer();
   }
 }

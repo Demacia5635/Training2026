@@ -4,14 +4,10 @@
 
 package frc.robot;
 
-import frc.robot.commands.StartDriveMotorToPosition;
-import frc.robot.commands.StartSteerMotorToPosition;
-import frc.robot.commands.SteerWithPID;
+import frc.robot.commands.MoveModula;
 import frc.robot.subsystems.DriveMotor;
 import frc.robot.subsystems.SteerMotor;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -23,13 +19,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
-  private DriveMotor driveMotor;
-  private SteerMotor steerMotor;
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    driveMotor = new DriveMotor(Constants.MotorConstants.DriveMotorID);
-    steerMotor = new SteerMotor(Constants.MotorConstants.SteerMotorID);
     // Configure the trigger bindings
     configureBindings();
   }
@@ -61,6 +52,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return startCommend;
-    return new SteerWithPID(steerMotor);
+    return new MoveModula();
   }
 }

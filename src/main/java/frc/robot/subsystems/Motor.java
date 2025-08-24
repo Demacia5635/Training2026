@@ -18,7 +18,7 @@ public class Motor extends SubsystemBase {
 
     public Motor(int MotorID){
         super();
-        motor = new TalonFX(MotorID, Constants.MotorConstants.MotorCANbus);
+        motor = new TalonFX(MotorID, Constants.ModuleConstants.MOTOR_CANBUS);
         motor.getConfigurator().apply(new TalonFXConfiguration());
         SmartDashboard.putData("motor sub",this);
     }
@@ -35,7 +35,7 @@ public class Motor extends SubsystemBase {
         return motor.getPosition().getValueAsDouble();
     }
 
-    public double getVelocity(){
+    protected double getVelocity(){
         return motor.getVelocity().getValueAsDouble();
     }
 } 

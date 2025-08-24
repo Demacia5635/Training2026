@@ -4,34 +4,55 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.ModuleConstants.STEER_KD;
+import static frc.robot.Constants.ModuleConstants.STEER_KI;
+import static frc.robot.Constants.ModuleConstants.STEER_KP;
+import static frc.robot.Constants.ModuleConstants.DRIVE_KP;
+import static frc.robot.Constants.ModuleConstants.DRIVE_KS;
+import static frc.robot.Constants.ModuleConstants.DRIVE_KV;
+
+import com.ctre.phoenix6.hardware.CANcoder;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 /** Add your docs here. */
 public class Modula extends SubsystemBase {
-    private Motor driveMotor;
-    private Motor steerMotor;
+
+    private final DriveMotor driveMotor;
+    private final SteerMotor steerMotor;
+    private final CANcoder absEncoder;
+    private double power;
+
+    SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(DRIVE_KS, DRIVE_KV, 0);
+    PIDController drivePID = new PIDController(DRIVE_KP, 0, 0);
+    PIDController steerPID = new PIDController(STEER_KP, STEER_KI, STEER_KD);
 
     public Modula() {
         super();
-        driveMotor = new Motor(Constants.MotorConstants.DriveMotorID);
-        steerMotor = new Motor(Constants.MotorConstants.SteerMotorID);
+        driveMotor = new DriveMotor(Constants.ModuleConstants.DRIVE_ID);
+        steerMotor = new SteerMotor(Constants.ModuleConstants.STEER_ID);
+        absEncoder = new CANcoder(Constants.ModuleConstants.CANBCODER_ID);
     }
 
-    public void setPowerToDrive(double power) {
-        driveMotor.setPower(power);
+    public void setDriveVelocity(double targetVelocity) {
+        power = driveFF.calculate(targetVelocity);
+        power += drivePID.calculate(driveMotor.getVelocity(), targetVelocity);
+        driveMotor.setPower(0.4);
     }
 
-    public void setPowerToSteer(double power) {
+    public void setSteerPower(double power) {
         steerMotor.setPower(power);
     }
 
-    public void stopToSteer() {
-        steerMotor.stop();
+    public void stopDrive() {
+        driveMotor.stop();
     }
 
-    public void stopToDrive() {
-        driveMotor.stop();
+    public void stopSteer() {
+        steerMotor.stop();
     }
     
     public double getDrivePosition() {
@@ -40,5 +61,27 @@ public class Modula extends SubsystemBase {
 
     public double getSteerPosition() {
         return steerMotor.getPosition();
+    }
+
+    public double getVelocity() {
+        return driveMotor.getVelocity();
+    }
+
+    public void calibrateAngle() {
+        double offset = absEncoder.getAbsolutePosition().getValueAsDouble() * Constants.ModuleConstants.STEER_GEAR_RATIO * 360;
+        goToAngle(offset);
+    }
+
+    public double getAngle() {
+        return absEncoder.getAbsolutePosition().getValueAsDouble() * Constants.ModuleConstants.STEER_GEAR_RATIO * 360;
+    }
+
+    public void goToAngle(double tagetPosition) {
+        while (Math.abs(steerMotor.getPosition() - tagetPosition) > 0.1) {
+            double error = tagetPosition - steerMotor.getPosition();
+            double steerPower = steerPID.calculate(error);
+            setSteerPower(steerPower);
+        }
+        stopSteer();
     }
 }
