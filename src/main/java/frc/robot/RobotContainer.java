@@ -5,6 +5,8 @@
 package frc.robot;
 
 import frc.robot.commands.MyFirstSubsystemCommand;
+import frc.robot.commands.SpeedPID;
+import frc.robot.subsystems.MoveSubsystem;
 import frc.robot.subsystems.MyFirstSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -20,8 +22,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
   private final MyFirstSubsystemCommand autoCommand = new MyFirstSubsystemCommand(subsystem);
-  private final MyFirstSubsystem subsystemVelocty = new MyFirstSubsystem();
-  private final MyFirstSubsystemCommand autoCommandVelocty = new MyFirstSubsystemCommand(subsystemVelocty);
+  private final MoveSubsystem subsystemVelocty = new MoveSubsystem();
+  private final SpeedPID autoCommandVelocty = new SpeedPID(subsystemVelocty);
 
 
   
