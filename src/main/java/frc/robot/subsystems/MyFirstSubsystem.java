@@ -17,7 +17,7 @@ public class MyFirstSubsystem extends SubsystemBase {
     // Constructor
     public MyFirstSubsystem() {
         super();
-        motor = new TalonFX(Constants.MyFirstSubsystemConstants.swerve_Motor_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
+        motor = new TalonFX(Constants.MyFirstSubsystemConstants.steer_Motor_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
         turnController = new PIDController(Constants.MyFirstSubsystemConstants.Kp,Constants.MyFirstSubsystemConstants.Ki, Constants.MyFirstSubsystemConstants.Kd);
 
     }
