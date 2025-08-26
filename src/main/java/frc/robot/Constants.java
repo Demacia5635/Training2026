@@ -21,10 +21,10 @@ public final class Constants {
     public static final double Deegree_ratio = 6.14;
     public static final double Drive_Radios_In_Meter = 5;
     public static final double Kp = 0.005;
-    public static final double Ki = 0.001;
+    public static final double Ki = 0.00;
     public static final double Kd = 0.0002;
     public static final double kp2 = 0.015;
-    public static final double ki2 = 0.0001;
+    public static final double ki2 = 0.0000;
     public static final double kd2 = 0.001;
     public static double kS = 0.0;
     public static double kV = 0.00938;

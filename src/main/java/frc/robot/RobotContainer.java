@@ -5,9 +5,8 @@
 package frc.robot;
 
 import frc.robot.commands.MyFirstSubsystemCommand;
-import frc.robot.commands.SpeedPID;
-import frc.robot.subsystems.MoveSubsystem;
-import frc.robot.subsystems.MyFirstSubsystem;
+import frc.robot.commands.MyFirstSubsystemCommand;
+import frc.robot.subsystems.ModuleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -20,10 +19,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
+  private final ModuleSubsystem subsystem = new ModuleSubsystem();
   private final MyFirstSubsystemCommand autoCommand = new MyFirstSubsystemCommand(subsystem);
-  private final MoveSubsystem subsystemVelocty = new MoveSubsystem();
-  private final SpeedPID autoCommandVelocty = new SpeedPID(subsystemVelocty);
 
 
   
@@ -53,6 +50,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return autoCommandVelocty;
+    return autoCommand;
   }
 }
