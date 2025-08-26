@@ -345,6 +345,10 @@ public class Translation2d
         MathUtil.interpolate(this.getY(), endValue.getY(), t));
   }
 
+  public double dot(Translation2d other) {
+    return m_x * other.m_x + m_y * other.m_y;
+  }
+
   /** Translation2d protobuf for serialization. */
   public static final Translation2dProto proto = new Translation2dProto();
 

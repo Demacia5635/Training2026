@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "FieldVisualizer",
+      "request": "launch",
+      "mainClass": "frc.Demacia.Sysid.FieldVisualizer",
+      "projectName": "Training2026"
+    },
+    {
+      "type": "java",
       "name": "WindowBuilder",
       "request": "launch",
       "mainClass": "WindowBuilder",
