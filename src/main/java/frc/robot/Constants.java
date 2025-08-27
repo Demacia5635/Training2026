@@ -5,6 +5,7 @@
 package frc.robot;
 
 
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.Demacia.utils.Motors.SparkConfig;
 import frc.Demacia.utils.Motors.TalonConfig;
 import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
@@ -18,10 +19,28 @@ import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
+  public static final class CAN {
+    public static final int FL_DRIVE_ID = 1;
+    public static final int FL_STEER_ID = 2;
+    public static final int FR_DRIVE_ID = 4;
+    public static final int FR_STEER_ID = 5;
+    public static final int BL_DRIVE_ID = 7;
+    public static final int BL_STEER_ID = 8;
+    public static final int BR_DRIVE_ID = 10;
+    public static final int BR_STEER_ID = 11;
+    public static final int PIGEON_ID = 14;
+    public static final int FL_CANcoder_ID = 3; 
+    public static final int FR_CANcoder_ID = 6;
+    public static final int BL_CANcoder_ID = 9;
+    public static final int BR_CANcoder_ID = 12;
+    public static final double FL_CANcoder_Ofset =0.3945;
+    public static final double FR_CANcoder_Ofset =0.487;
+    public static final double BL_CANcoder_Ofset =-0.0622;
+    public static final double BR_CANcoder_Ofset =0.4;
+    public static final Translation2d[] KINEMATICS = new Translation2d[]{
+      new Translation2d(0.315,0.265),new Translation2d(-0.310,0.265),new Translation2d(-0.315,-0.315),new Translation2d(0.315,-0.315) } ;
+    }
   public static class ModuleConstants {
-    public static final int STEER_ID = 1;
-    public static final int DRIVE_ID = 2;
     public static final int CANBCODER_ID = 3;
     public static final double MAX_STEER_AMPS = 20;
     public static final double MAX_STEER_VOLTS = 8;
@@ -44,7 +63,6 @@ public final class Constants {
     public static final double STEER_RAMP = 0.2;
     public static final double DRIVE_RAMP = 0.2;
     public static final double WHEEL_CIRCUMFERENCE = Math.PI * 4 * 0.0254;
-
     public static final double STEER_VELOCITY_P = 2;
     public static final double ABS_ENCODER_OFFSET = 10;
   }
@@ -68,4 +86,8 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-}
+  public static class Swerve {
+    public static final double MAX_SPEED_MPS =0.3; 
+    public static final double MAX_ANGULAR_SPEED_RAD_PER_S =0.3;
+    }
+} 

@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Chassis;
 
-public class DriveCommand extends Command {
+public class drivecommand extends Command {
   private final Chassis chassis;
   private final XboxController controller;
   private final boolean fieldRelative;
 
-  public DriveCommand(Chassis chassis, XboxController controller, boolean fieldRelative) {
+  public drivecommand(Chassis chassis, XboxController controller, boolean fieldRelative) {
     this.chassis = chassis;
     this.controller = controller;
     this.fieldRelative = fieldRelative;
@@ -20,7 +20,7 @@ public class DriveCommand extends Command {
   }
 
   private static double deadband(double v) {
-    return MathUtil.applyDeadband(v, Constants.Swerve.DEADBAND);
+    return MathUtil.applyDeadband(v, 0.1);
   }
 
   @Override

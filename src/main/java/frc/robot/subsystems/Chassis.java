@@ -20,7 +20,7 @@ public class Chassis extends SubsystemBase {
     private final SwerveModule bl = new SwerveModule(Constants.CAN.BL_DRIVE_ID, Constants.CAN.BL_STEER_ID,Constants.CAN.BL_CANcoder_ID,Constants.CAN.BL_CANcoder_Ofset);
     private final SwerveModule br = new SwerveModule(Constants.CAN.BR_DRIVE_ID, Constants.CAN.BR_STEER_ID,Constants.CAN.BR_CANcoder_ID,Constants.CAN.BR_CANcoder_Ofset);
 
-    private final SwerveDriveKinematics kinematics = Constants.Swerve.KINEMATICS;
+    private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(Constants.Swerve.KINEMATICS);
     private final Pigeon2 gyro = new Pigeon2(Constants.CAN.PIGEON_ID);
     private final Field2d field = new Field2d();
     private final SwerveDrivePoseEstimator poseEstimator;
