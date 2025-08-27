@@ -6,49 +6,65 @@ package frc.robot;
 
 import frc.robot.commands.MoveDriveMotor1Meter;
 import frc.robot.commands.MoveInSameVelocity;
+import frc.robot.commands.MoveInSameVelocityWithFF;
 import frc.robot.commands.MoveToAngle;
 import frc.robot.commands.MyFirstSubsystemCommand;
+import frc.robot.commands.TurningOnTheMotorByXboxOrElastic;
+import frc.robot.subsystems.ModuleSubsystem;
 import frc.robot.subsystems.MyFirstSubsystem;
+import frc.robot.subsystems.TestUtils;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class RobotContainer {
+  public static int N_CYCLE = 0;
   // The robot's subsystems and commands are defined here...
-  private MyFirstSubsystem subsystem1;
-  // private final Command autoCommand = new MyFirstSubsystemCommand(subsystem1, 0.4,0.3,  10.0);
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  MoveToAngle SteerMotorcmd;
-  MoveDriveMotor1Meter DriveMotorcmd;
-  MoveInSameVelocity MovingInSameVelocity;
-  public RobotContainer() {
-    subsystem1 = new MyFirstSubsystem();
-    DriveMotorcmd = new MoveDriveMotor1Meter(subsystem1);
-    SteerMotorcmd = new MoveToAngle(subsystem1);
-    MovingInSameVelocity = new MoveInSameVelocity(subsystem1);
-    configureBindings();
-  }
+    private MyFirstSubsystem subsystem1;
+    private TestUtils subsystem2;
+    // private final Command autoCommand = new MyFirstSubsystemCommand(subsystem1, 0.4,0.3,  10.0);
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    MoveToAngle SteerMotorcmd;
+    MoveDriveMotor1Meter DriveMotorcmd;
+    MoveInSameVelocity MovingInSameVelocity;
+    ModuleSubsystem module;
+    TurningOnTheMotorByXboxOrElastic turnOnTheDriveMotorOfTheModule;
+    MoveInSameVelocityWithFF MovingInSameVelocityWithFF;
+    public RobotContainer() {
+      subsystem1 = new MyFirstSubsystem();
+      subsystem2 = new TestUtils();
+      DriveMotorcmd = new MoveDriveMotor1Meter(subsystem1);
+      SteerMotorcmd = new MoveToAngle(subsystem1);
+      MovingInSameVelocity = new MoveInSameVelocity(subsystem1);
+      MovingInSameVelocityWithFF = new MoveInSameVelocityWithFF(subsystem2);
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureBindings() {
-    //controller.a().onTrue(new MyFirstSubsystemCommand(subsystem, 0.5, 2.0));
-  }
-
-  public void periodic() {
-    N_CYCLE++;
+      //module = new ModuleSubsystem(); 
+      //turnOnTheDriveMotorOfTheModule = new TurningOnTheMotorByXboxOrElastic(module);
+      configureBindings();
+    }
+  
+    /**
+     * Use this method to define your trigger->command mappings. Triggers can be created via the
+     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+     * predicate, or via the named factories in {@link
+     * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+     * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+     * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+     * joysticks}.
+     */
+    private void configureBindings() {
+      //controller.a().onTrue(new MyFirstSubsystemCommand(subsystem, 0.5, 2.0));
+    }
+  
+    public void periodic() {
+      N_CYCLE++;
+      
   }
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
     // return DriveMotorcmd.andThen(SteerMotorcmd);
-    //return MovingInSameVelocity;
-    return SteerMotorcmd;
+    return MovingInSameVelocityWithFF;
   }
 }

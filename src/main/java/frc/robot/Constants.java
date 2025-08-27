@@ -26,6 +26,9 @@ public final class Constants {
     public static final String MOTOR_CAN2 ="rio";
   }
 
+  public static final double NumberOfWheelCyclesIn1Sec=8.14;
+    public static final double SteerGearRetio=12.8;
+    public static final double diameterWheel = 0.1016;
   public static class ModuleConstants {
     public static final int STEER_ID = 1;
     public static final int DRIVE_ID = 2;

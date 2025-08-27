@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,10 +21,11 @@ public class MoveInSameVelocity extends Command {
   private PIDController pid = new PIDController(0.07, 1.5, 0);
   
   public MoveInSameVelocity(MyFirstSubsystem sub3) {
+    super();
     // Use addRequirements() here to declare subsystem dependencies.
     this.sub3=sub3;
     pid.setTolerance(0.1);
-    SmartDashboard.putNumber("Wanted Velcity", 0);
+    SmartDashboard.putNumber("Wanted Velcity", 5);
     this.wantedSpeed = SmartDashboard.getNumber("Wanted Velcity", 2);
     // pid.enableContinuousInput(-180, 180);
     addRequirements(sub3);
@@ -41,7 +43,8 @@ public class MoveInSameVelocity extends Command {
   public void execute() {
     wantedSpeed=SmartDashboard.getNumber("Wanted Velcity", 2);
     currentSpeed = sub3.getDriveMotorVelocity();
-    sub3.setPower(0, pid.calculate(currentSpeed,wantedSpeed));
+    //sub3.setPower(0, 0.2);
+    pid.calculate(currentSpeed,wantedSpeed);
   }
 
   // Called once the command ends or is interrupted.

@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Demacia.utils.Motors.SparkConfig;
 import frc.Demacia.utils.Motors.SparkMotor;
+import frc.Demacia.utils.Motors.TalonConfig;
+import frc.Demacia.utils.Sensors.CancoderConfig;
 
 import static frc.robot.Constants.ModuleConstants.*;
 
@@ -58,7 +60,7 @@ public class ModuleSubsystem extends SubsystemBase {
 
         // set steer direction
         calibrateSteer();
-
+        
         SmartDashboard.putData("Module", this);
     }
 

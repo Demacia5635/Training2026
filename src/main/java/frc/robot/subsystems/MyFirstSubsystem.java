@@ -4,13 +4,11 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.Num;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import static frc.robot.Constants.*;
+//import frc.robot.Constants;
 
 public class MyFirstSubsystem extends SubsystemBase {
     // Define the motor 
@@ -19,15 +17,12 @@ public class MyFirstSubsystem extends SubsystemBase {
     double v = 0.0; 
     double angle = 0;
     double length;
-    public static final double NumberOfWheelCyclesIn1Sec=8.14;
-    public static final double SteerGearRetio=12.8;
-    double diameterWheel = 0.1016;
 
     // Constructor
     public MyFirstSubsystem() {
         super();
-        motorDrive = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR_DRIVE_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
-        motorSteer = new TalonFX(Constants.MyFirstSubsystemConstants.MOTOR_STEER_ID2, Constants.MyFirstSubsystemConstants.MOTOR_CAN2);
+        motorDrive = new TalonFX(MyFirstSubsystemConstants.MOTOR_DRIVE_ID, MyFirstSubsystemConstants.MOTOR_CAN);
+        motorSteer = new TalonFX(MyFirstSubsystemConstants.MOTOR_STEER_ID2, MyFirstSubsystemConstants.MOTOR_CAN2);
         motorDrive.getConfigurator().apply(new TalonFXConfiguration());
         motorSteer.getConfigurator().apply(new TalonFXConfiguration());
         SmartDashboard.putData("MyFirstSubsystem",this);
@@ -84,6 +79,6 @@ public class MyFirstSubsystem extends SubsystemBase {
     }
     @Override
     public void periodic() {
-            
+        SmartDashboard.putData(this);
     }
 }   
