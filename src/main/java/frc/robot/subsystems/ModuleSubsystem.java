@@ -31,8 +31,6 @@ public class ModuleSubsystem extends SubsystemBase {
         DriveMotor.set(power);
         DriveController.setTolerance(0.1);
         DriveController.setIntegratorRange(-0.1, 0.1);
-        SteerController.setTolerance(1.0);
-        SteerController.setIntegratorRange(-1, 1);
     }
     public void setPowerSteerMotor(double power){
         SteerMotor.set(power);

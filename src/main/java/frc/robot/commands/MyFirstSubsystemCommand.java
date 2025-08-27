@@ -23,7 +23,7 @@ public class MyFirstSubsystemCommand extends Command {
       this.subsystem = subsystem;
       addRequirements(subsystem);
       this.targetDegree = 45;
-      this.targetVeloctyDrive = 20;
+      this.targetVeloctyDrive = 5;
       this.targetVeloctySteer = 10;
       SmartDashboard.putData(this);
     }
