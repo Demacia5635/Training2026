@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
 import frc.Demacia.utils.Motors.MotorInterface;
@@ -27,5 +28,9 @@ public class PizzaMotor extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
-  
+  @Override
+ public void initSendable(SendableBuilder builder){
+    super.initSendable(builder);
+    builder.addDoubleProperty("pizza target velocity", () -> driveMotor.getCurrentVelocity(), null);
+ }
 }

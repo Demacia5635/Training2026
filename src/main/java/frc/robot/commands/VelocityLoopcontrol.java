@@ -22,7 +22,7 @@ public class VelocityLoopcontrol extends Command {
     this.subsystem = subsystem;
      addRequirements(subsystem);
      SmartDashboard.putNumber("pizza velocity error", 0);
-      targetV = SmartDashboard.getNumber("pizza target velocity",0 );
+     targetV = SmartDashboard.getNumber("pizza target velocity", 0);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -36,9 +36,11 @@ public class VelocityLoopcontrol extends Command {
   @Override
   public void execute() {
   //  targetV= SmartDashboard.getNumber("target velocity", targetV);  
-    subsystem.driveMotor.setVelocityWithFeedForward(targetV);
+
+  subsystem.driveMotor.setVelocityWithFeedForward(targetV);
     double error = targetV - subsystem.driveMotor.getCurrentVelocity();
     SmartDashboard.putNumber("pizza velocity error", error);
+    
   
   }
 

@@ -18,6 +18,8 @@ public class GoToAngle extends Command {
     public GoToAngle(PizzaMotor subsystem) {
         double targetAngle = SmartDashboard.getNumber("steering Target ", subsystem.steerMotor.getCurrentPosition());
         this.subsystem = subsystem;
+         SmartDashboard.putNumber("steering Error", 0);
+    SmartDashboard.putNumber("steering angle", subsystem.steerMotor.getCurrentPosition());
       
 
   //       PIDController Spid = new PIDController(kp,ki,kd);
