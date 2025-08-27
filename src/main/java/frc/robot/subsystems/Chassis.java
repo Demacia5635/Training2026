@@ -15,17 +15,10 @@ import frc.robot.Constants;
 
 public class Chassis extends SubsystemBase {
     // מודולי הסרב
-<<<<<<< HEAD
     private final SwerveModule fl = new SwerveModule(Constants.CAN.FL_DRIVE_ID, Constants.CAN.FL_STEER_ID,Constants.CAN.FL_CANcoder_ID,Constants.CAN.FL_CANcoder_Ofset);
     private final SwerveModule fr = new SwerveModule(Constants.CAN.FR_DRIVE_ID, Constants.CAN.FR_STEER_ID,Constants.CAN.FR_CANcoder_ID,Constants.CAN.FR_CANcoder_Ofset);
     private final SwerveModule bl = new SwerveModule(Constants.CAN.BL_DRIVE_ID, Constants.CAN.BL_STEER_ID,Constants.CAN.BL_CANcoder_ID,Constants.CAN.BL_CANcoder_Ofset);
     private final SwerveModule br = new SwerveModule(Constants.CAN.BR_DRIVE_ID, Constants.CAN.BR_STEER_ID,Constants.CAN.BR_CANcoder_ID,Constants.CAN.BR_CANcoder_Ofset);
-=======
-    private final SwerveModule fl = new SwerveModule(Constants.CAN.FL_DRIVE_ID, Constants.CAN.FL_STEER_ID);
-    private final SwerveModule fr = new SwerveModule(Constants.CAN.FR_DRIVE_ID, Constants.CAN.FR_STEER_ID);
-    private final SwerveModule bl = new SwerveModule(Constants.CAN.BL_DRIVE_ID, Constants.CAN.BL_STEER_ID);
-    private final SwerveModule br = new SwerveModule(Constants.CAN.BR_DRIVE_ID, Constants.CAN.BR_STEER_ID);
->>>>>>> d628868 (LastHomeWork)
 
     private final SwerveDriveKinematics kinematics = Constants.Swerve.KINEMATICS;
     private final Pigeon2 gyro = new Pigeon2(Constants.CAN.PIGEON_ID);

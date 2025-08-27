@@ -1,15 +1,11 @@
 package frc.robot.subsystems;
 
-<<<<<<< HEAD
 import com.ctre.phoenix6.hardware.CANcoder;
-=======
->>>>>>> d628868 (LastHomeWork)
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-<<<<<<< HEAD
 public class SwerveModule{
     private final TalonFX driveMotor;
     private final TalonFX steerMotor;
@@ -21,15 +17,6 @@ public class SwerveModule{
         absCaNcoder = new CANcoder(CANcoderID);
 
         
-=======
-public class SwerveModule {
-    private final TalonFX driveMotor;
-    private final TalonFX steerMotor;
-
-    public SwerveModule(int driveMotorID, int steerMotorID) {
-        driveMotor = new TalonFX(driveMotorID);
-        steerMotor = new TalonFX(steerMotorID);
->>>>>>> d628868 (LastHomeWork)
 
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -37,18 +24,12 @@ public class SwerveModule {
         driveMotor.getConfigurator().apply(config);
         steerMotor.getConfigurator().apply(config);
 
-<<<<<<< HEAD
         resetToAbsolute(CANcoderOfset);
 
     }
     public double getabsolotangle(){
         return absCaNcoder.getAbsolutePosition().getValueAsDouble();
     }
-=======
-        resetToAbsolute();
-    }
-
->>>>>>> d628868 (LastHomeWork)
     public void setDriveSpeed(double speed) {
         driveMotor.set(speed);
     }
@@ -57,16 +38,10 @@ public class SwerveModule {
         steerMotor.set(angle / 360.0);
     }
 
-<<<<<<< HEAD
     public void resetToAbsolute(double ofset) {
         steerMotor.setPosition(getabsolotangle()-ofset);
         driveMotor.setPosition(0);
 
-=======
-    public void resetToAbsolute() {
-        steerMotor.setPosition(0);
-        driveMotor.setPosition(0);
->>>>>>> d628868 (LastHomeWork)
     }
 
     public double getDrivePosition() {

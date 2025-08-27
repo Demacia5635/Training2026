@@ -8,7 +8,6 @@ public final class Constants {
   public static final class CAN {
     public static final int FL_DRIVE_ID = 1;
     public static final int FL_STEER_ID = 2;
-<<<<<<< HEAD
     public static final int FR_DRIVE_ID = 4;
     public static final int FR_STEER_ID = 5;
     public static final int BL_DRIVE_ID = 7;
@@ -24,15 +23,6 @@ public final class Constants {
     public static final double FR_CANcoder_Ofset =0.487;
     public static final double BL_CANcoder_Ofset =-0.0622;
     public static final double BR_CANcoder_Ofset =0.4;
-=======
-    public static final int FR_DRIVE_ID = 3;
-    public static final int FR_STEER_ID = 4;
-    public static final int BL_DRIVE_ID = 5;
-    public static final int BL_STEER_ID = 6;
-    public static final int BR_DRIVE_ID = 7;
-    public static final int BR_STEER_ID = 8;
-    public static final int PIGEON_ID = 9;
->>>>>>> d628868 (LastHomeWork)
   }
 
   public static final class Swerve {
