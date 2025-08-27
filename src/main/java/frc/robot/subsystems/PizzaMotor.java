@@ -17,14 +17,20 @@ import frc.Demacia.utils.Motors.TalonMotor;
 public class PizzaMotor extends SubsystemBase {
     public MotorInterface driveMotor; 
     public MotorInterface steerMotor;
+    public double pTargetV;
 
   public PizzaMotor() {
     super();
   driveMotor = new TalonMotor(Constants.MotorsConfig.DRIVE_CONFIG);
   steerMotor = new TalonMotor(Constants.MotorsConfig.STEER_CONFIG);
- SmartDashboard.putData("PizzaMotor", this);
+ SmartDashboard.putData("pizza motor", this);
   }
-
+ double getTargetV(){
+  return pTargetV;
+ }
+ void setTargetV(double targetV){
+  this.pTargetV = targetV;
+ }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -32,6 +38,6 @@ public class PizzaMotor extends SubsystemBase {
   @Override
  public void initSendable(SendableBuilder builder){
     super.initSendable(builder);
-    builder.addDoubleProperty("pizza target velocity", () -> driveMotor.getCurrentVelocity(), null);
+    builder.addDoubleProperty("pizza target velocity", ()->getTargetV(),(x)->setTargetV(x));
  }
 }

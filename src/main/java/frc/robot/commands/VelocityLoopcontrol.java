@@ -14,7 +14,7 @@ import frc.robot.subsystems.PizzaMotor;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class VelocityLoopcontrol extends Command {
 
-  private  double targetV;
+
   private  PizzaMotor subsystem;
   
   /** Creates a new VelocityLoopcontrol. */
@@ -22,7 +22,8 @@ public class VelocityLoopcontrol extends Command {
     this.subsystem = subsystem;
      addRequirements(subsystem);
      SmartDashboard.putNumber("pizza velocity error", 0);
-     targetV = SmartDashboard.getNumber("pizza target velocity", 0);
+     subsystem.pTargetV = SmartDashboard.getNumber("pizza target velocity", 0);
+     SmartDashboard.putNumber("current pizza velocity", 0);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -34,12 +35,11 @@ public class VelocityLoopcontrol extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-  //  targetV= SmartDashboard.getNumber("target velocity", targetV);  
-
-  subsystem.driveMotor.setVelocityWithFeedForward(targetV);
-    double error = targetV - subsystem.driveMotor.getCurrentVelocity();
+  public void execute() {  
+  subsystem.driveMotor.setVelocityWithFeedForward(subsystem.pTargetV);
+    double error = subsystem.pTargetV - subsystem.driveMotor.getCurrentVelocity();
     SmartDashboard.putNumber("pizza velocity error", error);
+    SmartDashboard.putNumber("current pizza velocity", subsystem.driveMotor.getCurrentVelocity());
     
   
   }
