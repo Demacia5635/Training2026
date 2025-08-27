@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
 import frc.Demacia.utils.Motors.MotorInterface;
@@ -21,7 +22,7 @@ public class PizzaMotor extends SubsystemBase {
     super();
   driveMotor = new TalonMotor(Constants.MotorsConfig.DRIVE_CONFIG);
   steerMotor = new TalonMotor(Constants.MotorsConfig.STEER_CONFIG);
-
+ SmartDashboard.putData("PizzaMotor", this);
   }
 
   @Override
