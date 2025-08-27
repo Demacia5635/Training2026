@@ -24,7 +24,7 @@ public class ModuleSubsystem extends SubsystemBase {
         DriveController = new PIDController(Constants.MyFirstSubsystemConstants.kp2,Constants.MyFirstSubsystemConstants.ki2, Constants.MyFirstSubsystemConstants.kd2);
         FF = new SimpleMotorFeedforward(Constants.MyFirstSubsystemConstants.kS, Constants.MyFirstSubsystemConstants.kV);
 
-        SmartDashboard.putData("MoveSubsystem", this);
+        SmartDashboard.putData("ModuleSubsystem", this);
     }
 
     public void setPowerDriveMotor(double power){
