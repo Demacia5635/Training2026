@@ -18,7 +18,7 @@ import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {
+public final class Constants {  
   public static final class CAN {
     public static final int FL_DRIVE_ID = 1;
     public static final int FL_STEER_ID = 2;
@@ -37,8 +37,6 @@ public final class Constants {
     public static final double FR_CANcoder_Ofset =0.487;
     public static final double BL_CANcoder_Ofset =-0.0622;
     public static final double BR_CANcoder_Ofset =0.4;
-    public static final Translation2d[] KINEMATICS = new Translation2d[]{
-      new Translation2d(0.315,0.265),new Translation2d(-0.310,0.265),new Translation2d(-0.315,-0.315),new Translation2d(0.315,-0.315) } ;
     }
   public static class ModuleConstants {
     public static final int CANBCODER_ID = 3;
@@ -66,7 +64,6 @@ public final class Constants {
     public static final double STEER_VELOCITY_P = 2;
     public static final double ABS_ENCODER_OFFSET = 10;
   }
-
   public static class BaseConfigs {
     public static final TalonConfig BASE_TALON_CONFIG = new TalonConfig(0, Canbus.Rio, "base")
         .withBrake(true)
@@ -82,12 +79,13 @@ public final class Constants {
         .withVolts(12)
         .withPID(0, 0, 0, 0, 0, 0, 0);
   }
-
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
   public static class Swerve {
     public static final double MAX_SPEED_MPS =0.3; 
     public static final double MAX_ANGULAR_SPEED_RAD_PER_S =0.3;
+    public static final Translation2d[] KINEMATICS = new Translation2d[]{
+      new Translation2d(0.315,0.265),new Translation2d(0.310,-0.265),new Translation2d(-0.315,-0.315),new Translation2d(-0.315,0.315) } ;
     }
 } 
