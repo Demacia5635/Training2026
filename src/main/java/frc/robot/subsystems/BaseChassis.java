@@ -50,7 +50,7 @@ public class BaseChassis extends SubsystemBase {
     // This method will be called once per scheduler run
     SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(kinematics,gyroAngle,modulesPosition,initialPosition);
 poseEstimator.update(gyroAngle, modulesPositions);
-poseEstimator.getEstimatedPosition()
+poseEstimator.getEstimatedPosition();
 poseEstimator.resetPose(pose);
 poseEstimator.addVisionMeasurement(pose, time);
 
