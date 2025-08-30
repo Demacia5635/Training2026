@@ -24,7 +24,7 @@ public final class Constants {
     public static final int DMOTOR_ID = 10;
   }
 public static class MotorsConfig {
-  public static final TalonConfig DRIVE_CONFIG = new TalonConfig(Constants.MyFirstSubsystemConstants.DMOTOR_ID, Canbus.Rio, "driveMexicana")
+  public static final TalonConfig LBD_CONFIG = new TalonConfig(Constants.MyFirstSubsystemConstants.LBD_ID, Canbus.Rio, "driveMexicana")
           .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
@@ -32,7 +32,58 @@ public static class MotorsConfig {
           .withPID(0.001, 0, 0, -0.1, 1.3, 0, 0) 			// kp, ki, kd, ks, kv, ka, kg
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
-  public static final TalonConfig STEER_CONFIG = new TalonConfig(Constants.MyFirstSubsystemConstants.DMOTOR_ID, Canbus.Rio, "driveMexicana")
+  public static final TalonConfig LBS_CONFIG = new TalonConfig(Constants.MyFirstSubsystemConstants.LBS_ID, Canbus.Rio, "driveMexicana")
+          .withBrake(true)
+          .withCurrent(20)   						// Current Limit
+          .withInvert(true)
+          .withMeterMotor(OperatorConstants.SgearRatio, OperatorConstants.wheelDiameter*0.0254) 				// Gear Ratio and Wheel Circumference
+          .withPID(0.001, 0, 0, -0.1, 1.3, 0, 0) 			// kp, ki, kd, ks, kv, ka, kg
+          .withRampTime(0.3) 						// time from zero to max power in seconds
+          .withVolts(6); 						// max volt
+
+          public static final TalonConfig LFD_CONFIG = new TalonConfig(Constants.MyFirstSubsystemConstants.LFD_ID, Canbus.Rio, "driveMexicana")
+          .withBrake(true)
+          .withCurrent(20)   						// Current Limit
+          .withInvert(true)
+          .withMeterMotor(OperatorConstants.DgearRatio, OperatorConstants.wheelDiameter*0.0254) 				// Gear Ratio and Wheel Circumference
+          .withPID(0.001, 0, 0, -0.1, 1.3, 0, 0) 			// kp, ki, kd, ks, kv, ka, kg
+          .withRampTime(0.3) 						// time from zero to max power in seconds
+          .withVolts(6); 						// max volt
+  public static final TalonConfig LFS_CONFIG = new TalonConfig(Constants.MyFirstSubsystemConstants.LFS_ID, Canbus.Rio, "driveMexicana")
+          .withBrake(true)
+          .withCurrent(20)   						// Current Limit
+          .withInvert(true)
+          .withMeterMotor(OperatorConstants.SgearRatio, OperatorConstants.wheelDiameter*0.0254) 				// Gear Ratio and Wheel Circumference
+          .withPID(0.001, 0, 0, -0.1, 1.3, 0, 0) 			// kp, ki, kd, ks, kv, ka, kg
+          .withRampTime(0.3) 						// time from zero to max power in seconds
+          .withVolts(6); 						// max volt
+
+          public static final TalonConfig RBD_CONFIG = new TalonConfig(Constants.MyFirstSubsystemConstants.RBD_ID, Canbus.Rio, "driveMexicana")
+          .withBrake(true)
+          .withCurrent(20)   						// Current Limit
+          .withInvert(true)
+          .withMeterMotor(OperatorConstants.DgearRatio, OperatorConstants.wheelDiameter*0.0254) 				// Gear Ratio and Wheel Circumference
+          .withPID(0.001, 0, 0, -0.1, 1.3, 0, 0) 			// kp, ki, kd, ks, kv, ka, kg
+          .withRampTime(0.3) 						// time from zero to max power in seconds
+          .withVolts(6); 						// max volt
+  public static final TalonConfig RBS_CONFIG = new TalonConfig(Constants.MyFirstSubsystemConstants.RBS_ID, Canbus.Rio, "driveMexicana")
+          .withBrake(true)
+          .withCurrent(20)   						// Current Limit
+          .withInvert(true)
+          .withMeterMotor(OperatorConstants.SgearRatio, OperatorConstants.wheelDiameter*0.0254) 				// Gear Ratio and Wheel Circumference
+          .withPID(0.001, 0, 0, -0.1, 1.3, 0, 0) 			// kp, ki, kd, ks, kv, ka, kg
+          .withRampTime(0.3) 						// time from zero to max power in seconds
+          .withVolts(6); 						// max volt
+
+          public static final TalonConfig RFD_CONFIG = new TalonConfig(Constants.MyFirstSubsystemConstants.RFD_ID, Canbus.Rio, "driveMexicana")
+          .withBrake(true)
+          .withCurrent(20)   						// Current Limit
+          .withInvert(true)
+          .withMeterMotor(OperatorConstants.DgearRatio, OperatorConstants.wheelDiameter*0.0254) 				// Gear Ratio and Wheel Circumference
+          .withPID(0.001, 0, 0, -0.1, 1.3, 0, 0) 			// kp, ki, kd, ks, kv, ka, kg
+          .withRampTime(0.3) 						// time from zero to max power in seconds
+          .withVolts(6); 						// max volt
+  public static final TalonConfig RFS_CONFIG = new TalonConfig(Constants.MyFirstSubsystemConstants.RFS_ID, Canbus.Rio, "driveMexicana")
           .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)

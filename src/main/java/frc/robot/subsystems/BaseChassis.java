@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.BaseSwerveModule;
 import frc.Demacia.utils.Motors.TalonConfig;
@@ -27,7 +28,10 @@ public class BaseChassis extends SubsystemBase {
   public BaseSwerveModule leftFrontModule;
   public BaseSwerveModule rightBackModule;
   public BaseSwerveModule rightFrontModule;
-  public BaseChassis (TalonConfig lbSteer, TalonConfig lbDrive, int lbEncoder, TalonConfig lfSteer, TalonConfig lfDrive, int lfEncoder, TalonConfig rbSteer, TalonConfig rbDrive,int rbEncoder, TalonConfig rfSteer, TalonConfig rfDrive,int rfEncoder) {
+  public double vx;
+  public double vy;
+  public double vrD;
+  public BaseChassis (double vx, double vy, double vrD,TalonConfig lbSteer, TalonConfig lbDrive, int lbEncoder, TalonConfig lfSteer, TalonConfig lfDrive, int lfEncoder, TalonConfig rbSteer, TalonConfig rbDrive,int rbEncoder, TalonConfig rfSteer, TalonConfig rfDrive,int rfEncoder) {
   this.lbDrive = lbDrive;
   this.lbSteer = lbSteer;
   this.lbEncoder = lbEncoder;
@@ -40,19 +44,19 @@ public class BaseChassis extends SubsystemBase {
   this.rfDrive = rfDrive;
   this.rfSteer = rfSteer;
   this.rfEncoder = rfEncoder;
+  this.vx=vx;
+  this.vy=vy;
+  this.vrD=vrD;
   leftBackModule = new BaseSwerveModule(lbSteer, lbDrive, lbEncoder);
   leftFrontModule = new BaseSwerveModule(lfSteer, lfDrive, lfEncoder);
   rightBackModule = new BaseSwerveModule(rbSteer, rbDrive,  rbEncoder);
   rightFrontModule = new BaseSwerveModule(rfSteer, rfDrive, rfEncoder);
+  ChassisSpeeds pizzaSpeed = new ChassisSpeeds(vx, vy, Math.toRadians(vrD));
 }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(kinematics,gyroAngle,modulesPosition,initialPosition);
-poseEstimator.update(gyroAngle, modulesPositions);
-poseEstimator.getEstimatedPosition();
-poseEstimator.resetPose(pose);
-poseEstimator.addVisionMeasurement(pose, time);
+
 
 
   }
