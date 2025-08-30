@@ -3,7 +3,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class controllerpizza {
 private final CommandXboxController controller = new CommandXboxController(Constants.DriverConstants.DriverID);
- 
+ public controllerpizza() {
+
+ }
 
 public double driveparameter() {
     double rightjoystickY = controller.getRightY();

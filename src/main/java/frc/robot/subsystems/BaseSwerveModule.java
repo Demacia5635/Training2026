@@ -41,8 +41,8 @@ public class BaseSwerveModule extends SubsystemBase {
     double power= signPower*2;
     drive.setVelocity(power);
   }
-  public void setPowerForPosition(double targetPosition){
+  public void setPowerForPosition(double pizzatarget){
     steer.setEncoderPosition(absEncoder.getPosition().getValueAsDouble());
-    steer.setMotion(targetPosition);
+    steer.setMotion(pizzatarget);
   }
 }

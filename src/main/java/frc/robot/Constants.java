@@ -23,6 +23,12 @@ public final class Constants {
     public static final String MOTOR_CAN = "rio";
     public static final int DMOTOR_ID = 10;
   }
+  public static class Encoders {
+    public static final int LB_ENCODER = 1;
+    public static final int LF_ENCODER = 2;
+    public static final int RB_ENCODER = 3;
+    public static final int RF_ENCODER = 4;
+  }
 public static class MotorsConfig {
   public static final TalonConfig LBD_CONFIG = new TalonConfig(Constants.ModuleConstants.LBD_ID, Canbus.Rio, "driveMexicana")
           .withBrake(true)

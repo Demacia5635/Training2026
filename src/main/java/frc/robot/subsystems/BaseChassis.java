@@ -60,4 +60,16 @@ public class BaseChassis extends SubsystemBase {
 
 
   }
+  public void driveSetPower(double signPower){
+    leftBackModule.driveSetPower(signPower);
+    leftFrontModule.driveSetPower(signPower);
+    rightBackModule.driveSetPower(signPower);
+    rightFrontModule.driveSetPower(signPower);
+  }
+  public void setPowerForPosition(double targetPosition){
+    leftBackModule.setPowerForPosition(targetPosition);
+    leftFrontModule.setPowerForPosition(targetPosition);
+    rightBackModule.setPowerForPosition(targetPosition);
+    rightFrontModule.setPowerForPosition(targetPosition);
+  }
 }
