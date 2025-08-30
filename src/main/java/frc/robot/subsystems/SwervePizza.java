@@ -14,7 +14,6 @@ public class SwervePizza extends SubsystemBase {
   /** Creates a new SwervePizza. */
   public SwervePizza() {
     BaseChassis pizza = new BaseChassis();
-    Translation2d point1 = new Translation2d(1,3);
   }
 
   @Override
