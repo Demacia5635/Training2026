@@ -5,8 +5,6 @@
 package frc.robot;
 
 import frc.robot.commands.MoveModula;
-import frc.robot.subsystems.DriveMotor;
-import frc.robot.subsystems.SteerMotor;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;

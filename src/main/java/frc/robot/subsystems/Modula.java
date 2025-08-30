@@ -13,8 +13,10 @@ import static frc.robot.Constants.ModuleConstants.DRIVE_KV;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -35,6 +37,7 @@ public class Modula extends SubsystemBase {
         driveMotor = new DriveMotor(Constants.ModuleConstants.DRIVE_ID);
         steerMotor = new SteerMotor(Constants.ModuleConstants.STEER_ID);
         absEncoder = new CANcoder(Constants.ModuleConstants.CANBCODER_ID);
+        power = 0;
     }
 
     public void setDriveVelocity(double targetVelocity) {
@@ -69,19 +72,36 @@ public class Modula extends SubsystemBase {
 
     public void calibrateAngle() {
         double offset = absEncoder.getAbsolutePosition().getValueAsDouble() * Constants.ModuleConstants.STEER_GEAR_RATIO * 360;
-        goToAngle(offset);
+        setSteerPosition(offset);
     }
 
     public double getAngle() {
         return absEncoder.getAbsolutePosition().getValueAsDouble() * Constants.ModuleConstants.STEER_GEAR_RATIO * 360;
     }
 
-    public void goToAngle(double tagetPosition) {
-        while (Math.abs(steerMotor.getPosition() - tagetPosition) > 0.1) {
-            double error = tagetPosition - steerMotor.getPosition();
+    public void setSteerPosition(double targetPosition) {
+        targetPosition = targetPosition * (180 / Math.PI) * Constants.ModuleConstants.STEER_GEAR_RATIO;
+        while (Math.abs(steerMotor.getPosition() - targetPosition) > 0.1) {
+            double error = targetPosition - steerMotor.getPosition();
             double steerPower = steerPID.calculate(error);
             setSteerPower(steerPower);
         }
         stopSteer();
+    }
+
+    public void setState(SwerveModuleState state) {
+        double wantedAngle = state.angle.getRadians();
+        double diff = wantedAngle - steerMotor.getPosition();
+        double vel = state.speedMetersPerSecond;
+        diff = MathUtil.angleModulus(diff);
+        if(diff > 0.5 * Math.PI) {
+            vel = -vel;
+            diff = diff-Math.PI;
+        } else if(diff < -0.5 * Math.PI) {
+            vel = -vel;
+            diff = diff + Math.PI;
+        }
+        setSteerPosition(steerMotor.getPosition() + diff);
+        setDriveVelocity(vel);
     }
 }

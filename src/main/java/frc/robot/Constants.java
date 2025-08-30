@@ -56,12 +56,21 @@ public final class Constants {
     public static final String MOTOR_CANBUS = "rio";
   }
   public static class BaseConfigs {
-    public static final TalonConfig BASE_TALON_CONFIG = new TalonConfig(0, Canbus.Rio, "base")
+    public static final TalonConfig DRIVE_TALON_CONFIG = new TalonConfig(10, Canbus.Rio, "Drive")
         .withBrake(true)
         .withCurrent(40)
         .withRampTime(0.3)
         .withVolts(12)
-        .withPID(0, 0, 0, 0, 0, 0, 0);
+        .withPID(ModuleConstants.DRIVE_KP, 0, 0, ModuleConstants.DRIVE_KS, ModuleConstants.DRIVE_KV, 0, 0);
+
+    
+    public static final TalonConfig STEER_TALON_CONFIG = new TalonConfig(10, Canbus.Rio, "Steer")
+        .withBrake(true)
+        .withCurrent(40)
+        .withRampTime(0.3)
+        .withVolts(12)
+        .withPID(ModuleConstants.STEER_KP, ModuleConstants.STEER_KI, ModuleConstants.STEER_KD, ModuleConstants.STEER_KS, ModuleConstants.STEER_KV, 0, 0)
+        .withMotionParam(0, 0, 0);
 
     public static final SparkConfig BASE_SPARK_CONFIG = new SparkConfig(0, "base")
         .withBrake(true)
