@@ -45,4 +45,7 @@ public class BaseSwerveModule extends SubsystemBase {
     steer.setEncoderPosition(absEncoder.getPosition().getValueAsDouble());
     steer.setMotion(pizzatarget);
   }
+  public double getSteerPIzza(){
+    return absEncoder.getPosition().getValueAsDouble();
+  }
 }

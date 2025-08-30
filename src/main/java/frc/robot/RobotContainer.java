@@ -29,8 +29,8 @@ public class RobotContainer {
  //private final Command Velocity_2 = new VelocityLoopcontrol(subsystem, -2, 0.001, -0.1, 1.3, 0.0, 0.0);
   private final Command drive21 = new Drive(subsystem, 100, 0.01, 0.0, 0.0);
   private final Command Pizza = new KsAkvCalc(subsystem, 5);
-  private final Command Pizza2 = new VelocityLoopcontrol(PizzaMotor);
-  private final Command PizzaGoToMexcicna = new GoToAngle(PizzaMotor);
+  //private final Command Pizza2 = new VelocityLoopcontrol(PizzaMotor);
+ // private final Command PizzaGoToMexcicna = new GoToAngle(PizzaMotor);
   private final Command Pizzasofinizachno = new DriveController(PizzaPizza);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

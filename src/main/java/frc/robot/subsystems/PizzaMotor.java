@@ -18,8 +18,8 @@ public class PizzaMotor extends SubsystemBase {
 
   public PizzaMotor() {
     super();
-  driveMotor = new TalonMotor(Constants.MotorsConfig.DRIVE_CONFIG);
-  steerMotor = new TalonMotor(Constants.MotorsConfig.STEER_CONFIG);
+  driveMotor = new TalonMotor(Constants.MotorsConfig.LBD_CONFIG);
+  steerMotor = new TalonMotor(Constants.MotorsConfig.LBS_CONFIG);
 
   }
 

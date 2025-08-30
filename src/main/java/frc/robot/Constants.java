@@ -23,6 +23,9 @@ public final class Constants {
     public static final String MOTOR_CAN = "rio";
     public static final int DMOTOR_ID = 10;
   }
+  public static class DriverConstants{
+    public static final int DriverID = 0;
+  }
   public static class Encoders {
     public static final int LB_ENCODER = 1;
     public static final int LF_ENCODER = 2;
@@ -30,7 +33,7 @@ public final class Constants {
     public static final int RF_ENCODER = 4;
   }
 public static class MotorsConfig {
-  public static final TalonConfig LBD_CONFIG = new TalonConfig(Constants.ModuleConstants.LBD_ID, Canbus.Rio, "driveMexicana")
+  public static final TalonConfig LBD_CONFIG = new TalonConfig(Constants.ModuleConstants.LBD_ID, Canbus.Rio, "LBDRIVE")
           .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
@@ -38,7 +41,7 @@ public static class MotorsConfig {
           .withPID(0.001, 0, 0, -0.1, 1.3, 0, 0) 			// kp, ki, kd, ks, kv, ka, kg
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
-  public static final TalonConfig LBS_CONFIG = new TalonConfig(Constants.ModuleConstants.LBS_ID, Canbus.Rio, "driveMexicana")
+  public static final TalonConfig LBS_CONFIG = new TalonConfig(Constants.ModuleConstants.LBS_ID, Canbus.Rio, "LBSTEER")
           .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
@@ -47,7 +50,7 @@ public static class MotorsConfig {
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
 
-          public static final TalonConfig LFD_CONFIG = new TalonConfig(Constants.ModuleConstants.LFD_ID, Canbus.Rio, "driveMexicana")
+          public static final TalonConfig LFD_CONFIG = new TalonConfig(Constants.ModuleConstants.LFD_ID, Canbus.Rio, "LFDRIVE")
           .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
@@ -55,7 +58,7 @@ public static class MotorsConfig {
           .withPID(0.001, 0, 0, -0.1, 1.3, 0, 0) 			// kp, ki, kd, ks, kv, ka, kg
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
-  public static final TalonConfig LFS_CONFIG = new TalonConfig(Constants.ModuleConstants.LFS_ID, Canbus.Rio, "driveMexicana")
+  public static final TalonConfig LFS_CONFIG = new TalonConfig(Constants.ModuleConstants.LFS_ID, Canbus.Rio, "LFSTEER")
           .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
@@ -64,7 +67,7 @@ public static class MotorsConfig {
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
 
-          public static final TalonConfig RBD_CONFIG = new TalonConfig(Constants.ModuleConstants.RBD_ID, Canbus.Rio, "driveMexicana")
+          public static final TalonConfig RBD_CONFIG = new TalonConfig(Constants.ModuleConstants.RBD_ID, Canbus.Rio, "RBDRIVE")
           .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
@@ -72,7 +75,7 @@ public static class MotorsConfig {
           .withPID(0.001, 0, 0, -0.1, 1.3, 0, 0) 			// kp, ki, kd, ks, kv, ka, kg
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
-  public static final TalonConfig RBS_CONFIG = new TalonConfig(Constants.ModuleConstants.RBS_ID, Canbus.Rio, "driveMexicana")
+  public static final TalonConfig RBS_CONFIG = new TalonConfig(Constants.ModuleConstants.RBS_ID, Canbus.Rio, "RBSTEER")
           .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
@@ -81,7 +84,7 @@ public static class MotorsConfig {
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
 
-          public static final TalonConfig RFD_CONFIG = new TalonConfig(Constants.ModuleConstants.RFD_ID, Canbus.Rio, "driveMexicana")
+          public static final TalonConfig RFD_CONFIG = new TalonConfig(Constants.ModuleConstants.RFD_ID, Canbus.Rio, "RFDRIVE")
           .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
@@ -89,7 +92,7 @@ public static class MotorsConfig {
           .withPID(0.001, 0, 0, -0.1, 1.3, 0, 0) 			// kp, ki, kd, ks, kv, ka, kg
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
-  public static final TalonConfig RFS_CONFIG = new TalonConfig(Constants.ModuleConstants.RFS_ID, Canbus.Rio, "driveMexicana")
+  public static final TalonConfig RFS_CONFIG = new TalonConfig(Constants.ModuleConstants.RFS_ID, Canbus.Rio, "RFSTEER")
           .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
