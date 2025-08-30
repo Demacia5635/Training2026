@@ -37,4 +37,12 @@ public class BaseSwerveModule extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+  public void driveSetPower(double signPower){
+    double power= signPower*2;
+    drive.setVelocity(power);
+  }
+  public void setPowerForPosition(double targetPosition){
+    steer.setEncoderPosition(absEncoder.getPosition().getValueAsDouble());
+    steer.setMotion(targetPosition);
+  }
 }
