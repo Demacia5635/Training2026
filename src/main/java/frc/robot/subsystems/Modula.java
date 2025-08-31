@@ -32,18 +32,18 @@ public class Modula extends SubsystemBase {
     PIDController drivePID = new PIDController(DRIVE_KP, 0, 0);
     PIDController steerPID = new PIDController(STEER_KP, STEER_KI, STEER_KD);
 
-    public Modula() {
+    public Modula(int[] moduleID) {
         super();
-        driveMotor = new DriveMotor(Constants.ModuleConstants.DRIVE_ID);
-        steerMotor = new SteerMotor(Constants.ModuleConstants.STEER_ID);
-        absEncoder = new CANcoder(Constants.ModuleConstants.CANBCODER_ID);
+        driveMotor = new DriveMotor(moduleID[0]);
+        steerMotor = new SteerMotor(moduleID[1]);
+        absEncoder = new CANcoder(moduleID[2]);
         power = 0;
     }
 
     public void setDriveVelocity(double targetVelocity) {
         power = driveFF.calculate(targetVelocity);
         power += drivePID.calculate(driveMotor.getVelocity(), targetVelocity);
-        driveMotor.setPower(0.4);
+        driveMotor.setPower(power);
     }
 
     public void setSteerPower(double power) {

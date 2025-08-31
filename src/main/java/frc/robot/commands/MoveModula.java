@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ChassisConstants;
 import frc.robot.subsystems.Modula;
 
 public class MoveModula extends Command {
@@ -8,7 +9,7 @@ public class MoveModula extends Command {
   private Modula modula;
 
   public MoveModula() {
-    this.modula = new Modula();
+    this.modula = new Modula(ChassisConstants.BACK_RIGHT);
     addRequirements(modula);
   }
 

@@ -7,6 +7,12 @@ package frc.robot;
 
 import frc.Demacia.utils.Motors.SparkConfig;
 import frc.Demacia.utils.Motors.TalonConfig;
+
+import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.swerve.SwerveModule;
+
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
 
 /**
@@ -20,9 +26,6 @@ import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
 public final class Constants {
 
   public static class ModuleConstants {
-    public static final int STEER_ID = 11;
-    public static final int DRIVE_ID = 10;
-    public static final int CANBCODER_ID = 3;
     public static final double MAX_STEER_AMPS = 20;
     public static final double MAX_STEER_VOLTS = 8;
     public static final boolean STEER_INVERTED = false;
@@ -82,5 +85,22 @@ public final class Constants {
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+  }
+
+  public static class ChassisConstants {
+    public static final int[] FRONT_LEFT = new int[]{1, 2, 3}; //drive, steer, cancoder
+    public static final int[] FRONT_RIGHT = new int[]{4, 5, 6};
+    public static final int[] BACK_LEFT = new int[]{7, 8, 9};
+    public static final int[] BACK_RIGHT = new int[]{10, 11, 12};
+    public static final double FL_CANCODER_OFFSET = 0.3945;
+    public static final double FR_CANCODER_OFFSET = 0.487;
+    public static final double BL_CANCODER_OFFSET = 0.0622;
+    public static final double BR_CANCODER_OFFSET = 0.4;
+    public static final int GYRO_ID = 14;
+    public static final String GYRO_CAN_BUS = "rio";
+
+    public static final Translation2d[] KINEMATICS = new Translation2d[]{
+      new Translation2d(0.315,0.265),new Translation2d(0.310,-0.265),new Translation2d(-0.315,-0.315),new Translation2d(-0.315,0.315)
+    };
   }
 }
