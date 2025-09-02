@@ -28,11 +28,9 @@ public class VectorUtils {
         Rotation2d dir2 = Rotation2d.fromDegrees(-55);
         double startTime = System.currentTimeMillis()/1000.0;
         Translation2d x = new Translation2d();
-        double xx = 0;
         for(int i = 0; i < 1000; i++) {
             p1.set(p1.getX() + 0.1, p1.getY());
             x = intersct(p1, dir1, p2, dir2);
-            xx += x.getX();
         }
         double endTime = System.currentTimeMillis()/1000.0;
         System.out.println(" avg time = " + (endTime - startTime)*1000.0 + "us");

@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "UdiKinematics1",
+      "request": "launch",
+      "mainClass": "frc.robot.Drive.UdiKinematics1",
+      "projectName": "Training2026"
+    },
+    {
+      "type": "java",
       "name": "VectorUtils",
       "request": "launch",
       "mainClass": "frc.Demacia.utils.VectorUtils",
