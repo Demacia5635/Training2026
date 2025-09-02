@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import frc.robot.commands.drivecommand;
+import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.DemaciaMotorExample;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RobotContainer {
@@ -12,6 +15,9 @@ public class RobotContainer {
   public static Robot robot;
   public static int N_CYCLE = 0;
   public static double CYCLE_TIME = 0.02;
+  public static XboxController controller = new XboxController(0);
+  public static Chassis chassis = new Chassis();
+  public static drivecommand drivecommand = new drivecommand(chassis, controller);
 
   public DemaciaMotorExample demaciaMotorExample = new DemaciaMotorExample();
 
@@ -20,7 +26,6 @@ public class RobotContainer {
     RobotContainer.CYCLE_TIME = robot.getPeriod();
     configureBindings();
   }
-  
    private void configureBindings() {
   }
 
