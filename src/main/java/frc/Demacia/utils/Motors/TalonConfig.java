@@ -1,5 +1,7 @@
 package frc.Demacia.utils.Motors;
 
+import java.lang.ModuleLayer.Controller;
+
 /** 
  * Class to hold all Talon FX/SRX configuration
  * Applicable to Phoenix 6
@@ -22,5 +24,6 @@ public class TalonConfig extends BaseMotorConfig<TalonConfig> {
         copyBaseFields(config);
         motorType = MotorControllerType.TalonFX;
     }
-   
+
+    
 }

@@ -52,8 +52,10 @@ public class Chassis extends SubsystemBase {
     }
 
     /** מפעיל את הרובוט עם מהירויות נתונות, עם או בלי field-relative */
-    public void drive(ChassisSpeeds speeds) {
-        ChassisSpeeds applied = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getHeading());
+    public void drive(ChassisSpeeds speeds, boolean fieldRelative) {
+        ChassisSpeeds applied = fieldRelative
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getHeading())
+            : speeds;
 
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(applied);
         SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.Swerve.MAX_SPEED_MPS);

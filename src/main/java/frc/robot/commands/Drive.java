@@ -1,3 +1,6 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
@@ -7,12 +10,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Chassis;
 
-public class drivecommand extends Command {
+public class Drive extends Command {
   private final Chassis chassis;
   private final XboxController controller;
   private final boolean fieldRelative;
 
-  public drivecommand(Chassis chassis, XboxController controller, boolean fieldRelative) {
+  public Drive(Chassis chassis, XboxController controller, boolean fieldRelative) {
     this.chassis = chassis;
     this.controller = controller;
     this.fieldRelative = fieldRelative;
@@ -20,7 +23,7 @@ public class drivecommand extends Command {
   }
 
   private static double deadband(double v) {
-    return MathUtil.applyDeadband(v, 0.1);
+    return MathUtil.applyDeadband(v, Constants.Swerve.DEADBAND);
   }
 
   @Override

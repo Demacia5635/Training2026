@@ -8,7 +8,7 @@ import com.ctre.phoenix6.CANBus;
  */
 public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
 
-    public static enum Canbus { Rio("rio"), CANIvore("CANIvore");
+    public static enum Canbus { Rio("rio"), CANIvore("canivore");
     
         public CANBus canbus;
         private Canbus(String name) {
@@ -85,6 +85,8 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
         return (T) this;
     }
 
+    
+
     /**
      * Set motor inversion
      * @param invert true to invert motor direction
@@ -154,6 +156,12 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
     @SuppressWarnings("unchecked")
     public T withMaxPositionError(double maxPositionError) {
         this.maxPositionError = maxPositionError;
+        return (T) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T withMotorRatio(double ratio) {
+        this.motorRatio *= ratio;
         return (T) this;
     }
 
