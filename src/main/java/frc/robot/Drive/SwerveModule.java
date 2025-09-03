@@ -12,6 +12,7 @@ import frc.Demacia.utils.Motors.MotorCommands;
 import frc.Demacia.utils.Motors.MotorInterface;
 import frc.Demacia.utils.Motors.TalonMotor;
 import frc.Demacia.utils.Sensors.Cancoder;
+import frc.robot.Utilities;
 
 public class SwerveModule implements Sendable {
     private MotorInterface steer;
@@ -21,7 +22,7 @@ public class SwerveModule implements Sendable {
     protected SwerveModuleState state = new SwerveModuleState(0, new Rotation2d());
     protected SwerveModulePosition position = new SwerveModulePosition(0, new Rotation2d());
     private double lastSteerPosition = 0;
-    private double steerTargetDiff = 0;
+    private double steerCorrection = 0;
     private double driveTarget = 0;
 
 
@@ -54,23 +55,23 @@ public class SwerveModule implements Sendable {
     }
 
     private void optimaizeTarget() {
-        if(steerTargetDiff > 90) {
-            steerTargetDiff -= 180;
+        if(steerCorrection > 90) {
+            steerCorrection -= 180;
             driveTarget = -driveTarget;
-        } else if(steerTargetDiff < -90) {
-            steerTargetDiff += 180;
+        } else if(steerCorrection < -90) {
+            steerCorrection += 180;
             driveTarget = -driveTarget;
         }
-        double add = steerTargetDiff * Constants.STATE_STEER_ADDITION;
-        steerTargetDiff += MathUtil.clamp(add, -Constants.MAX_SET_STATE_STEER_ADDITION, Constants.MAX_SET_STATE_STEER_ADDITION);
+        double add = steerCorrection * Constants.STATE_STEER_ADDITION;
+        steerCorrection += Utilities.clampAroundZero(add, Constants.MAX_SET_STATE_STEER_ADDITION);
     }
 
     public void setState(SwerveModuleState state) {
         double currentPosition = steer.getCurrentPosition();
-        steerTargetDiff = MathUtil.inputModulus(state.angle.getDegrees() - currentPosition,-180,180);
+        steerCorrection = MathUtil.inputModulus(state.angle.getDegrees() - currentPosition,-180,180);
         driveTarget = state.speedMetersPerSecond;
         optimaizeTarget();
-        steer.setMotion(currentPosition + steerTargetDiff);
+        steer.setMotion(currentPosition + steerCorrection);
         drive.setVelocity(driveTarget);
     }
 
