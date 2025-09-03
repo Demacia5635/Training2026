@@ -1,6 +1,7 @@
 package frc.robot.Drive;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.Sendable;
@@ -17,8 +18,8 @@ public class SwerveModule implements Sendable {
     private MotorInterface drive;
     private Cancoder absEncoder;
     protected Constants.ModuleConfig config;
-    protected SwerveModuleState state = new SwerveModuleState();
-    protected SwerveModulePosition position = new SwerveModulePosition();
+    protected SwerveModuleState state = new SwerveModuleState(0, new Rotation2d());
+    protected SwerveModulePosition position = new SwerveModulePosition(0, new Rotation2d());
     private double lastSteerPosition = 0;
     private double steerTargetDiff = 0;
     private double driveTarget = 0;
@@ -30,8 +31,7 @@ public class SwerveModule implements Sendable {
         drive = new TalonMotor(config.driveConfig);
         absEncoder = new Cancoder(config.cancoderConfig);
         setSteerOffset();
-        refreshPosition();
-        refreshState();
+        refreshStateAndPosition();
         SmartDashboard.putData(config.name, this);
     }
 
@@ -43,16 +43,14 @@ public class SwerveModule implements Sendable {
         return absEncoder.getCurrentAbsPosition();
     }
 
-    public void refreshState() {
-        state.angle.setDegrees(steer.getCurrentPosition());
-        state.speedMetersPerSecond = drive.getCurrentVelocity();
-    }
 
-    public void refreshPosition() {
+    public void refreshStateAndPosition() {
         double steerPosition = steer.getCurrentPosition();
         position.angle.setDegrees((lastSteerPosition + steerPosition)/2);
         lastSteerPosition = steerPosition;
         position.distanceMeters = drive.getCurrentPosition() + steerPosition * Constants.STEER_TO_DISTANCE_RATIO;
+        state.angle.setDegrees(steerPosition);
+        state.speedMetersPerSecond = drive.getCurrentVelocity() +  steer.getCurrentVelocity() * Constants.STEER_TO_DISTANCE_RATIO;
     }
 
     private void optimaizeTarget() {
@@ -63,14 +61,14 @@ public class SwerveModule implements Sendable {
             steerTargetDiff += 180;
             driveTarget = -driveTarget;
         }
+        double add = steerTargetDiff * Constants.STATE_STEER_ADDITION;
+        steerTargetDiff += MathUtil.clamp(add, -Constants.MAX_SET_STATE_STEER_ADDITION, Constants.MAX_SET_STATE_STEER_ADDITION);
     }
 
     public void setState(SwerveModuleState state) {
         double currentPosition = steer.getCurrentPosition();
         steerTargetDiff = MathUtil.inputModulus(state.angle.getDegrees() - currentPosition,-180,180);
         driveTarget = state.speedMetersPerSecond;
-        optimaizeTarget();
-        steerTargetDiff = (MathUtil.clamp(steerTargetDiff * Constants.STATE_STEER_ADDITION, steerTargetDiff-Constants.MAX_SET_STATE_STEER_ADDITION, steerTargetDiff+Constants.MAX_SET_STATE_STEER_ADDITION));
         optimaizeTarget();
         steer.setMotion(currentPosition + steerTargetDiff);
         drive.setVelocity(driveTarget);

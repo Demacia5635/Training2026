@@ -162,8 +162,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void periodic() {
         super.periodic();
         for(SwerveModule m : modules) {
-            m.refreshPosition();
-            m.refreshState();
+            m.refreshStateAndPosition();
         }
         ChassisSpeeds t = kinematics.toChassisSpeeds(moduleStates);
         currentChassisSpeeds.vxMetersPerSecond = t.vxMetersPerSecond;

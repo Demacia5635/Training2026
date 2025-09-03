@@ -34,8 +34,7 @@ public class SingleModuleSubsystem extends SubsystemBase {
     public void periodic() {
         super.periodic();
         for(SwerveModule m : modules) {
-            m.refreshPosition();
-            m.refreshState();
+            m.refreshStateAndPosition();
         }
     }
 

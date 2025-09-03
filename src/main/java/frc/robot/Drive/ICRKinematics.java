@@ -12,7 +12,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
 import frc.Demacia.utils.StatusSignalData;
 import frc.robot.Utilities;
-import frc.robot.Drive.ICRData.ICRType;
 
 public class ICRKinematics {
     final Translation2d[] modulePositions;
@@ -136,6 +135,8 @@ public class ICRKinematics {
                     break;
             }
         }
+        if(nSlip > 3 || nNoMove > 3) 
+            return null;
         if(nRadial > 2) {
             return new Translation2d(x / nRadial, y / nRadial);
         }        
