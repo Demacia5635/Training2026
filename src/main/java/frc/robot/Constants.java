@@ -27,10 +27,10 @@ public final class Constants {
     public static final int DriverID = 0;
   }
   public static class Encoders {
-    public static final int LB_ENCODER = 1;
-    public static final int LF_ENCODER = 2;
-    public static final int RB_ENCODER = 3;
-    public static final int RF_ENCODER = 4;
+    public static final int LB_ENCODER = 9;
+    public static final int LF_ENCODER = 3;
+    public static final int RB_ENCODER = 12;
+    public static final int RF_ENCODER = 6;
   }
 public static class MotorsConfig {
   public static final TalonConfig LBD_CONFIG = new TalonConfig(Constants.ModuleConstants.LBD_ID, Canbus.Rio, "LBDRIVE")
@@ -102,14 +102,14 @@ public static class MotorsConfig {
           .withVolts(6); 						// max volt
 }
   public static class ModuleConstants {
-    public static final int LBS_ID = 1;
-    public static final int LBD_ID = 2;
-    public static final int LFS_ID = 5;
-    public static final int LFD_ID = 6;
-    public static final int RBS_ID = 3;
-    public static final int RBD_ID = 4;
-    public static final int RFS_ID = 7;
-    public static final int RFD_ID = 8;
+    public static final int LBS_ID = 8;
+    public static final int LBD_ID = 7;
+    public static final int LFS_ID = 2;
+    public static final int LFD_ID = 1;
+    public static final int RBS_ID = 11;
+    public static final int RBD_ID = 10;
+    public static final int RFS_ID = 5;
+    public static final int RFD_ID = 4;
     public static final int CANBCODER_ID = 3;
     public static final double MAX_STEER_AMPS = 20;
     public static final double MAX_STEER_VOLTS = 8;
