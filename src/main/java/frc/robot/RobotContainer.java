@@ -32,9 +32,12 @@ public class RobotContainer {
   //private final Command Pizza2 = new VelocityLoopcontrol(PizzaMotor);
  // private final Command PizzaGoToMexcicna = new GoToAngle(PizzaMotor);
   private final Command Pizzasofinizachno = new DriveController(PizzaPizza);
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     configureBindings();
+    PizzaPizza.setDefaultCommand(Pizzasofinizachno);
+
   }
 
   /**

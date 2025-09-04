@@ -38,7 +38,7 @@ public class BaseSwerveModule extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void driveSetPower(double signPower){
-    double power= signPower*2;
+    double power= signPower*3;
     drive.setVelocity(power);
   }
   public void setPowerForPosition(double pizzatarget){

@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ModuleConstants;
 import frc.robot.subsystems.BaseSwerveModule;
 import frc.Demacia.utils.Motors.TalonConfig;
 
@@ -67,9 +68,9 @@ public class BaseChassis extends SubsystemBase {
     rightFrontModule.driveSetPower(signPower);
   }
   public void setPowerForPosition(double targetPosition){
-    leftBackModule.setPowerForPosition(targetPosition);
-    leftFrontModule.setPowerForPosition(targetPosition);
-    rightBackModule.setPowerForPosition(targetPosition);
-    rightFrontModule.setPowerForPosition(targetPosition);
+    leftBackModule.setPowerForPosition(targetPosition+ ModuleConstants.absEncoderLBcali);
+    leftFrontModule.setPowerForPosition(targetPosition+ ModuleConstants.absEncoderLFcali);
+    rightBackModule.setPowerForPosition(targetPosition + ModuleConstants.absEncoderRBcali);
+    rightFrontModule.setPowerForPosition(targetPosition + ModuleConstants.absEncoderRFcali);
   }
 }

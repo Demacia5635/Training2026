@@ -34,7 +34,7 @@ public final class Constants {
   }
 public static class MotorsConfig {
   public static final TalonConfig LBD_CONFIG = new TalonConfig(Constants.ModuleConstants.LBD_ID, Canbus.canivore, "LBDRIVE")
-          .withBrake(true)
+        //  .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
           .withMeterMotor(OperatorConstants.DgearRatio, Constants.ModuleConstants.WHEEL_CIRCUMFERENCE) 				// Gear Ratio and Wheel Circumference
@@ -42,7 +42,7 @@ public static class MotorsConfig {
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
   public static final TalonConfig LBS_CONFIG = new TalonConfig(Constants.ModuleConstants.LBS_ID, Canbus.canivore, "LBSTEER")
-          .withBrake(true)
+         // .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
           .withMeterMotor(OperatorConstants.SgearRatio, Constants.ModuleConstants.WHEEL_CIRCUMFERENCE) 				// Gear Ratio and Wheel Circumference
@@ -51,7 +51,7 @@ public static class MotorsConfig {
           .withVolts(6); 						// max volt
 
           public static final TalonConfig LFD_CONFIG = new TalonConfig(Constants.ModuleConstants.LFD_ID, Canbus.canivore, "LFDRIVE")
-          .withBrake(true)
+         // .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
           .withMeterMotor(OperatorConstants.DgearRatio, Constants.ModuleConstants.WHEEL_CIRCUMFERENCE) 				// Gear Ratio and Wheel Circumference
@@ -59,7 +59,7 @@ public static class MotorsConfig {
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
   public static final TalonConfig LFS_CONFIG = new TalonConfig(Constants.ModuleConstants.LFS_ID, Canbus.canivore, "LFSTEER")
-          .withBrake(true)
+         // .withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
           .withMeterMotor(OperatorConstants.SgearRatio, Constants.ModuleConstants.WHEEL_CIRCUMFERENCE) 				// Gear Ratio and Wheel Circumference
@@ -68,7 +68,7 @@ public static class MotorsConfig {
           .withVolts(6); 						// max volt
 
           public static final TalonConfig RBD_CONFIG = new TalonConfig(Constants.ModuleConstants.RBD_ID, Canbus.canivore, "RBDRIVE")
-          .withBrake(true)
+          //.withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
           .withMeterMotor(OperatorConstants.DgearRatio, Constants.ModuleConstants.WHEEL_CIRCUMFERENCE) 				// Gear Ratio and Wheel Circumference
@@ -76,7 +76,7 @@ public static class MotorsConfig {
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
   public static final TalonConfig RBS_CONFIG = new TalonConfig(Constants.ModuleConstants.RBS_ID, Canbus.canivore, "RBSTEER")
-          .withBrake(true)
+          //.withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
           .withMeterMotor(OperatorConstants.SgearRatio, Constants.ModuleConstants.WHEEL_CIRCUMFERENCE) 				// Gear Ratio and Wheel Circumference
@@ -85,7 +85,7 @@ public static class MotorsConfig {
           .withVolts(6); 						// max volt
 
           public static final TalonConfig RFD_CONFIG = new TalonConfig(Constants.ModuleConstants.RFD_ID, Canbus.canivore, "RFDRIVE")
-          .withBrake(true)
+          //.withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
           .withMeterMotor(OperatorConstants.DgearRatio, Constants.ModuleConstants.WHEEL_CIRCUMFERENCE) 				// Gear Ratio and Wheel Circumference
@@ -93,7 +93,7 @@ public static class MotorsConfig {
           .withRampTime(0.3) 						// time from zero to max power in seconds
           .withVolts(6); 						// max volt
   public static final TalonConfig RFS_CONFIG = new TalonConfig(Constants.ModuleConstants.RFS_ID, Canbus.canivore, "RFSTEER")
-          .withBrake(true)
+          //.withBrake(true)
           .withCurrent(20)   						// Current Limit
           .withInvert(true)
           .withMeterMotor(OperatorConstants.SgearRatio,Constants.ModuleConstants.WHEEL_CIRCUMFERENCE) 				// Gear Ratio and Wheel Circumference
@@ -102,6 +102,10 @@ public static class MotorsConfig {
           .withVolts(6); 						// max volt
 }
   public static class ModuleConstants {
+    public static final double absEncoderLBcali = 0.18457*Math.PI*2*(-1);
+    public static final double absEncoderLFcali = (-0.43335)*Math.PI*2*(-1);
+    public static final double absEncoderRBcali = (0.32666)*Math.PI*2*(-1);
+    public static final double absEncoderRFcali =(-0.251465) *Math.PI*2*(-1);
     public static final int LBS_ID = 8;
     public static final int LBD_ID = 7;
     public static final int LFS_ID = 2;

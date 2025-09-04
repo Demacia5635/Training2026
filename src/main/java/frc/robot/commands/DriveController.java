@@ -13,12 +13,15 @@ import frc.robot.subsystems.SwervePizza;
 public class DriveController extends Command {
   /** Creates a new DriveController. */
   private final SwervePizza subsystem;
+  private double steerTarget;
   private final controllerpizza controllerpizza;
   
   public DriveController(SwervePizza subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
 this.subsystem = subsystem;
+this.steerTarget = 0;
 this.controllerpizza = new controllerpizza();
+addRequirements(subsystem);
 
 
    
@@ -32,10 +35,11 @@ this.controllerpizza = new controllerpizza();
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double pastAngle = steerTarget;
     double drivepower = controllerpizza.driveparameter();
     subsystem.pizza.driveSetPower(drivepower);
-    double steertarget = controllerpizza.pizzasteerparmeter();
-    subsystem.pizza.setPowerForPosition(steertarget);
+    double steerTarget = controllerpizza.pizzasteerparmeter(pastAngle);
+    subsystem.pizza.setPowerForPosition(steerTarget);
   }
 
   // Called once the command ends or is interrupted.
