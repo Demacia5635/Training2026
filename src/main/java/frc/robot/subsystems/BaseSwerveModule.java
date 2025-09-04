@@ -15,6 +15,7 @@ import frc.Demacia.utils.Motors.MotorInterface;
 import frc.Demacia.utils.Motors.TalonConfig;
 import frc.Demacia.utils.Motors.TalonMotor;
 import frc.robot.Constants;
+import frc.robot.Constants.ModuleConstants;
 
 
 public class BaseSwerveModule extends SubsystemBase {
@@ -31,21 +32,20 @@ public class BaseSwerveModule extends SubsystemBase {
     drive = new TalonMotor(driveConfig);
     steer= new TalonMotor(steerConfig);
     absEncoder = new CANcoder(CANBCODER_ID);
+    steer.setEncoderPosition(getAbsAngle()-ModuleConstants.offsetArr[CANBCODER_ID/3]);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
-  public void driveSetPower(double signPower){
-    double power= signPower*3;
-    drive.setVelocity(power);
+  public void setDriveVelocity(double velocity){
+    drive.setVelocity(velocity);
   }
-  public void setPowerForPosition(double pizzatarget){
-    steer.setEncoderPosition(absEncoder.getPosition().getValueAsDouble());
-    steer.setMotion(pizzatarget);
+  public void setSteerPosition(double position){
+    steer.setAngle(position);
   }
-  public double getSteerPIzza(){
+  public double getAbsAngle(){
     return absEncoder.getPosition().getValueAsDouble();
   }
 }

@@ -1,9 +1,9 @@
 package frc.robot;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-public class controllerpizza {
+public class utils {
 private final CommandXboxController controller = new CommandXboxController(Constants.DriverConstants.DriverID);
- public controllerpizza() {
+ public void controllerpizza() {
 
  }
 

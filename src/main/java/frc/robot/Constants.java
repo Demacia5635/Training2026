@@ -19,9 +19,7 @@ import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
  */
 public final class Constants {
   public static class MyFirstSubsystemConstants {
-    public static final int SMOTOR_ID = 11;
     public static final String MOTOR_CAN = "rio";
-    public static final int DMOTOR_ID = 10;
   }
   public static class DriverConstants{
     public static final int DriverID = 0;
@@ -106,6 +104,7 @@ public static class MotorsConfig {
     public static final double absEncoderLFcali = (-0.43335)*Math.PI*2*(-1);
     public static final double absEncoderRBcali = (0.32666)*Math.PI*2*(-1);
     public static final double absEncoderRFcali =(-0.251465) *Math.PI*2*(-1);
+    public static final double[] offsetArr = {0,absEncoderLFcali,absEncoderRFcali, absEncoderLBcali,  absEncoderRBcali };
     public static final int LBS_ID = 8;
     public static final int LBD_ID = 7;
     public static final int LFS_ID = 2;
@@ -114,27 +113,6 @@ public static class MotorsConfig {
     public static final int RBD_ID = 10;
     public static final int RFS_ID = 5;
     public static final int RFD_ID = 4;
-    public static final int CANBCODER_ID = 3;
-    public static final double MAX_STEER_AMPS = 20;
-    public static final double MAX_STEER_VOLTS = 8;
-    public static final boolean STEER_INVERTED = false;
-    public static final boolean DRIVE_INVERTED = false;
-    public static final double STEER_GERA_RATIO = 150.0/7.0;
-    public static final double DRIVE_GERA_RATIO = 6.75;
-    public static final double STEER_KP = 0.1;
-    public static final double STEER_KI = 0.0;
-    public static final double STEER_KD = 0.0;
-    public static final double STEER_KS = 0.1;
-    public static final double STEER_KV = 0.2;
-    public static final double STEER_KA = 0.01;
-    public static final double DRIVE_KP = 0.1;
-    public static final double DRIVE_KI = 0.0;
-    public static final double DRIVE_KD = 0.0;
-    public static final double DRIVE_KS = 0.1;
-    public static final double DRIVE_KV = 0.2;
-    public static final double DRIVE_KA = 0.01;
-    public static final double STEER_RAMP = 0.2;
-    public static final double DRIVE_RAMP = 0.2;
     public static final double WHEEL_CIRCUMFERENCE = Math.PI * OperatorConstants.wheelDiameter ;
 
     public static final double STEER_VELOCITY_P = 2;
