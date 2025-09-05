@@ -62,20 +62,21 @@ public class DriveTo extends Command {
         toEnd.set(x - pose.getX(), y - pose.getY());
         currentDriveRotation.set(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond);
         double currentHeading = currentDriveRotation.getRadians();
-        double driveHeadingError = MathUtil.angleModulus(toEnd.getAngle().getRadians() - currentHeading);
+        double toTargetHeading = toEnd.getAngle().getRadians();
+        double driveHeadingError = MathUtil.angleModulus(toTargetHeading - currentHeading);
         remainingDistance = toEnd.getNorm();
         
         double alpha = 0;
         if(!turnedToTarget) {
             if(Math.abs(driveHeadingError) < MAX_INITIAL_TURN_ERROR) {
                 turnedToTarget = true;
-                initialHeading = toEnd.getAngle().getRadians();
+                initialHeading = toTargetHeading;
             } else {
                 alpha = currentHeading + Utilities.clamp(driveHeadingError, -turnRate, turnRate);
             }
         }
         if(turnedToTarget) {
-            alpha = 2*toEnd.getAngle().getRadians() - initialHeading;
+            alpha = 2*toTargetHeading - initialHeading;
         }
         double vel = isFinal ? Math.min(remainingDistance * KVelocity, v) : v;
         double headingError = targetHeading - pose.getRotation().getRadians();
