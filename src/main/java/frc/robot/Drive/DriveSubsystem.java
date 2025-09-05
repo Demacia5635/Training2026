@@ -35,6 +35,7 @@ public class DriveSubsystem extends SubsystemBase {
     SwerveDrivePoseEstimator poseEstimator;
     Field2d robotField;
     SwerveDriveKinematics kinematics;
+    UdiKinematics1 udiKinematics1;
     Pigeon2 gyro;
     MotorInterface[] steerMotors;
     MotorInterface[] driveMotors;
@@ -68,6 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
             moduleNames[i] = Constants.CONFIGS[i].name;
         }
         kinematics = new SwerveDriveKinematics(modulePositionOnRobot);
+        udiKinematics1 = new UdiKinematics1(modulePositionOnRobot);
         gyro = new Pigeon2(Constants.GYRO_ID, Constants.GYRO_CANBUS);
         gyroSignal = gyro.getYaw();
         poseEstimator = new SwerveDrivePoseEstimator(kinematics, getGyroRotation(), modulePositions,new Pose2d());
@@ -161,13 +163,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     public Command getTestCommand() {
         return new InstantCommand(()->resetPose(new Translation2d(0,6),new Rotation2d(0))).andThen(
-            new DriveTo(4, 6, 2, 1, this, false),
-            new RotateTo(6, 3, 2, 0, 90, this),
-            new DriveTo(6, 3, 2, -1, this, false),
-            new RotateTo(2, 3, 2, 0, 90, this),
-            new DriveTo(2, 3, 2, -1, this, false),
-            new RotateTo(0, 6, 2, 0, 90, this),
-            new DriveTo(0, 6, 2, 1, this, true));
+            new DriveTo(4, 6, 1000, 2, 1, 90, this, false),
+            new DriveTo(6, 3, 2, -1000, -1, 90, this, false),
+            new DriveTo(2, 3, 2, 1000,  -1, 90, this, false),
+            new DriveTo(0, 6, 0, 2, 1, 90, this, true));
     }
 
     @Override

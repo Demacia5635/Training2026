@@ -19,11 +19,11 @@ public class SwerveModule implements Sendable {
     private MotorInterface drive;
     private Cancoder absEncoder;
     protected Constants.ModuleConfig config;
-    protected SwerveModuleState state = new SwerveModuleState(0, new Rotation2d());
     protected SwerveModulePosition position = new SwerveModulePosition(0, new Rotation2d());
     private double lastSteerPosition = 0;
     private double steerCorrection = 0;
     private double driveTarget = 0;
+    protected frc.robot.Drive.SwerveModuleState state = new frc.robot.Drive.SwerveModuleState(0, 0, 0);
 
 
     SwerveModule(Constants.ModuleConfig config) {
@@ -52,6 +52,7 @@ public class SwerveModule implements Sendable {
         position.distanceMeters = drive.getCurrentPosition() + steerPosition * Constants.STEER_TO_DISTANCE_RATIO;
         state.angle.setDegrees(steerPosition);
         state.speedMetersPerSecond = drive.getCurrentVelocity() +  steer.getCurrentVelocity() * Constants.STEER_TO_DISTANCE_RATIO;
+        state.distanceMeters = position.distanceMeters;
     }
 
     private void optimaizeTarget() {
