@@ -78,7 +78,6 @@ public class Path {
                 double offset = Math.PI/2;
                 double angle = angleFromLast + (positiveTurn ? -offset: offset);
                 Translation2d t = new Translation2d(radius, new Rotation2d(angle));
-                System.out.println("angleFrom=" + angleFromLast + " offset=" + offset + " radius=" + radius + " l=" + length + " angle= " + angle + " t=" + t);
                 startTurn = center.plus(t);
                 prev.endTurn = prev.center.plus(t);
             } else { // mid point = reverse turn
@@ -158,7 +157,6 @@ public class Path {
        calculateTurnCenters();
         calculateTurnPoints();
         calculateDistances();
-        print();
         Field2d fld = new Field2d();
         fld.setRobotPose(startPose);
         SmartDashboard.putData("path", fld);
