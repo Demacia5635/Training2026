@@ -1,11 +1,11 @@
-package frc.robot;
+package frc.Demacia.utils;
 
 public class Utilities {
 
     public static double clamp(double value, double min, double max) {
         return value < min ? min : value > max ? max : value;
     }
-    public static double clampAroundZero(double value, double max) {
+    public static double clamp(double value, double max) {
         return clamp(value, -max, max);
     }
     public static double deadband(double value, double deadband) {
@@ -14,5 +14,5 @@ public class Utilities {
     public static double signumWithDeadband(double value, double deadband) {
         return value > deadband ? 1 : value < -deadband ? -1 : 0;
     }
-    
+
 }

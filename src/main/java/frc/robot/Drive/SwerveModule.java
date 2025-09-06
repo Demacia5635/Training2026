@@ -8,11 +8,11 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.Demacia.utils.Utilities;
 import frc.Demacia.utils.Motors.MotorCommands;
 import frc.Demacia.utils.Motors.MotorInterface;
 import frc.Demacia.utils.Motors.TalonMotor;
 import frc.Demacia.utils.Sensors.Cancoder;
-import frc.robot.Utilities;
 
 public class SwerveModule implements Sendable {
     private MotorInterface steer;
@@ -64,7 +64,7 @@ public class SwerveModule implements Sendable {
             driveTarget = -driveTarget;
         }
         double add = steerCorrection * Constants.STATE_STEER_ADDITION;
-        steerCorrection += Utilities.clampAroundZero(add, Constants.MAX_SET_STATE_STEER_ADDITION);
+        steerCorrection += Utilities.clamp(add, Constants.MAX_SET_STATE_STEER_ADDITION);
     }
 
     public void setState(SwerveModuleState state) {

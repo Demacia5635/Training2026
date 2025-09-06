@@ -6,7 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Utilities;
+import frc.Demacia.utils.Utilities;
 
 public class DriveTo extends Command {
     double x;
@@ -83,7 +83,7 @@ public class DriveTo extends Command {
         if(targetHeadingReal) {
             headingError = MathUtil.angleModulus(headingError);
         }
-        double omega = Utilities.clampAroundZero(headingError*KOmega, maxOmega);
+        double omega = Utilities.clamp(headingError*KOmega, maxOmega);
         drive.setSpeeds(new ChassisSpeeds(vel*Math.cos(alpha),vel*Math.sin(alpha),omega));
     } 
 

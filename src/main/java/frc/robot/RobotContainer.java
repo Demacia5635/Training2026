@@ -21,7 +21,7 @@ public class RobotContainer {
   public Path path = new Path(new Pose2d(0,6,Rotation2d.kZero),new Pose2d(0,6, Rotation2d.kZero), 
         new Translation2d[]{new Translation2d(4,6), new Translation2d(6,3), new Translation2d(2,3)},
         1, 2, 90, 90, 6);
-        
+
   public RobotContainer(Robot robot) {
     RobotContainer.robot = robot;
     RobotContainer.CYCLE_TIME = robot.getPeriod();

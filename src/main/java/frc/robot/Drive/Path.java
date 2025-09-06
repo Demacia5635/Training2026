@@ -24,6 +24,7 @@ public class Path {
         Translation2d toCenter;
         boolean positiveTurn = true;
         double radius;
+        double remainingDistance = 0;
 
         PathPoint prev = null;
         PathPoint next = null;
@@ -89,6 +90,17 @@ public class Path {
             }
         }
 
+        void calculateDistance() {
+            if(prev == null) { // first
+                remainingDistance = next.remainingDistance + point.getDistance(next.startTurn);
+            } else if(next == null) {
+                remainingDistance = 0;
+            } else {
+                remainingDistance = next.remainingDistance + 2*radius*Math.asin(startTurn.getDistance(endTurn) / radius / 2) + endTurn.getDistance(next.startTurn);
+            }
+
+        }
+
         @Override
         public String toString() {
             return String.format("point=%s center=%s start=%s end=%s from=%s to=%s positive=%b radius=%f", point, center, startTurn, endTurn, fromPrev, toCenter, positiveTurn, radius);
@@ -105,6 +117,7 @@ public class Path {
     double maxOmega;
     double maxTurnRate;
     double maxAcceleration;
+    double maxCentrifugalG;
     /**
      * 
      * @param startPose
@@ -142,8 +155,9 @@ public class Path {
         this.maxOmega = maxOmega;
         this.maxTurnRate = maxTurnRate;
         this.maxAcceleration = maxAcceleration;
-        calculateTurnCenters();
+       calculateTurnCenters();
         calculateTurnPoints();
+        calculateDistances();
         print();
         Field2d fld = new Field2d();
         fld.setRobotPose(startPose);
@@ -161,6 +175,12 @@ public class Path {
         }
         last.toCenter = last.center.minus(last.prev.center);
     }
+    private void calculateDistances() {
+        for(PathPoint p = last; p != null; p = p.prev) {
+            p.calculateDistance();
+        }
+        last.toCenter = last.center.minus(last.prev.center);
+    }
 
 
     private void calculateTurnPoints() {
@@ -169,21 +189,21 @@ public class Path {
         }
     }
 
-    private List<Pose2d> getCenters(Rotation2d rot) {
+    public List<Pose2d> getCenters(Rotation2d rot) {
         ArrayList<Pose2d> l = new ArrayList<>();
         for(PathPoint p = first; p != null; p = p.next) {
             l.add(new Pose2d(p.center, rot));
         }
         return l;
     } 
-    private List<Pose2d> getPoints(Rotation2d rot) {
+    public List<Pose2d> getPoints(Rotation2d rot) {
         ArrayList<Pose2d> l = new ArrayList<>();
         for(PathPoint p = first; p != null; p = p.next) {
             l.add(new Pose2d(p.point, rot));
         }
         return l;
     } 
-    private List<Pose2d> getTurnPoints(Rotation2d rot) {
+    public List<Pose2d> getTurnPoints(Rotation2d rot) {
         ArrayList<Pose2d> l = new ArrayList<>();
         for(PathPoint p = first; p != null; p = p.next) {
             l.add(new Pose2d(p.startTurn, rot));
