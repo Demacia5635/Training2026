@@ -85,13 +85,4 @@ public static final ModuleConfig[] CONFIGS1 = {
     new ModuleConfig(11, 10, 12, X_POSITION, Y_POSITION, 150.6)
 };
 
-public static final TalonConfig DRIVE_CONFIG = new TalonConfig(10, Canbus.Rio, "BASE_DRIVE")
-            .withBrake(true)
-            .withCurrent(30)
-            .withMeterMotor(L1_DRIVE_RATIO, WHEEL_DIAMETER)
-            .withInvert(false)
-            .withPID(10, 0, 0, 0.0, 0.0, 0.0, 0)
-            .withRampTime(0.2)
-            .withMotionParam(3.5, 6.5, 10)
-            .withVolts(12);
 }
