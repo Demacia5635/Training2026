@@ -3,16 +3,18 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.subsystems.BaseSwerveModule;
 import frc.Demacia.utils.Motors.TalonConfig;
-
+import frc.robot.utils; 
 public class BaseChassis extends SubsystemBase {
   /** Creates a new BaseChassis. */
+  public utils utils;
   public TalonConfig lbSteer;
   public TalonConfig lbDrive;
   public int lbEncoder;
@@ -73,4 +75,31 @@ public class BaseChassis extends SubsystemBase {
     rightBackModule.setSteerPosition(targetPosition + ModuleConstants.absEncoderRBcali);
     rightFrontModule.setSteerPosition(targetPosition + ModuleConstants.absEncoderRFcali);
   }
+  // Ensure utils is defined or imported before using it
+  public void hishuvim(){
+    double pizzaSpeed = utils.driveparameter() * 2;
+    double kivun= utils.driveparameter();   
+ kinematics.toSwerveModuleStates(pizzaSpeed,pizzaSpeed,45);                                          
+
+
+
+
+
+
+robotSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(pizzaSpeed, getRobotAngle());
+
+SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+  new Translation2d[] {
+    new Translation2d(0.35, 0.3),
+    new Translation2d(0.35, -0.3),
+    new Translation2d(-0.35, 0.3),
+    new Translation2d(-0.35, -0.3)});
+kinematics.toSwerveModuleStates()                                          
+kinematics.toChassisSpeeds() 
 }
+}
+
+
+
+
+  

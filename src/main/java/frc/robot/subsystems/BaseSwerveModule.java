@@ -40,7 +40,7 @@ public class BaseSwerveModule extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void setDriveVelocity(double velocity){
-    drive.setVelocity(velocity);
+    drive.setVelocity(velocity*2);
   }
   public void setSteerPosition(double position){
     steer.setAngle(position);
