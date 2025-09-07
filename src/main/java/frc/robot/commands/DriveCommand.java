@@ -40,6 +40,7 @@ public class DriveCommand extends Command {
     @Override
     public void initialize() {
       wantSpeeds = new ChassisSpeeds(wantedSpeedsX,wantedSpeedsY,wantedRot);
+      chassis.resetGyro();
       direction = IsRed ? 1:-1;
       // = xboxController.getLeftY() * direction;
      // = xboxController.getLeftX() * direction;   
