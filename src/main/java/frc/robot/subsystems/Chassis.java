@@ -8,13 +8,14 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Chassis extends SubsystemBase {
-    // מודולי הסרב
+
     private final SwerveModule fl = new SwerveModule(Constants.CAN.FL_DRIVE_ID, Constants.CAN.FL_STEER_ID,Constants.CAN.FL_CANcoder_ID,Constants.CAN.FL_CANcoder_Ofset);
     private final SwerveModule fr = new SwerveModule(Constants.CAN.FR_DRIVE_ID, Constants.CAN.FR_STEER_ID,Constants.CAN.FR_CANcoder_ID,Constants.CAN.FR_CANcoder_Ofset);
     private final SwerveModule bl = new SwerveModule(Constants.CAN.BL_DRIVE_ID, Constants.CAN.BL_STEER_ID,Constants.CAN.BL_CANcoder_ID,Constants.CAN.BL_CANcoder_Ofset);
@@ -24,6 +25,8 @@ public class Chassis extends SubsystemBase {
     private final Pigeon2 gyro = new Pigeon2(Constants.CAN.PIGEON_ID);
     private final Field2d field = new Field2d();
     private final SwerveDrivePoseEstimator poseEstimator;
+    private final XboxController xboxController = new XboxController(Constants.OperatorConstants.kDriverControllerPort);
+
 
     public Chassis() {
         gyro.reset();
@@ -31,17 +34,17 @@ public class Chassis extends SubsystemBase {
         SmartDashboard.putData("Field", field);
     }
 
-    /** מחזיר את כיוון הרובוט (yaw) ביחס למגרש */
+   
     public Rotation2d getHeading() {
         return Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble());
     }
 
-    /** מאפס את כיוון הראש ל־0° */
+    
     public void zeroHeadingToField() {
         gyro.setYaw(0.0);
     }
 
-    /** מחזיר מערך של מצבי מודולי הסרב (Position) */
+    
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
             new SwerveModulePosition(fl.getDrivePosition(), new Rotation2d(fl.getSteerPosition())),
@@ -51,7 +54,7 @@ public class Chassis extends SubsystemBase {
         };
     }
 
-    /** מפעיל את הרובוט עם מהירויות נתונות, עם או בלי field-relative */
+  
     public void drive(ChassisSpeeds speeds, boolean fieldRelative) {
         ChassisSpeeds applied = fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getHeading())
@@ -73,7 +76,6 @@ public class Chassis extends SubsystemBase {
         br.setSteerAngle(states[3].angle.getDegrees());
     }
 
-    /** עוצר את כל המנועים */
     public void stop() {
         fl.setDriveSpeed(0);
         fr.setDriveSpeed(0);
@@ -81,7 +83,6 @@ public class Chassis extends SubsystemBase {
         br.setDriveSpeed(0);
     }
 
-    /** מאפס את כל מודולי הסרב למצב "קדימה" */
     public void faceForwardAll() {
         fl.setSteerAngle(0);
         fr.setSteerAngle(0);
@@ -89,32 +90,25 @@ public class Chassis extends SubsystemBase {
         br.setSteerAngle(0);
     }
 
-    /** מחזיר את הפוזה הנוכחית */
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPosition();
     }
 
-    /** מאפס את הפוזה */
     public void resetPose(Pose2d pose) {
         poseEstimator.resetPosition(getHeading(), getModulePositions(), pose);
     }
 
-    /** קריאה מחזורית */
     @Override
     public void periodic() {
-        // עדכון PoseEstimator
         poseEstimator.update(getHeading(), getModulePositions());
 
-        // עדכון Field2d
         Pose2d pose = getPose();
         field.setRobotPose(pose);
 
-        // עדכון ל‑SmartDashboard
         SmartDashboard.putNumber("Pose/X", pose.getX());
         SmartDashboard.putNumber("Pose/Y", pose.getY());
         SmartDashboard.putNumber("Pose/HeadingDeg", pose.getRotation().getDegrees());
 
-        // ניתן להוסיף גם log של מודולים
         fl.logToDashboard("FL");
         fr.logToDashboard("FR");
         bl.logToDashboard("BL");

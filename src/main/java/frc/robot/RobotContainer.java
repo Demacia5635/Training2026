@@ -5,12 +5,17 @@
 package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
-  public RobotContainer(Robot robot) {
+  public static final int N_CYCLE = 0;
+public RobotContainer(Robot robot) {
+  
+  
     configureBindings();
   }
    private void configureBindings() {
+    
   }
   public void periodic() { 
+    
   }
   public Command getAutonomousCommand() {
     return null;
