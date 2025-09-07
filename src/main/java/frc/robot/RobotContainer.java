@@ -4,9 +4,9 @@
 
 package frc.robot;
 
-import frc.robot.commands.MyFirstSubsystemCommand;
-import frc.robot.commands.MyFirstSubsystemCommand;
-import frc.robot.subsystems.ModuleSubsystem;
+import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveCommand;
+import frc.robot.subsystems.SwerveModule;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ModuleSubsystem subsystem = new ModuleSubsystem();
-  private final MyFirstSubsystemCommand autoCommand = new MyFirstSubsystemCommand(subsystem);
+  private final SwerveModule subsystem = new SwerveModule();
+  private final DriveCommand autoCommand = new DriveCommand(subsystem);
 
 
   

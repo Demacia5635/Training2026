@@ -16,6 +16,7 @@ public final class Constants {
   public static class MyFirstSubsystemConstants {
     public static final int Drive_MOTOR_ID = 10;
     public static final int steer_Motor_ID= 11;
+    public static final int Gyro_Id= 8;
     public static final String MOTOR_CAN = "rio";
     public static final double Drive_ratio = 12.8;
     public static final double Deegree_ratio = 6.14;
