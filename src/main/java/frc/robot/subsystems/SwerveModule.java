@@ -24,8 +24,6 @@ public class SwerveModule extends SubsystemBase {
     public SwerveModule(String name){
         super();
         this.name=name;
-        DriveMotor = new TalonFX(Constants.MyFirstSubsystemConstants.Drive_MOTOR_ID,Constants.MyFirstSubsystemConstants.MOTOR_CAN);
-        SteerMotor = new TalonFX(Constants.MyFirstSubsystemConstants.steer_Motor_ID, Constants.MyFirstSubsystemConstants.MOTOR_CAN);
         SteerController = new PIDController(Constants.MyFirstSubsystemConstants.Kp,Constants.MyFirstSubsystemConstants.Ki, Constants.MyFirstSubsystemConstants.Kd);
         DriveController = new PIDController(Constants.MyFirstSubsystemConstants.kp2,Constants.MyFirstSubsystemConstants.ki2, Constants.MyFirstSubsystemConstants.kd2);
         FF = new SimpleMotorFeedforward(Constants.MyFirstSubsystemConstants.kS, Constants.MyFirstSubsystemConstants.kV);
@@ -36,6 +34,10 @@ public class SwerveModule extends SubsystemBase {
     public void SetPositionSteer(double Angle){
         SteerMotor.setPosition(Angle);
     }
+    public void SetMotor(int steermotorID, int DrivemotorID){
+        SteerMotor = new TalonFX(steermotorID,Constants.MyFirstSubsystemConstants.MOTOR_CAN);
+        DriveMotor = new TalonFX(DrivemotorID,Constants.MyFirstSubsystemConstants.MOTOR_CAN);
+    }
 
     public void setPowerDriveMotor(double power){
         DriveMotor.set(power);
@@ -43,6 +45,9 @@ public class SwerveModule extends SubsystemBase {
         DriveController.setIntegratorRange(-0.1, 0.1);
         SteerController.setTolerance(1.0);
         SteerController.setIntegratorRange(-1, 1);
+    }
+    public void setPowerAll(double power){
+        DriveMotor.set(power);
     }
     public void setPowerSteerMotor(double power){
         SteerMotor.set(power);
@@ -56,6 +61,11 @@ public class SwerveModule extends SubsystemBase {
         setPowerDriveMotor(0.0);
         setPowerSteerMotor(0.0);
     }
+
+    /**
+     * 
+     * @return velocity in m/s
+     */
     public double GetVelocityDrive() {
         return ((DriveMotor.getVelocity().getValueAsDouble())/Constants.MyFirstSubsystemConstants.Drive_ratio)*Constants.MyFirstSubsystemConstants.Drive_Radios_In_Meter*2*Math.PI;
     }

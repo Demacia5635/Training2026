@@ -14,8 +14,14 @@ package frc.robot;
  */
 public final class Constants {
   public static class MyFirstSubsystemConstants {
-    public static final int Drive_MOTOR_ID = 10;
-    public static final int steer_Motor_ID= 11;
+    public static final int Drive_MOTOR_ID_Front_left= 10;
+    public static final int steer_Motor_ID_Front_left= 11;
+    public static final int steer_Motor_ID_Front_right= 11;
+    public static final int Drive_Motor_ID_Front_right= 11;
+    public static final int steer_Motor_ID_back_left= 11;
+    public static final int Drive_Motor_ID_back_left= 11;
+    public static final int steer_Motor_ID_back_right= 11;
+    public static final int Drive_Motor_ID_back_right= 11;
     public static final int Gyro_Id= 8;
     public static final String MOTOR_CAN = "rio";
     public static final double Drive_ratio = 12.8;
@@ -27,6 +33,7 @@ public final class Constants {
     public static final double kp2 = 0.015;
     public static final double ki2 = 0.0000;
     public static final double kd2 = 0.001;
+    public static final int DriveID = 7;
     public static double kS = 0.0;
     public static double kV = 0.00938;
 
@@ -35,4 +42,8 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int DriverControllerPort = 0;
   }
+
+public static  double MAX_ROTATIONAL_VELOCITY;
+public static  double MAX_DRIVE_VELOCITY_Y;
+public static  double MAX_DRIVE_VELOCITY_X;
 }
