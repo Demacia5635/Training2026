@@ -24,6 +24,10 @@ public final class Constants {
   public static class DriverConstants{
     public static final int DriverID = 0;
   }
+  public static class ChassisConstans{
+    public static final String GYRO_CAN_BUS = "rio";
+    public static final int GYRO_ID = 1; 
+  }
   public static class Encoders {
     public static final int LB_ENCODER = 9;
     public static final int LF_ENCODER = 3;
