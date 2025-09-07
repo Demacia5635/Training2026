@@ -3,16 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import frc.robot.commands.Drive;
 import frc.robot.commands.DriveController;
 import frc.robot.commands.GoToAngle;
-import frc.robot.commands.KsAkvCalc;
 import frc.robot.commands.VelocityLoopcontrol;
-import frc.robot.subsystems.MyFirstSubsystem;
 import frc.robot.subsystems.PizzaMotor;
 import frc.robot.subsystems.SwervePizza;
-import frc.robot.subsystems.DemaciaMotorExample;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RobotContainer {
@@ -20,15 +15,15 @@ public class RobotContainer {
   public static double CYCLE_TIME = 0.02;
   public static Robot robot;
   // The robot's subsystems and commands are defined here...
-  private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
+  //private final MyFirstSubsystem subsystem = new MyFirstSubsystem();
   private final PizzaMotor PizzaMotor = new PizzaMotor();
   private final SwervePizza PizzaPizza = new SwervePizza();
  //private final Command Velocity1 = new VelocityLoopcontrol(subsystem, 1, 0.001, -0.1, 1.3, 0.0, 0.0);
  //private final Command Velocity2= new VelocityLoopcontrol(subsystem, 2, 0.001, -0.1, 1.3, 0.0, 0.0);
  //private final Command Velocity_1 = new VelocityLoopcontrol(subsystem, -1, 0.001, -0.1, 1.3, 0.0, 0.0);
  //private final Command Velocity_2 = new VelocityLoopcontrol(subsystem, -2, 0.001, -0.1, 1.3, 0.0, 0.0);
-  private final Command drive21 = new Drive(subsystem, 100, 0.01, 0.0, 0.0);
-  private final Command Pizza = new KsAkvCalc(subsystem, 5);
+  //private final Command drive21 = new Drive(subsystem, 100, 0.01, 0.0, 0.0);
+  //private final Command Pizza = new KsAkvCalc(subsystem, 5);
   //private final Command Pizza2 = new VelocityLoopcontrol(PizzaMotor);
  // private final Command PizzaGoToMexcicna = new GoToAngle(PizzaMotor);
   private final Command Pizzasofinizachno = new DriveController(PizzaPizza);

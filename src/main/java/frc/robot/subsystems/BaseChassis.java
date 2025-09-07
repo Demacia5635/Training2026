@@ -61,16 +61,16 @@ public class BaseChassis extends SubsystemBase {
 
 
   }
-  public void driveSetPower(double signPower){
-    leftBackModule.driveSetPower(signPower);
-    leftFrontModule.driveSetPower(signPower);
-    rightBackModule.driveSetPower(signPower);
-    rightFrontModule.driveSetPower(signPower);
+  public void driveSetPower(double velocity){
+    leftBackModule.setDriveVelocity(velocity);
+    leftFrontModule.setDriveVelocity(velocity);
+    rightBackModule.setDriveVelocity(velocity);
+    rightFrontModule.setDriveVelocity(velocity);
   }
   public void setPowerForPosition(double targetPosition){
-    leftBackModule.setPowerForPosition(targetPosition+ ModuleConstants.absEncoderLBcali);
-    leftFrontModule.setPowerForPosition(targetPosition+ ModuleConstants.absEncoderLFcali);
-    rightBackModule.setPowerForPosition(targetPosition + ModuleConstants.absEncoderRBcali);
-    rightFrontModule.setPowerForPosition(targetPosition + ModuleConstants.absEncoderRFcali);
+    leftBackModule.setSteerPosition(targetPosition+ ModuleConstants.absEncoderLBcali);
+    leftFrontModule.setSteerPosition(targetPosition+ ModuleConstants.absEncoderLFcali);
+    rightBackModule.setSteerPosition(targetPosition + ModuleConstants.absEncoderRBcali);
+    rightFrontModule.setSteerPosition(targetPosition + ModuleConstants.absEncoderRFcali);
   }
 }
