@@ -32,7 +32,7 @@ public class Chassis {
             new SwerveModule("BackRight"),
 
         };
-        gyro = new Pigeon2(Constants.MyFirstSubsystemConstants.Gyro_Id,Constants.MyFirstSubsystemConstants.MOTOR_CAN);
+        gyro = new Pigeon2(Constants.MyFirstSubsystemConstants.Gyro_Id,Constants.MyFirstSubsystemConstants.Gyro_Can);
             kinematicsFix = new SwerveDriveKinematics(
             new Translation2d[] {
                 new Translation2d(0.35, 0.3),
