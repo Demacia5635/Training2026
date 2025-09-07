@@ -4,12 +4,9 @@
 
 package frc.robot;
 
-import frc.robot.Drive.Path;
-import frc.robot.subsystems.DemaciaMotorExample;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.Drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
 
@@ -17,11 +14,9 @@ public class RobotContainer {
   public static int N_CYCLE = 0;
   public static double CYCLE_TIME = 0.02;
 
-  public DemaciaMotorExample demaciaMotorExample = new DemaciaMotorExample();
-  public Path path = new Path(new Pose2d(0,6,Rotation2d.kZero),new Pose2d(0,6, Rotation2d.kZero), 
-        new Translation2d[]{new Translation2d(4,6), new Translation2d(6,3), new Translation2d(2,3)},
-        1, 2, 90, 90, 6);
-
+  public CommandXboxController drivController = new CommandXboxController(0);
+  public DriveSubsystem drive = new DriveSubsystem(drivController); 
+  
   public RobotContainer(Robot robot) {
     RobotContainer.robot = robot;
     RobotContainer.CYCLE_TIME = robot.getPeriod();
