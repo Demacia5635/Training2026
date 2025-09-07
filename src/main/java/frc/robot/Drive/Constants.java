@@ -18,7 +18,7 @@ public class Constants {
     public static final double X_POSITION = 0.35;
     public static final double Y_POSITION = 0.3;
 
-    public static final int GYRO_ID = 13;
+    public static final int GYRO_ID = 14;
     public static final CANBus GYRO_CANBUS = Canbus.Rio.canbus;
 
     public static double CYCLE_TIME = 0.02;
@@ -76,10 +76,10 @@ public class Constants {
     }
 
     public static final ModuleConfig[] CONFIGS = {
-        new ModuleConfig(1, 2, 3, X_POSITION, Y_POSITION, 22.6),
-        new ModuleConfig(4, 5, 6, X_POSITION, -Y_POSITION, 35.7),
-        new ModuleConfig(7, 8, 9, -X_POSITION, Y_POSITION, 50.0),
-        new ModuleConfig(10, 11, 12, -X_POSITION, -Y_POSITION, 150.6)
+        new ModuleConfig(2, 1, 3, X_POSITION, Y_POSITION, 22.6),
+        new ModuleConfig(5, 4, 6, X_POSITION, -Y_POSITION, 35.7),
+        new ModuleConfig(8, 7, 9, -X_POSITION, Y_POSITION, 50.0),
+        new ModuleConfig(11, 10, 12, -X_POSITION, -Y_POSITION, 150.6)
 };
 public static final ModuleConfig[] CONFIGS1 = {
     new ModuleConfig(11, 10, 12, X_POSITION, Y_POSITION, 150.6)
