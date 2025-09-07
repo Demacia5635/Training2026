@@ -23,9 +23,9 @@ public double driveparameter() {
     }
 }
     public double pizzasteerparmeter(double pastAngle) {
-        if (Math.abs(controller.getLeftY())> 0.7 && Math.abs(controller.getLeftX()) >0.7) {
-            double leftjoystickY = controller.getLeftY();
-            double leftjoystickX = controller.getLeftX();
+        double leftjoystickY = controller.getLeftY();
+         double leftjoystickX = controller.getLeftX();
+        if (Math.abs(controller.getLeftY())> 0.13 && Math.abs(controller.getLeftX()) >0.13) {
             double anglepizza = Math.atan(leftjoystickX/leftjoystickY); 
             return anglepizza;
         }

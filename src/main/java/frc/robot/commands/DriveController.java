@@ -14,13 +14,13 @@ public class DriveController extends Command {
   /** Creates a new DriveController. */
   private final SwervePizza subsystem;
   private double steerTarget;
-  private final controllerpizza controllerpizza;
+  private final utils utils;
   
   public DriveController(SwervePizza subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
 this.subsystem = subsystem;
 this.steerTarget = 0;
-this.controllerpizza = new controllerpizza();
+this.utils = new utils();
 addRequirements(subsystem);
 
 
@@ -36,9 +36,9 @@ addRequirements(subsystem);
   @Override
   public void execute() {
     double pastAngle = steerTarget;
-    double drivepower = controllerpizza.driveparameter();
-    subsystem.pizza.driveSetPower(drivepower);
-    double steerTarget = controllerpizza.pizzasteerparmeter(pastAngle);
+    double velocitypizza = utils.driveparameter();
+    subsystem.pizza.driveSetvelocity(velocitypizza);
+    double steerTarget = utils.pizzasteerparmeter(pastAngle);
     subsystem.pizza.setPowerForPosition(steerTarget);
   }
 

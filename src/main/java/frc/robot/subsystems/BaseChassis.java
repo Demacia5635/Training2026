@@ -61,7 +61,7 @@ public class BaseChassis extends SubsystemBase {
 
 
   }
-  public void driveSetPower(double velocity){
+  public void driveSetvelocity(double velocity){
     leftBackModule.setDriveVelocity(velocity);
     leftFrontModule.setDriveVelocity(velocity);
     rightBackModule.setDriveVelocity(velocity);
