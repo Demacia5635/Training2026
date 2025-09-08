@@ -42,5 +42,10 @@ public class Drive extends Command {
   @Override
   public void end(boolean interrupted) {
     chassis.stop();
+
+  }
+  @Override
+  public boolean isFinished() {
+    return false;
   }
 }
