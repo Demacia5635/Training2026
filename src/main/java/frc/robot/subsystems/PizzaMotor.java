@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
 import frc.Demacia.utils.Motors.MotorInterface;
@@ -15,17 +17,27 @@ import frc.Demacia.utils.Motors.TalonMotor;
 public class PizzaMotor extends SubsystemBase {
     public MotorInterface driveMotor; 
     public MotorInterface steerMotor;
+    public double pTargetV;
 
   public PizzaMotor() {
     super();
   driveMotor = new TalonMotor(Constants.MotorsConfig.DRIVE_CONFIG);
   steerMotor = new TalonMotor(Constants.MotorsConfig.STEER_CONFIG);
-
+ SmartDashboard.putData("pizza motor", this);
   }
-
+ double getTargetV(){
+  return pTargetV;
+ }
+ void setTargetV(double targetV){
+  this.pTargetV = targetV;
+ }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
-  
+  @Override
+ public void initSendable(SendableBuilder builder){
+    super.initSendable(builder);
+    builder.addDoubleProperty("pizza target velocity", ()->getTargetV(),(x)->setTargetV(x));
+ }
 }
