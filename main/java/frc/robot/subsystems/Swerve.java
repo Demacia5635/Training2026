@@ -28,7 +28,7 @@ public class Swerve extends SubsystemBase {
     );
 
     private SwerveModule[] modules;
-
+    
     public Swerve() {
          modules = new SwerveModule[4];
          modules[0] = new SwerveModule(new TalonFX(1), new TalonFX(2), new Encoder(0, 1));
