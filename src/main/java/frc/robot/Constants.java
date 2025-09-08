@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+
+import frc.Demacia.utils.Motors.SparkConfig;
+import frc.Demacia.utils.Motors.TalonConfig;
+import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -14,6 +19,7 @@ package frc.robot;
  */
 public final class Constants {
   public static class MyFirstSubsystemConstants {
+    public static final int MotorId = 7;
     public static final int Drive_MOTOR_ID_Front_left= 1;
     public static final int steer_Motor_ID_Front_left= 2;
     public static final int steer_Motor_ID_Front_right= 5;
@@ -34,17 +40,18 @@ public final class Constants {
     public static final double kp2 = 0.015;
     public static final double ki2 = 0.0000;
     public static final double kd2 = 0.001;
-    public static final int DriveID = 0;
+    public static final int DriveID = 7;
     public static double kS = 0.0;
     public static double kV = 0.00938;
-
+    public static final boolean MotorInverted = true;
   }
+
 
   public static class OperatorConstants {
     public static final int DriverControllerPort = 0;
   }
 
-public static  double MAX_ROTATIONAL_VELOCITY;
-public static  double MAX_DRIVE_VELOCITY_Y;
-public static  double MAX_DRIVE_VELOCITY_X;
+ public static  double MAX_ROTATIONAL_VELOCITY;
+ public static  double MAX_DRIVE_VELOCITY_Y;
+ public static  double MAX_DRIVE_VELOCITY_X;
 }
