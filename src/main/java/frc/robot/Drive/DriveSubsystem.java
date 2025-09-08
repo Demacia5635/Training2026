@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.Demacia.utils.DriverUtils;
+import frc.Demacia.utils.Utilities;
 import frc.Demacia.utils.Motors.MotorCommands;
 import frc.Demacia.utils.Motors.MotorInterface;
 import frc.Demacia.utils.Log.SwerveLogEntry;
@@ -147,14 +148,14 @@ public class DriveSubsystem extends SubsystemBase {
         // limit robot relative speeds to account for MAX accelration
         if(Math.abs(speeds.vxMetersPerSecond) > 0.1) {
             double currentX = currentChassisSpeeds.vxMetersPerSecond;
-            double newX = Math.min(Math.max(speeds.vxMetersPerSecond, currentX-Constants.MAX_X_VELOCITY_CHANGE),currentX+Constants.MAX_X_VELOCITY_CHANGE);
+            double newX = currentX + Utilities.clamp(speeds.vxMetersPerSecond-currentX, Constants.MAX_X_VELOCITY_CHANGE);
             double ratio = Math.abs(newX / speeds.vxMetersPerSecond);
             speeds.vxMetersPerSecond *= ratio;
             speeds.vyMetersPerSecond *= ratio;
         } 
         if(Math.abs(speeds.vyMetersPerSecond)  > 0.1) {
             double currentY = currentChassisSpeeds.vyMetersPerSecond;
-            double newY = Math.min(Math.max(speeds.vyMetersPerSecond, currentY-Constants.MAX_Y_VELOCITY_CHANGE),currentY+Constants.MAX_Y_VELOCITY_CHANGE);
+            double newY = currentY + Utilities.clamp(speeds.vyMetersPerSecond-currentY, Constants.MAX_Y_VELOCITY_CHANGE);
             double ratio = Math.abs(newY / speeds.vxMetersPerSecond);
             speeds.vxMetersPerSecond *= ratio;
             speeds.vyMetersPerSecond *= ratio;
