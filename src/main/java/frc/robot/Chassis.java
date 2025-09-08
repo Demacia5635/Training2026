@@ -16,9 +16,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.SwerveModule;
 
-public class Chassis {
+public class Chassis extends SubsystemBase{
     SwerveModule[] moudles;
     Pigeon2 gyro;
     SwerveDrivePoseEstimator poseEstimator;
@@ -26,10 +27,10 @@ public class Chassis {
     SwerveDriveKinematics kinematicsFix;
     public Chassis(){
         moudles=new SwerveModule[]{
-            new SwerveModule("FrontLeft"),
-            new SwerveModule("FrontRight"),
-            new SwerveModule("BackLeft"),
-            new SwerveModule("BackRight"),
+            new SwerveModule("FrontLeft",Constants.MyFirstSubsystemConstants.steer_Motor_ID_Front_left,Constants.MyFirstSubsystemConstants.Drive_MOTOR_ID_Front_left),
+            new SwerveModule("FrontRight",Constants.MyFirstSubsystemConstants.steer_Motor_ID_Front_right,Constants.MyFirstSubsystemConstants.Drive_Motor_ID_Front_right),
+            new SwerveModule("BackLeft",Constants.MyFirstSubsystemConstants.steer_Motor_ID_back_left,Constants.MyFirstSubsystemConstants.Drive_Motor_ID_back_left),
+            new SwerveModule("BackRight",Constants.MyFirstSubsystemConstants.steer_Motor_ID_back_right,Constants.MyFirstSubsystemConstants.Drive_Motor_ID_back_right),
 
         };
         gyro = new Pigeon2(Constants.MyFirstSubsystemConstants.Gyro_Id,Constants.MyFirstSubsystemConstants.Gyro_Can);
@@ -41,13 +42,9 @@ public class Chassis {
                 new Translation2d(-0.35, -0.3)
             }
         );
-        moudles[0].SetMotor(Constants.MyFirstSubsystemConstants.steer_Motor_ID_Front_left,Constants.MyFirstSubsystemConstants.Drive_MOTOR_ID_Front_left);
-        moudles[1].SetMotor(Constants.MyFirstSubsystemConstants.steer_Motor_ID_Front_right,Constants.MyFirstSubsystemConstants.Drive_Motor_ID_Front_right);
-        moudles[2].SetMotor(Constants.MyFirstSubsystemConstants.steer_Motor_ID_back_left,Constants.MyFirstSubsystemConstants.Drive_Motor_ID_back_left);
-        moudles[2].SetMotor(Constants.MyFirstSubsystemConstants.steer_Motor_ID_back_right,Constants.MyFirstSubsystemConstants.Drive_Motor_ID_back_right);
-        poseEstimator = new SwerveDrivePoseEstimator(kinematicsFix, getAngle(), null, new Pose2d());
+        poseEstimator = new SwerveDrivePoseEstimator(kinematicsFix, getAngle(), getModulePositions(), new Pose2d());
         field = new Field2d();
-        SmartDashboard.putData("reset gyro", new InstantCommand(this::resetGyro).ignoringDisable(true));
+        SmartDashboard.putData("reset gyro", new InstantCommand(() -> resetGyro()).ignoringDisable(true));
         SmartDashboard.putData("field", field);
             
     }
@@ -71,7 +68,7 @@ public class Chassis {
         return poseEstimator.getEstimatedPosition();
     }
     public void setVelocities(ChassisSpeeds wantedSpeeds, ChassisSpeeds speeds){
-        ChassisSpeeds robotSpeed = speeds.fromFieldRelativeSpeeds(wantedSpeeds, gyro.getRotation2d());
+        ChassisSpeeds robotSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(wantedSpeeds, gyro.getRotation2d());
         SwerveModuleState[] states = kinematicsFix.toSwerveModuleStates(robotSpeed);
         for(int i = 0; i < moudles.length; i++) {
             moudles[i].SetState(states[i]);

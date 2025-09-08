@@ -11,16 +11,12 @@ public class SetPoower extends Command {
     Timer Timer;
     public SetPoower(){
         moudles=new SwerveModule[]{
-            new SwerveModule("FrontLeft"),
-            new SwerveModule("FrontRight"),
-            new SwerveModule("BackLeft"),
-            new SwerveModule("BackRight"),
+            new SwerveModule("FrontLeft",Constants.MyFirstSubsystemConstants.steer_Motor_ID_Front_left,Constants.MyFirstSubsystemConstants.Drive_MOTOR_ID_Front_left),
+            new SwerveModule("FrontRight",Constants.MyFirstSubsystemConstants.steer_Motor_ID_Front_right,Constants.MyFirstSubsystemConstants.Drive_Motor_ID_Front_right),
+            new SwerveModule("BackLeft",Constants.MyFirstSubsystemConstants.steer_Motor_ID_back_left,Constants.MyFirstSubsystemConstants.Drive_Motor_ID_back_left),
+            new SwerveModule("BackRight",Constants.MyFirstSubsystemConstants.steer_Motor_ID_back_right,Constants.MyFirstSubsystemConstants.Drive_Motor_ID_back_right),
 
         };
-        moudles[0].SetMotor(Constants.MyFirstSubsystemConstants.steer_Motor_ID_Front_left,Constants.MyFirstSubsystemConstants.Drive_MOTOR_ID_Front_left);
-        moudles[1].SetMotor(Constants.MyFirstSubsystemConstants.steer_Motor_ID_Front_right,Constants.MyFirstSubsystemConstants.Drive_Motor_ID_Front_right);
-        moudles[2].SetMotor(Constants.MyFirstSubsystemConstants.steer_Motor_ID_back_left,Constants.MyFirstSubsystemConstants.Drive_Motor_ID_back_left);
-        moudles[2].SetMotor(Constants.MyFirstSubsystemConstants.steer_Motor_ID_back_right,Constants.MyFirstSubsystemConstants.Drive_Motor_ID_back_right);
         duration=10;
         
     }

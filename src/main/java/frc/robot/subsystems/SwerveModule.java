@@ -16,27 +16,25 @@ import com.ctre.phoenix6.hardware.TalonFX;
 public class SwerveModule extends SubsystemBase {
     TalonFX DriveMotor;
     TalonFX SteerMotor;
+    
     String name;
     private PIDController SteerController;
     private PIDController DriveController;
     private SimpleMotorFeedforward FF;
     Encoder encoder;
-    public SwerveModule(String name){
+    public SwerveModule(String name,int idsteer, int idDrive){
         super();
         this.name=name;
+        SteerMotor = new TalonFX(idsteer,Constants.MyFirstSubsystemConstants.MOTOR_CAN);
+        DriveMotor = new TalonFX(idDrive,Constants.MyFirstSubsystemConstants.MOTOR_CAN);
         SteerController = new PIDController(Constants.MyFirstSubsystemConstants.Kp,Constants.MyFirstSubsystemConstants.Ki, Constants.MyFirstSubsystemConstants.Kd);
         DriveController = new PIDController(Constants.MyFirstSubsystemConstants.kp2,Constants.MyFirstSubsystemConstants.ki2, Constants.MyFirstSubsystemConstants.kd2);
         FF = new SimpleMotorFeedforward(Constants.MyFirstSubsystemConstants.kS, Constants.MyFirstSubsystemConstants.kV);
-        encoder = new Encoder(0, 1);
 
         SmartDashboard.putData("SwerveModule", this);
     }
     public void SetPositionSteer(double Angle){
         SteerMotor.setPosition(Angle);
-    }
-    public void SetMotor(int steermotorID, int DrivemotorID){
-        SteerMotor = new TalonFX(steermotorID,Constants.MyFirstSubsystemConstants.MOTOR_CAN);
-        DriveMotor = new TalonFX(DrivemotorID,Constants.MyFirstSubsystemConstants.MOTOR_CAN);
     }
 
     public void setPowerDriveMotor(double power){

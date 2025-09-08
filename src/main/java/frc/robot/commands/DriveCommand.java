@@ -22,43 +22,42 @@ public class DriveCommand extends Command {
   private ChassisSpeeds wantSpeeds;
   private ChassisSpeeds speed;
   private double direction;
-  private double wantedSpeedsX;
-  private double wantedSpeedsY;
-  private double wantedRot;
+  private double lastSpeedsX;
+  private double lastSpeedsY;
+  private double lastwantedRot;
 
   double joyX;
   double joyY;
     public DriveCommand (Chassis chassis) {
-      SmartDashboard.putData(this);
-      chassis = new Chassis();
+      this.chassis = chassis;
       xboxController = new CommandXboxController(Constants.MyFirstSubsystemConstants.DriveID);
       IsRed=true;
-      wantedSpeedsX = 15.0;
-      wantedSpeedsY = 15.0;
-      wantedRot = 30.0;
+      addRequirements(chassis);
+      SmartDashboard.putData(this);
     }
     @Override
     public void initialize() {
-      wantSpeeds = new ChassisSpeeds(wantedSpeedsX,wantedSpeedsY,wantedRot);
-      chassis.resetGyro();
       direction = IsRed ? 1:-1;
+      chassis.resetGyro();
       // = xboxController.getLeftY() * direction;
      // = xboxController.getLeftX() * direction;   
 
     }
     @Override
     public void execute() {
-      joyX = xboxController.getLeftY() * direction;
-      joyY = xboxController.getLeftX() * direction;        
+      joyX = xboxController.getLeftX() * direction;
+      joyY = xboxController.getLeftY() * direction;        
       double rot = xboxController.getLeftTriggerAxis() - xboxController.getRightTriggerAxis();
-      double velX = Math.pow(joyX, 2) * 
-      Constants.MAX_DRIVE_VELOCITY_X * Math.signum(joyX);
-      double velY = Math.pow(joyY, 2) *
-      Constants.MAX_DRIVE_VELOCITY_Y * Math.signum(joyY);
-      double velRot = Math.pow(rot, 2) *
-      Constants.MAX_ROTATIONAL_VELOCITY*Math.signum(rot);
-      speed = new ChassisSpeeds(velX, velY,velRot);
+      double velX = Math.pow(joyX, 2) * 3.6;
+      double velY = Math.pow(joyY, 2) * 3.6;
+      double velRot = Math.pow(rot, 2) * 40;
+      wantSpeeds = new ChassisSpeeds(velX, velY,velRot);
       chassis.setVelocities(wantSpeeds,speed);
+      lastSpeedsX = velY;
+      lastSpeedsY = velY;
+      lastwantedRot = rot;
+      speed = new ChassisSpeeds(lastSpeedsX,lastSpeedsY,lastwantedRot);
+
 
     }
     @Override
