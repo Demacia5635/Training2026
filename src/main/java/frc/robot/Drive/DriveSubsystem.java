@@ -49,6 +49,7 @@ public class DriveSubsystem extends SubsystemBase {
     CommandXboxController controller;
     ChassisSpeeds targetChassisSpeeds = new ChassisSpeeds();
     Rotation2d gyroRotation = new Rotation2d();
+    Rotation2d lastGyroRotation = new Rotation2d();
 
     public DriveSubsystem(CommandXboxController controller) {
         super();
@@ -176,6 +177,7 @@ public class DriveSubsystem extends SubsystemBase {
         for(SwerveModule m : modules) {
             m.refreshStateAndPosition();
         }
+        lastGyroRotation.set(gyroRotation.getRadians());
         ChassisSpeeds t = kinematics.toChassisSpeeds(moduleStates);
         currentChassisSpeeds.vxMetersPerSecond = t.vxMetersPerSecond;
         currentChassisSpeeds.vyMetersPerSecond = t.vyMetersPerSecond;
