@@ -1,14 +1,15 @@
 package frc.Demacia.Sysid;
 
 import javax.swing.*;
+
+import frc.Demacia.Geometry.Pose2d;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
-
-import edu.wpi.first.math.geometry.Pose2d;
 
 /**
  * Visualizes robot positions on a field image

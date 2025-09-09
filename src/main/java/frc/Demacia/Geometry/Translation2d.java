@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package edu.wpi.first.math.geometry;
+package frc.Demacia.Geometry;
 
 import static edu.wpi.first.units.Units.Meters;
 
@@ -15,11 +15,8 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.proto.Translation2dProto;
 import edu.wpi.first.math.geometry.struct.Translation2dStruct;
-import edu.wpi.first.math.interpolation.Interpolatable;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.util.protobuf.ProtobufSerializable;
-import edu.wpi.first.util.struct.StructSerializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -34,7 +31,7 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE)
 public class Translation2d
-    implements Interpolatable<Translation2d>, ProtobufSerializable, StructSerializable {
+    extends edu.wpi.first.math.geometry.Translation2d {
   /**
    * A preallocated Translation2d representing the origin.
    *
@@ -311,7 +308,8 @@ public class Translation2d
    * @param translations The list of translations.
    * @return The nearest Translation2d from the list.
    */
-  public Translation2d nearest(List<Translation2d> translations) {
+  @Override
+  public edu.wpi.first.math.geometry.Translation2d nearest(List<edu.wpi.first.math.geometry.Translation2d> translations) {
     return Collections.min(translations, Comparator.comparing(this::getDistance));
   }
 
@@ -339,7 +337,7 @@ public class Translation2d
   }
 
   @Override
-  public Translation2d interpolate(Translation2d endValue, double t) {
+  public Translation2d interpolate(edu.wpi.first.math.geometry.Translation2d endValue, double t) {
     return new Translation2d(
         MathUtil.interpolate(this.getX(), endValue.getX(), t),
         MathUtil.interpolate(this.getY(), endValue.getY(), t));

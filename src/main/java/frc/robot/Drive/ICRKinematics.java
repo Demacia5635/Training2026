@@ -2,14 +2,14 @@ package frc.robot.Drive;
 
 import static edu.wpi.first.units.Units.Radians;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
+import frc.Demacia.Geometry.Pose2d;
+import frc.Demacia.Geometry.Rotation2d;
+import frc.Demacia.Geometry.Translation2d;
 import frc.Demacia.utils.StatusSignalData;
 import frc.Demacia.utils.Utilities;
 
@@ -67,9 +67,9 @@ public class ICRKinematics {
     private void copyCurrentToLast() {
         for(int i = 0; i < lastPositions.length; i++) {
             lastPositions[i].distanceMeters = currentPositions[i].distanceMeters;
-            lastPositions[i].angle.set(lastPositions[i].angle.getRadians());
+//            lastPositions[i].angle.set(lastPositions[i].angle.getRadians());
             lastStates[i].speedMetersPerSecond = currentStates[i].speedMetersPerSecond;
-            lastStates[i].angle.set(currentStates[i].angle.getRadians());
+//            lastStates[i].angle.set(currentStates[i].angle.getRadians());
         }
         lastHeading = currentHeading;
     }
@@ -78,7 +78,7 @@ public class ICRKinematics {
             velocities[i].speedMetersPerSecond = Utilities.deadband(
                 (currentStates[i].speedMetersPerSecond + lastStates[i].speedMetersPerSecond + 
                 (currentPositions[i].distanceMeters - lastPositions[i].distanceMeters)/dt)/3, VELOCITY_DEADBAND);
-            velocities[i].angle.set((currentStates[i].angle.getRadians() + lastStates[i].angle.getRadians())/2);
+//            velocities[i].angle.set((currentStates[i].angle.getRadians() + lastStates[i].angle.getRadians())/2);
         }
     }
 
@@ -195,9 +195,9 @@ public class ICRKinematics {
             double deltaDistance = currentPositions[i].distanceMeters - lastPositions[i].distanceMeters;
             
             if (Math.abs(deltaDistance) > 0.001) {
-                Rotation2d moduleAngle = currentPositions[i].angle;
-                totalDx += deltaDistance * moduleAngle.getCos();
-                totalDy += deltaDistance * moduleAngle.getSin();
+//                Rotation2d moduleAngle = currentPositions[i].angle;
+//                totalDx += deltaDistance * moduleAngle.getCos();
+//                totalDy += deltaDistance * moduleAngle.getSin();
                 validModules++;
             }
         }

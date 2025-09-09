@@ -2,7 +2,7 @@ package frc.robot.Drive;
 
 import com.ctre.phoenix6.CANBus;
 
-import edu.wpi.first.math.geometry.Translation2d;
+import frc.Demacia.Geometry.Translation2d;
 import frc.Demacia.utils.Motors.TalonConfig;
 import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
 import frc.Demacia.utils.Sensors.CancoderConfig;
@@ -37,7 +37,7 @@ public class Constants {
 
     public static boolean CANCODER_INVERTED = false;
 
-    public static final TalonConfig BASE_STEER_CONFIG = new TalonConfig(0, Canbus.Rio, "BASE_STEER")
+    public static final TalonConfig BASE_STEER_CONFIG = new TalonConfig(0, Canbus.CANIvore, "BASE_STEER")
             .withBrake(true)
             .withCurrent(15)
             .withDegreesMotor(MK4_STEER_RATIO)
@@ -46,7 +46,7 @@ public class Constants {
             .withRampTime(0.2)
             .withMotionParam(1000, 2000, 3000)
             .withVolts(8);
-    public static final TalonConfig BASE_DRIVE_CONFIG = new TalonConfig(0, Canbus.Rio, "BASE_DRIVE")
+    public static final TalonConfig BASE_DRIVE_CONFIG = new TalonConfig(0, Canbus.CANIvore, "BASE_DRIVE")
             .withBrake(true)
             .withCurrent(30)
             .withMeterMotor(L1_DRIVE_RATIO, WHEEL_DIAMETER)

@@ -1,7 +1,7 @@
 package frc.Demacia.utils;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import frc.Demacia.Geometry.Rotation2d;
+import frc.Demacia.Geometry.Translation2d;
 
 public class VectorUtils {
 

@@ -95,6 +95,7 @@ public class MotorCommands {
         RandomPowerGenerator generator = new RandomPowerGenerator(minPower,maxPower,rampTime);
         return new RunCommand(()->{
             double p = generator.next();
+            System.out.println(" random power - " + p);
             for(MotorInterface motor : motors) {
                 motor.setDuty(p/12.0);
             }
