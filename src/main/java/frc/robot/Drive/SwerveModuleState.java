@@ -1,12 +1,15 @@
 package frc.robot.Drive;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import frc.Demacia.Geometry.Rotation2d;
 
 public class SwerveModuleState extends edu.wpi.first.math.kinematics.SwerveModuleState {
     public double distanceMeters;
+    public Rotation2d angle;
 
     public SwerveModuleState(double metersPerSecond, double distanceMeters, Rotation2d angle) {
-        super(metersPerSecond, angle);
+        super();
+        this.speedMetersPerSecond = metersPerSecond;
+        this.angle = angle;
         this.distanceMeters = distanceMeters;
 
     }

@@ -1,13 +1,12 @@
 package frc.robot.Drive;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.Demacia.Geometry.Rotation2d;
 import frc.Demacia.utils.Utilities;
 import frc.Demacia.utils.Motors.MotorCommands;
 import frc.Demacia.utils.Motors.MotorInterface;
@@ -31,6 +30,7 @@ public class SwerveModule implements Sendable {
         steer = new TalonMotor(config.steerConfig);
         drive = new TalonMotor(config.driveConfig);
         absEncoder = new Cancoder(config.cancoderConfig);
+        System.out.println("Module " + config.name + " steer=" + config.steerConfig.id);
         setSteerOffset();
         refreshStateAndPosition();
         SmartDashboard.putData(config.name, this);
@@ -67,7 +67,7 @@ public class SwerveModule implements Sendable {
         steerCorrection += Utilities.clamp(add, Constants.MAX_SET_STATE_STEER_ADDITION);
     }
 
-    public void setState(SwerveModuleState state) {
+    public void setState(edu.wpi.first.math.kinematics.SwerveModuleState state) {
         double currentPosition = steer.getCurrentPosition();
         steerCorrection = MathUtil.inputModulus(state.angle.getDegrees() - currentPosition,-180,180);
         driveTarget = state.speedMetersPerSecond;
@@ -117,6 +117,7 @@ public class SwerveModule implements Sendable {
         drive.setNeutralMode(true);
     }
     public void setCoast() {
+        System.out.println(config.name + " coast");
         steer.setNeutralMode(false);
         drive.setNeutralMode(false);
     }

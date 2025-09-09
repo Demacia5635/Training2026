@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package edu.wpi.first.math.geometry;
+package frc.Demacia.Geometry;
 
 import static edu.wpi.first.units.Units.Meters;
 
@@ -13,22 +13,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.geometry.proto.Pose2dProto;
 import edu.wpi.first.math.geometry.struct.Pose2dStruct;
-import edu.wpi.first.math.interpolation.Interpolatable;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.util.protobuf.ProtobufSerializable;
-import edu.wpi.first.util.struct.StructSerializable;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Objects;
 
 /** Represents a 2D pose containing translational and rotational elements. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE)
-public class Pose2d implements Interpolatable<Pose2d>, ProtobufSerializable, StructSerializable {
+public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
   /**
    * A preallocated Pose2d representing the origin.
    *
@@ -111,7 +107,10 @@ public class Pose2d implements Interpolatable<Pose2d>, ProtobufSerializable, Str
     this.m_rotation = pose2d.m_rotation;
     this.m_translation = pose2d.m_translation;
   }
-
+  public void set(edu.wpi.first.math.geometry.Pose2d pose2d) {
+    this.m_translation.set(pose2d.getX(), pose2d.getY());
+    this.m_rotation.set(pose2d.getRotation().getRadians());
+  }
   /**
    * Transforms the pose by the given transformation and returns the new transformed pose.
    *
@@ -125,10 +124,15 @@ public class Pose2d implements Interpolatable<Pose2d>, ProtobufSerializable, Str
    * @return The transformed pose.
    */
   public Pose2d plus(Transform2d other) {
-    return transformBy(other);
-  }
+   var t = other.getTranslation().rotateBy(m_rotation);
+    return new Pose2d(new Translation2d(getX() + t.getX(), getY() + t.getY()),
+      new Rotation2d(other.getRotation().getRadians() + m_rotation.getRadians()));
+}
   public Pose2d plusSelf(Transform2d other) {
-    return transformBySelf(other);
+    var t = other.getTranslation().rotateBy(m_rotation);
+    m_translation.set(m_translation.getX() + t.getX(), m_translation.getY() + t.getY());
+    m_rotation.set(m_rotation.getRadians() + other.getRotation().getRadians());
+    return this;
   }
 
   /**
@@ -248,16 +252,6 @@ public class Pose2d implements Interpolatable<Pose2d>, ProtobufSerializable, Str
    * @param other The transform to transform the pose by.
    * @return The transformed pose.
    */
-  public Pose2d transformBy(Transform2d other) {
-    return new Pose2d(
-        m_translation.plus(other.getTranslation().rotateBy(m_rotation)),
-        other.getRotation().plus(m_rotation));
-  }
-  public Pose2d transformBySelf(Transform2d other) {
-        m_translation.plusSelf(other.getTranslation()).rotateBySelf(m_rotation);
-        m_rotation.plusSelf(other.getRotation());
-        return this;
-  }
 
   /**
    * Returns the current pose relative to the given pose.
@@ -271,7 +265,9 @@ public class Pose2d implements Interpolatable<Pose2d>, ProtobufSerializable, Str
    */
   public Pose2d relativeTo(Pose2d other) {
     var transform = new Transform2d(other, this);
-    return new Pose2d(transform.getTranslation(), transform.getRotation());
+    var t = transform.getTranslation();
+    var r = transform.getRotation();
+    return new Pose2d(t.getX(),t.getY(), new Rotation2d(r.getRadians()));
   }
 
   /**
@@ -394,15 +390,6 @@ public class Pose2d implements Interpolatable<Pose2d>, ProtobufSerializable, Str
    * @param poses The list of poses to find the nearest.
    * @return The nearest Pose2d from the list.
    */
-  public Pose2d nearest(List<Pose2d> poses) {
-    return Collections.min(
-        poses,
-        Comparator.comparing(
-                (Pose2d other) -> this.getTranslation().getDistance(other.getTranslation()))
-            .thenComparing(
-                (Pose2d other) ->
-                    Math.abs(this.getRotation().minus(other.getRotation()).getRadians())));
-  }
 
   @Override
   public String toString() {
@@ -427,19 +414,7 @@ public class Pose2d implements Interpolatable<Pose2d>, ProtobufSerializable, Str
     return Objects.hash(m_translation, m_rotation);
   }
 
-  @Override
-  public Pose2d interpolate(Pose2d endValue, double t) {
-    if (t < 0) {
-      return this;
-    } else if (t >= 1) {
-      return endValue;
-    } else {
-      var twist = this.log(endValue);
-      var scaledTwist = new Twist2d(twist.dx * t, twist.dy * t, twist.dtheta * t);
-      return this.exp(scaledTwist);
-    }
-  }
-
+ 
   /** Pose2d protobuf for serialization. */
   public static final Pose2dProto proto = new Pose2dProto();
 
