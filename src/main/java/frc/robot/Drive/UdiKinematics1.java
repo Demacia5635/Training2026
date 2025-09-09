@@ -59,13 +59,13 @@ public class UdiKinematics1 {
         return new ChassisSpeeds(vx/pos.length, vy/pos.length, baseOmega);
     }
 
-    private  static SwerveModuleState[] baseKinematics(SwerveDriveKinematics kinematics, double heading, ChassisSpeeds speed) {
+    private  static edu.wpi.first.math.kinematics.SwerveModuleState[] baseKinematics(SwerveDriveKinematics kinematics, double heading, ChassisSpeeds speed) {
         Rotation2d rot = new Rotation2d(heading);
         ChassisSpeeds robotRelative = ChassisSpeeds.fromFieldRelativeSpeeds(speed, rot);
-        return null;
+        return kinematics.toSwerveModuleStates(robotRelative);
     }
 
-    private static void compare(double heading, ChassisSpeeds speed, SwerveModuleState[] baseStates, SwerveModuleState[] states) {
+    private static void compare(double heading, ChassisSpeeds speed, edu.wpi.first.math.kinematics.SwerveModuleState[] baseStates, SwerveModuleState[] states) {
         System.out.printf("compare for - heading = %5.1f, vx=%4.2f vy=%4.2f omega=%5.2f\n", heading, speed.vxMetersPerSecond, speed.vyMetersPerSecond, Math.toDegrees(speed.omegaRadiansPerSecond));
         for(int i = 0; i < baseStates.length; i++) {
             System.out.printf("   %d: v = %5.3f [%4.2f, %4.2f]  a = %6.4f [%5.3f, %5.3f]\n", i, 
@@ -83,7 +83,7 @@ public class UdiKinematics1 {
             new Translation2d(X,Y), new Translation2d(X,-Y), new Translation2d(-X,Y), new Translation2d(-X,-Y)};
         UdiKinematics1 u = new UdiKinematics1(modulePositionOnRobot);
         SwerveDriveKinematics  kinematics = new SwerveDriveKinematics(modulePositionOnRobot);
-        SwerveModuleState[] baseStates;
+        edu.wpi.first.math.kinematics.SwerveModuleState[] baseStates;
 
         ChassisSpeeds s = new ChassisSpeeds(2,0,1);
         double heading = 0;

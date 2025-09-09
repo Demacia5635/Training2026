@@ -16,7 +16,6 @@ import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.geometry.proto.Pose2dProto;
 import edu.wpi.first.math.geometry.struct.Pose2dStruct;
-import edu.wpi.first.math.interpolation.Interpolatable;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Distance;
 import java.util.Objects;
