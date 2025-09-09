@@ -7,6 +7,7 @@ package frc.robot;
 
 import frc.Demacia.utils.Motors.SparkConfig;
 import frc.Demacia.utils.Motors.TalonConfig;
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
 
 
@@ -19,13 +20,13 @@ import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class MyFirstSubsystemConstants {
+  public static class MyFirstSubsystemConstants { 
     public static final int MOTOR_DRIVE_ID = 10;
     public static final String MOTOR_CAN ="rio";
     public static final int MOTOR_STEER_ID2 = 11;
     public static final String MOTOR_CAN2 ="rio";
   }
-
+  public static final int GYRO_ID = 0;
   public static final double NumberOfWheelCyclesIn1Sec=8.14;
     public static final double SteerGearRetio=12.8;
     public static final double diameterWheel = 0.1016;
@@ -58,9 +59,16 @@ public final class Constants {
     public static final double STEER_VELOCITY_P = 2;
     public static final double ABS_ENCODER_OFFSET = 10;
   }
-
+  
   public static class BaseConfigs {
-    public static final TalonConfig BASE_TALON_CONFIG = new TalonConfig(0, Canbus.Rio, "base")
+    public static final TalonConfig DRIVE_MOTOR_CONFIG = new TalonConfig(0, Canbus.Rio, "DRIVEMOTOR")
+        .withBrake(true)
+        .withCurrent(40)
+        .withRampTime(0.3)
+        .withVolts(12)
+        .withPID(0, 0, 0, 0, 0, 0, 0);
+        
+        public static final TalonConfig STEER_MOTOR_CONFIG = new TalonConfig(0, Canbus.Rio, "STEERMOTOR")
         .withBrake(true)
         .withCurrent(40)
         .withRampTime(0.3)
@@ -78,6 +86,12 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int DriverControllerPort = 0;
   }
-  TalonConfig driveConfig = new TalonConfig(0, Canbus.CANIvore, );
-
+  public static class Swerve {
+    public static final double MAX_SPEED_MPS =0.3; 
+    public static final double MAX_ANGULAR_SPEED_RAD_PER_S =0.3;
+    public static final Translation2d[] KINEMATICS = new Translation2d[]{
+      new Translation2d(0.315,0.265),new Translation2d(0.310,-0.265),new Translation2d(-0.315,-0.315),new Translation2d(-0.315,0.315) } ;
+    public static final double DEADBAND = 0;
+    }
 }
+
