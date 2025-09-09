@@ -84,16 +84,17 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putData("Set Drive Coast", new InstantCommand(()-> {for(SwerveModule m : modules) m.setCoast();}).ignoringDisable(true));
         SmartDashboard.putData("Reset Heading", new InstantCommand(this::setFieldHeading).ignoringDisable(true));
         controller.start().onTrue(new InstantCommand(this::setFieldHeading).ignoringDisable(true));
-        setDefaultCommand(new RunCommand(this::drive, this));
+        SmartDashboard.putData("Drive Command", new RunCommand(this::drive, this));
+//        setDefaultCommand(new RunCommand(this::drive, this));
         showBaseCommands();
         SwerveLogEntry.add(moduleNames, moduleStates, modulePositions, pose, currentChassisSpeeds, targetChassisSpeeds);
     }
 
     private void showBaseCommands() {
-        MotorCommands.showRandomPowerCommand("Steers Random Power", -0.6, 0.6, 0.3, this, steerMotors);
-        MotorCommands.showRandomPowerCommand("Drives Random Power", -0.9, 0.9, 0.2, this, driveMotors);
+        MotorCommands.showRandomPowerCommand("Steers Random Power", -6, 6, 0.3, this, steerMotors);
+        MotorCommands.showRandomPowerCommand("Drives Random Power", -9, 9, 0.2, this, driveMotors);
+        MotorCommands.showPowerCommand("Drives Power", this, driveMotors);
         MotorCommands.showSlowPowerCommand("Steers Slow Power", 0.05, 0.01, 1, this, steerMotors);
-        MotorCommands.showSlowPowerCommand("Drives Slow Power", 0.03, 0.01, 1, this, driveMotors);
         MotorCommands.showMotionCommand("Set Steer Angle",this, steerMotors);
         MotorCommands.showVelocityCommand("Set Drive Velocity",this, driveMotors);
 

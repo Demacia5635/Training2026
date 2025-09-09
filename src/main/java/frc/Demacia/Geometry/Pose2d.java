@@ -13,10 +13,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.geometry.proto.Pose2dProto;
 import edu.wpi.first.math.geometry.struct.Pose2dStruct;
+import edu.wpi.first.math.interpolation.Interpolatable;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Distance;
 import java.util.Objects;
@@ -30,7 +30,7 @@ public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
    *
    * <p>This exists to avoid allocations for common poses.
    */
-  public static final Pose2d kZero = new Pose2d();
+  public static final Pose2d  kZero = new Pose2d();
 
   private Translation2d m_translation;
   private Rotation2d m_rotation;
@@ -252,7 +252,11 @@ public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
    * @param other The transform to transform the pose by.
    * @return The transformed pose.
    */
-
+  public Pose2d transformBy(Transform2d other) {
+    return new Pose2d(
+        m_translation.plus(other.getTranslation().rotateBy(m_rotation)),
+        other.getRotation().plus(m_rotation));
+  }
   /**
    * Returns the current pose relative to the given pose.
    *
@@ -414,6 +418,18 @@ public class Pose2d extends edu.wpi.first.math.geometry.Pose2d {
     return Objects.hash(m_translation, m_rotation);
   }
 
+  @Override
+  public Pose2d interpolate(edu.wpi.first.math.geometry.Pose2d endValue, double t) {
+    if (t < 0) {
+      return this;
+    } else if (t >= 1) {
+      return (Pose2d)endValue;
+    } else {
+      var twist = this.log(endValue);
+      var scaledTwist = new Twist2d(twist.dx * t, twist.dy * t, twist.dtheta * t);
+      return this.exp(scaledTwist);
+    }
+  }
  
   /** Pose2d protobuf for serialization. */
   public static final Pose2dProto proto = new Pose2dProto();

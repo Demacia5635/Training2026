@@ -17,4 +17,10 @@ public class SwerveModuleState extends edu.wpi.first.math.kinematics.SwerveModul
         this(metersPerSecond, distanceMeters, new Rotation2d(angleRadians));        
     }
 
+    public void copy(SwerveModuleState other) {
+        this.speedMetersPerSecond = other.speedMetersPerSecond;
+        this.distanceMeters = other.distanceMeters;
+        this.angle.set(other.angle.getRadians());
+    }
+
 }
