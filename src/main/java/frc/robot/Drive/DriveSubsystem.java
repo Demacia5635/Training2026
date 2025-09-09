@@ -42,6 +42,7 @@ public class DriveSubsystem extends SubsystemBase {
     MotorInterface[] driveMotors;
     SwerveModulePosition[] modulePositions;
     SwerveModuleState[] moduleStates;
+    frc.robot.Drive.SwerveModuleState[] moduleStatePos;
     String moduleNames[];
     StatusSignal<Angle> gyroSignal;
     Pose2d pose;
@@ -50,6 +51,7 @@ public class DriveSubsystem extends SubsystemBase {
     ChassisSpeeds targetChassisSpeeds = new ChassisSpeeds();
     Rotation2d gyroRotation = new Rotation2d();
     Rotation2d lastGyroRotation = new Rotation2d();
+    boolean useUdiKinematics = false;
 
     public DriveSubsystem(CommandXboxController controller) {
         super();
@@ -58,6 +60,7 @@ public class DriveSubsystem extends SubsystemBase {
         Translation2d[] modulePositionOnRobot = new Translation2d[modules.length];
         modulePositions = new SwerveModulePosition[modules.length];
         moduleStates = new SwerveModuleState[modules.length];
+        moduleStatePos = new frc.robot.Drive.SwerveModuleState[modules.length];
         steerMotors = new MotorInterface[modules.length];
         driveMotors = new MotorInterface[modules.length];
         moduleNames = new String[modules.length];
@@ -69,6 +72,7 @@ public class DriveSubsystem extends SubsystemBase {
             steerMotors[i] = modules[i].steerMotor();
             driveMotors[i] = modules[i].driveMotor();
             moduleNames[i] = Constants.CONFIGS[i].name;
+            moduleStatePos[i] = modules[i].state;
         }
         kinematics = new SwerveDriveKinematics(modulePositionOnRobot);
         udiKinematics1 = new UdiKinematics1(modulePositionOnRobot);
@@ -138,14 +142,20 @@ public class DriveSubsystem extends SubsystemBase {
 
 
     public void setSpeeds(ChassisSpeeds speeds) {
-        ChassisSpeeds robotRelativSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getHeadingRotation());
-        limitSpeeds(robotRelativSpeeds);
-        SwerveModuleState[] states = kinematics.toSwerveModuleStates(robotRelativSpeeds);
+        SwerveModuleState[] states;
+        if(useUdiKinematics) {
+            states = udiKinematics1.getModuleStates(getHeading(), speeds);
+
+        } else {
+            ChassisSpeeds robotRelativSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getHeadingRotation());
+            limitSpeeds(robotRelativSpeeds);
+            states = kinematics.toSwerveModuleStates(robotRelativSpeeds);
+        }
         SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.MAX_SPEED);
         for(int i = 0; i < modules.length; i++) {
             modules[i].setState(states[i]);
         }
-    }
+}
 
     private void limitSpeeds(ChassisSpeeds speeds) {
         // limit robot relative speeds to account for MAX accelration
@@ -180,7 +190,13 @@ public class DriveSubsystem extends SubsystemBase {
             m.refreshStateAndPosition();
         }
         lastGyroRotation.set(gyroRotation.getRadians());
-        ChassisSpeeds t = kinematics.toChassisSpeeds(moduleStates);
+        ChassisSpeeds t;
+        if(useUdiKinematics) {
+            t = udiKinematics1.getChassisSpeeds(moduleStatePos, getHeading());
+
+        } else {
+            t = kinematics.toChassisSpeeds(moduleStates);
+        }
         currentChassisSpeeds.vxMetersPerSecond = t.vxMetersPerSecond;
         currentChassisSpeeds.vyMetersPerSecond = t.vyMetersPerSecond;
         currentChassisSpeeds.omegaRadiansPerSecond = t.omegaRadiansPerSecond;

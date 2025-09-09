@@ -18,6 +18,7 @@ public class UdiKinematics1 {
     }
     ModulPos[] pos;
     SwerveModuleState[] states;
+    double lastHeading = 0;
 
 
     UdiKinematics1(Translation2d[] modulsPos) {
@@ -29,7 +30,7 @@ public class UdiKinematics1 {
         }
     }
 
-    public void updateStates(double heading, ChassisSpeeds speed) {
+    public  SwerveModuleState[] getModuleStates(double heading, ChassisSpeeds speed) {
         double omegat = speed.omegaRadiansPerSecond * DT;
         for(int i = 0; i < pos.length; i++) {
             double alpha = heading + pos[i].alpha + omegat;
@@ -38,6 +39,7 @@ public class UdiKinematics1 {
             states[i].angle.set(Math.atan2(vy, vx) - heading);
             states[i].speedMetersPerSecond = Math.hypot(vx, vy);
         }
+        return states;
     }
 
     public SwerveModuleState[] states() {
@@ -45,7 +47,7 @@ public class UdiKinematics1 {
     }
 
 
-    public ChassisSpeeds getChassisSpeeds(SwerveModuleState[] states, double lastHeading, double currentHeading) {
+    public ChassisSpeeds getChassisSpeeds(SwerveModuleState[] states, double currentHeading) {
         double baseOmega = (currentHeading - lastHeading) / DT;
         // calculate based on module 0/1
         double vx = 0;
@@ -56,6 +58,7 @@ public class UdiKinematics1 {
             vy += states[i].speedMetersPerSecond * Math.sin(states[i].angle.getRadians() + currentHeading) - 
                     baseOmega*pos[i].d*Math.cos(currentHeading + pos[i].alpha);
         }
+        lastHeading = currentHeading;
         return new ChassisSpeeds(vx/pos.length, vy/pos.length, baseOmega);
     }
 
@@ -87,21 +90,21 @@ public class UdiKinematics1 {
 
         ChassisSpeeds s = new ChassisSpeeds(2,0,1);
         double heading = 0;
-        u.updateStates(heading, s);
+        u.getModuleStates(heading, s);
         baseStates = baseKinematics(kinematics, heading, s);
         compare(heading, s, baseStates, u.states);
-        System.out.println(" calculated = " + u.getChassisSpeeds(u.states, heading, heading + s.omegaRadiansPerSecond * DT));
+        System.out.println(" calculated = " + u.getChassisSpeeds(u.states, heading + s.omegaRadiansPerSecond * DT));
         s.vxMetersPerSecond = 1;
         s.vyMetersPerSecond = 1;
         s.omegaRadiansPerSecond = -1;
-        u.updateStates(0, s);
+        u.getModuleStates(0, s);
         baseStates = baseKinematics(kinematics, heading, s);
         compare(heading, s, baseStates, u.states);
 
-        System.out.println(" calculated = " + u.getChassisSpeeds(u.states, heading, heading + s.omegaRadiansPerSecond * DT));
+        System.out.println(" calculated = " + u.getChassisSpeeds(u.states, heading + s.omegaRadiansPerSecond * DT));
         double startTime1 = System.currentTimeMillis();
         for(int i = 0; i < 1000; i++) {
-            u.updateStates(heading, s);
+            u.getModuleStates(heading, s);
         }
         double endTime1 = System.currentTimeMillis();
         double startTime2 = System.currentTimeMillis();
