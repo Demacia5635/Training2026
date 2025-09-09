@@ -7,7 +7,6 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.Demacia.Geometry.Rotation2d;
-import frc.Demacia.utils.Utilities;
 import frc.Demacia.utils.Motors.MotorCommands;
 import frc.Demacia.utils.Motors.MotorInterface;
 import frc.Demacia.utils.Motors.TalonMotor;
@@ -63,8 +62,9 @@ public class SwerveModule implements Sendable {
             steerCorrection += 180;
             driveTarget = -driveTarget;
         }
-        double add = steerCorrection * Constants.STATE_STEER_ADDITION;
-        steerCorrection += Utilities.clamp(add, Constants.MAX_SET_STATE_STEER_ADDITION);
+        if(Math.abs(steerCorrection) < Constants.MAX_STEER_CORRECTION) {
+            steerCorrection *= Constants.STATE_STEER_MULTIPLIER;
+        }
     }
 
     public void setState(edu.wpi.first.math.kinematics.SwerveModuleState state) {
@@ -73,7 +73,7 @@ public class SwerveModule implements Sendable {
         driveTarget = state.speedMetersPerSecond;
         optimaizeTarget();
         steer.setMotion(currentPosition + steerCorrection);
-        drive.setVelocity(driveTarget);
+        drive.setVelocity(driveTarget - steer.getCurrentVelocity()*Constants.STEER_TO_DISTANCE_RATIO);
     }
 
     public void setSteerPower(double power) {
