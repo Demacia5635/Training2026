@@ -1,6 +1,7 @@
 package frc.robot.Drive;
 
 import frc.Demacia.Geometry.Pose2d;
+import frc.Demacia.Geometry.Translation2d;
 
 import static edu.wpi.first.units.Units.Degrees;
 
@@ -8,7 +9,6 @@ import com.ctre.phoenix6.StatusSignal;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Angle;
-import frc.Demacia.utils.StatusSignalData;
 
 public class PoseEstimator {
 
@@ -94,6 +94,25 @@ public class PoseEstimator {
         lastSpeeds.vyMetersPerSecond = currentSpeeds.vyMetersPerSecond;
         lastSpeeds.omegaRadiansPerSecond = currentSpeeds.omegaRadiansPerSecond;
         lastHeading = heading;
+    }
+
+    Translation2d getAccumulatedCorrection(double time) {
+        Translation2d t = new Translation2d();
+        PositionCorrection p = first.next;
+        while(p != null && p.time < time) {
+            p = p.next;
+        }
+        if(p == null) {
+            return t;
+        }
+        // calculate interpulated from prev to p 
+        double delta = p.time - time;
+        double ratio = delta/(p.time - p.prev.time);
+        t.set(p.deltaX*ratio, p.deltaY*ratio);
+        for(p = p.next; p != null; p = p.next) {
+            t.set(t.getX() + p.deltaX, t.getY() + p.deltaY);
+        }
+        return t;
     }
 
     void cleanAll() {
