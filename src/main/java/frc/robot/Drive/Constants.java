@@ -76,10 +76,10 @@ public class Constants {
     }
 
     public static final ModuleConfig[] CONFIGS = {
-        new ModuleConfig(2, 1, 3, X_POSITION, Y_POSITION, 22.6),
-        new ModuleConfig(5, 4, 6, X_POSITION, -Y_POSITION, 35.7),
-        new ModuleConfig(8, 7, 9, -X_POSITION, Y_POSITION, 50.0),
-        new ModuleConfig(11, 10, 12, -X_POSITION, -Y_POSITION, 150.6)
+        new ModuleConfig(2, 1, 3, X_POSITION, Y_POSITION, 140),
+        new ModuleConfig(5, 4, 6, X_POSITION, -Y_POSITION, -178),
+        new ModuleConfig(8, 7, 9, -X_POSITION, Y_POSITION, -30),
+        new ModuleConfig(11, 10, 12, -X_POSITION, -Y_POSITION, 137.6)
 };
 public static final ModuleConfig[] CONFIGS1 = {
     new ModuleConfig(11, 10, 12, X_POSITION, Y_POSITION, 150.6)
