@@ -36,6 +36,7 @@ public class DriveSubsystem extends SubsystemBase {
     SwerveDrivePoseEstimator poseEstimator;
     PoseEstimator udiEstimator;
     Field2d robotField;
+    Field2d robotField2;
     SwerveDriveKinematics kinematics;
     UdiKinematics1 udiKinematics1;
     Pigeon2 gyro;
@@ -86,9 +87,12 @@ public class DriveSubsystem extends SubsystemBase {
         pose.set(poseEstimator.getEstimatedPosition());
         udiPose.set(poseEstimator.getEstimatedPosition());
         robotField = new Field2d();
+        robotField2 = new Field2d();
         udiEstimator = new PoseEstimator(currentChassisSpeeds, modules[0].steerHeadingSignal(), gyroSignal, pose);
+        robotField2.setRobotPose(udiPose);
         SmartDashboard.putData("Drive", this);
         SmartDashboard.putData("Robot Position", robotField);
+        SmartDashboard.putData("Robot Position2", robotField2);
         SmartDashboard.putData("Set Drive Brake", new InstantCommand(()-> {for(SwerveModule m : modules) m.setBrake();}).ignoringDisable(true));
         SmartDashboard.putData("Set Drive Coast", new InstantCommand(()-> {for(SwerveModule m : modules) m.setCoast();}).ignoringDisable(true));
         SmartDashboard.putData("Reset Heading", new InstantCommand(this::setFieldHeading).ignoringDisable(true));
@@ -208,7 +212,8 @@ public class DriveSubsystem extends SubsystemBase {
         poseEstimator.update(getGyroRotation(), modulePositions);
         pose.set(poseEstimator.getEstimatedPosition());
         robotField.setRobotPose(pose);
-
+        udiEstimator.updatePose();
+        robotField2.setRobotPose(udiPose);
     }
 
     @Override
