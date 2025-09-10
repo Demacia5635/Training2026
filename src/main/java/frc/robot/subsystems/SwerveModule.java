@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,14 +23,21 @@ public class SwerveModule extends SubsystemBase {
   private Cancoder cancoder;
   private TalonMotor driveMotor;
   private TalonMotor steerMotor;
+  private PIDController steerController;
+  private PIDController driveController;
+
   public SwerveModule(int cancoderId, int steerId, int driveId, String steerName, String driveName, String canCoderName) {
     cancoder = new Cancoder(new CancoderConfig(cancoderId ,Canbus.Rio, canCoderName));
     driveMotor = new TalonMotor(new TalonConfig(driveId , Canbus.Rio, driveName));
     steerMotor = new TalonMotor(new TalonConfig(steerId , Canbus.Rio, steerName));
+    steerController = new PIDController(Constants.ModuleConstants.STEER_KP, Constants.ModuleConstants.STEER_KI, Constants.ModuleConstants.STEER_KD);
     SmartDashboard.putData(this);
   }
-  public SwerveModulePosition getPosition(){
-    return new SwerveModulePosition
+  public void setPositionSteer(double angle){
+    steerMotor.setPosition(angle);
+  }
+  public double getPositionOfSteer(){
+    return (steerMotor.)
   }
   public double getDriveMotorVelocity(){
     return (driveMotor.getVelocity().getValueAsDouble()/NumberOfWheelCyclesIn1Sec)*diameterWheel*Math.PI;
