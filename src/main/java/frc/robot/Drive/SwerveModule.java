@@ -85,6 +85,12 @@ public class SwerveModule implements Sendable {
     public void setDrivePower(double power) {
         drive.setDuty(power);
     }
+
+    public void stop() {
+        steer.setDuty(0);
+        drive.setDuty(0);
+    }
+    
     public void setSteerAngle(double angle) {
         steer.setMotion(angle);
     }
@@ -128,6 +134,8 @@ public class SwerveModule implements Sendable {
     public StatusSignal<Angle> steerHeadingSignal() {
         return ((TalonFX)steer).getPosition();
     }
+
+
 
     @Override
     public void initSendable(SendableBuilder builder) {
