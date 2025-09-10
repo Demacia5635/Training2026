@@ -93,7 +93,8 @@ public class DriveSubsystem extends SubsystemBase {
         kinematics = new SwerveDriveKinematics(modulePositionOnRobot);
         gyro = new Pigeon2(Constants.GYRO_ID, Constants.GYRO_CANBUS.canbus);
         gyroSignal = gyro.getYaw();
-        poseEstimator = new SwerveDrivePoseEstimator(kinematics, getGyroRotation(), modulePositions,new Pose2d());
+        refreshGyro();
+        poseEstimator = new SwerveDrivePoseEstimator(kinematics, gyroRotation, modulePositions,new Pose2d());
         pose = new Pose2d();
         pose.set(poseEstimator.getEstimatedPosition());
         robotField = new Field2d();
@@ -156,21 +157,21 @@ public class DriveSubsystem extends SubsystemBase {
      * reset heading to zero
      */
     public void setFieldHeading() {
-        resetPose(pose.getTranslation(), Rotation2d.kZero);
+        resetPose(pose.getTranslation(), new Rotation2d());
+        System.out.println(" reset heading");
     }
 
     /**
      * Gyro data
      * @return
      */
-    public Rotation2d getGyroRotation() {
+    public void refreshGyro() {
         gyroSignal.refresh();
         gyroRotation.set(gyroSignal.getValue().in(Radians));
-        return gyroRotation;
     }
 
     public double getGyroHeading() {
-        return getGyroRotation().getDegrees();
+        return gyroRotation.getDegrees();
     }
 
     /*
@@ -190,7 +191,21 @@ public class DriveSubsystem extends SubsystemBase {
      * @param rotation2d
      */
     public void resetPose(Translation2d translation2d, Rotation2d rotation2d) {
-        poseEstimator.resetPose(new Pose2d(translation2d, rotation2d));
+        poseEstimator.resetPosition(gyroRotation, modulePositions, new Pose2d(translation2d, rotation2d));
+        updatePose();
+        System.out.println("Reset pose to " + translation2d + " " + rotation2d);
+        System.out.println(" new pose - " + pose);
+        poseEstimator.update(gyroRotation, modulePositions);
+        updatePose();
+        System.out.println("Reset pose to " + translation2d + " " + rotation2d);
+        System.out.println(" new pose - " + pose);
+        System.out.println(" heading = " + getHeading());
+    }
+
+    private void updatePose() {
+        var p = poseEstimator.getEstimatedPosition();
+        pose.getTranslation().set(p.getX(), p.getY());
+        pose.getRotation().set(p.getRotation().getRadians());
     }
 
 
@@ -261,6 +276,7 @@ public class DriveSubsystem extends SubsystemBase {
         for(SwerveModule m : modules) {
             m.refreshStateAndPosition();
         }
+        refreshGyro();
         ChassisSpeeds t;
         if(useUdiKinematics) {
             t = udiKinematics1.getChassisSpeeds(moduleStatePos, getHeading());
@@ -271,17 +287,18 @@ public class DriveSubsystem extends SubsystemBase {
         currentChassisSpeeds.vxMetersPerSecond = t.vxMetersPerSecond;
         currentChassisSpeeds.vyMetersPerSecond = t.vyMetersPerSecond;
         currentChassisSpeeds.omegaRadiansPerSecond = t.omegaRadiansPerSecond;
-        poseEstimator.update(getGyroRotation(), modulePositions);
-        pose.set(poseEstimator.getEstimatedPosition());
+        poseEstimator.update(gyroRotation, modulePositions);
+        updatePose();
         robotField.setRobotPose(pose);
-        udiEstimator.updatePose();
-        robotField2.setRobotPose(udiPose);
+//        udiEstimator.updatePose();
+//        robotField2.setRobotPose(udiPose);
     }
 
     @Override
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
         builder.addDoubleProperty("Heading", this::getHeading, null);
+        builder.addDoubleProperty("Gyro", this::getGyroHeading, null);
         builder.addDoubleProperty("Vx", ()->currentChassisSpeeds.vxMetersPerSecond, null);
         builder.addDoubleProperty("Vy", ()->currentChassisSpeeds.vyMetersPerSecond, null);
         builder.addDoubleProperty("Omega Rad Per Sec", ()->currentChassisSpeeds.omegaRadiansPerSecond, null);

@@ -1,7 +1,5 @@
 package frc.robot.Drive;
 
-import com.ctre.phoenix6.CANBus;
-
 import frc.Demacia.Geometry.Translation2d;
 import frc.Demacia.utils.Motors.TalonConfig;
 import frc.Demacia.utils.Motors.BaseMotorConfig.Canbus;
@@ -19,7 +17,7 @@ public class Constants {
     public static final double Y_POSITION = 0.3;
 
     public static final int GYRO_ID = 14;
-    public static final Canbus GYRO_CANBUS = Canbus.CANIvore;
+    public static final Canbus GYRO_CANBUS = Canbus.Rio;
 
     public static double CYCLE_TIME = 0.02;
 
@@ -40,18 +38,18 @@ public class Constants {
     public static final TalonConfig BASE_STEER_CONFIG = new TalonConfig(0, Canbus.CANIvore, "BASE_STEER")
             .withBrake(true)
             .withCurrent(15)
-            .withDegreesMotor(MK4_STEER_RATIO)
-            .withInvert(true)
-            .withPID(0.05, 0, 0, 0.14, 0.005, 0.0004, 0)
+            .withDegreesMotor(MK4i_STEER_RATIO)
+            .withInvert(false)
+            .withPID(0.05, 0, 0, 0.2, 0.007, 0.0004, 0)
             .withRampTime(0.2)
-            .withMotionParam(1000, 2000, 3000)
+            .withMotionParam(1000, 2500, 6000)
             .withVolts(8);
     public static final TalonConfig BASE_DRIVE_CONFIG = new TalonConfig(0, Canbus.CANIvore, "BASE_DRIVE")
             .withBrake(true)
             .withCurrent(30)
             .withMeterMotor(L1_DRIVE_RATIO, WHEEL_DIAMETER)
             .withInvert(false)
-            .withPID(1.76, 0, 0, 0.03, 2.93, 0.05, 0)
+            .withPID(2  , 0, 0, 0.1, 2.93, 0.13, 0)
             .withRampTime(0.2)
             .withMotionParam(3.5, 6.5, 10)
             .withVolts(12);
@@ -76,10 +74,10 @@ public class Constants {
     }
 
     public static final ModuleConfig[] CONFIGS = {
-        new ModuleConfig(2, 1, 3, X_POSITION, Y_POSITION, 140),
-        new ModuleConfig(5, 4, 6, X_POSITION, -Y_POSITION, -178),
-        new ModuleConfig(8, 7, 9, -X_POSITION, Y_POSITION, -30),
-        new ModuleConfig(11, 10, 12, -X_POSITION, -Y_POSITION, 137.6)
+        new ModuleConfig(2, 1, 3, X_POSITION, Y_POSITION, 141.2),
+        new ModuleConfig(5, 4, 6, X_POSITION, -Y_POSITION, -178.8),
+        new ModuleConfig(8, 7, 9, -X_POSITION, Y_POSITION, -22.9),
+        new ModuleConfig(11, 10, 12, -X_POSITION, -Y_POSITION, 139.7)
 };
 public static final ModuleConfig[] CONFIGS1 = {
     new ModuleConfig(11, 10, 12, X_POSITION, Y_POSITION, 150.6)
