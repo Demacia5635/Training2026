@@ -96,8 +96,8 @@ public class DriveSubsystem extends SubsystemBase {
         refreshGyro();
         poseEstimator = new SwerveDrivePoseEstimator(kinematics, gyroRotation, modulePositions,new Pose2d());
         pose = new Pose2d();
-        pose.set(poseEstimator.getEstimatedPosition());
         robotField = new Field2d();
+        updatePose();
         // alternate kinematics
         udiKinematics1 = new UdiKinematics1(modulePositionOnRobot);
         udiPose = new Pose2d();
@@ -185,17 +185,25 @@ public class DriveSubsystem extends SubsystemBase {
         return getHeadingRotation().getDegrees();
     }
 
+    private edu.wpi.first.math.geometry.Rotation2d getGyroRotation2d() {
+        return new edu.wpi.first.math.geometry.Rotation2d(gyroRotation.getRadians());
+    }
+
     /**
      * reset the pose
      * @param translation2d
      * @param rotation2d
      */
     public void resetPose(Translation2d translation2d, Rotation2d rotation2d) {
-        poseEstimator.resetPosition(gyroRotation, modulePositions, new Pose2d(translation2d, rotation2d));
+        poseEstimator.resetPosition(getGyroRotation2d(), 
+                                    modulePositions,
+                                    new edu.wpi.first.math.geometry.Pose2d(
+                                        new edu.wpi.first.math.geometry.Translation2d(translation2d.getX(), translation2d.getY()), 
+                                        new edu.wpi.first.math.geometry.Rotation2d(rotation2d.getRadians())));
         updatePose();
         System.out.println("Reset pose to " + translation2d + " " + rotation2d);
         System.out.println(" new pose - " + pose);
-        poseEstimator.update(gyroRotation, modulePositions);
+        poseEstimator.update(getGyroRotation2d(), modulePositions);
         updatePose();
         System.out.println("Reset pose to " + translation2d + " " + rotation2d);
         System.out.println(" new pose - " + pose);
@@ -206,6 +214,7 @@ public class DriveSubsystem extends SubsystemBase {
         var p = poseEstimator.getEstimatedPosition();
         pose.getTranslation().set(p.getX(), p.getY());
         pose.getRotation().set(p.getRotation().getRadians());
+        robotField.setRobotPose(p);
     }
 
 
@@ -277,19 +286,12 @@ public class DriveSubsystem extends SubsystemBase {
             m.refreshStateAndPosition();
         }
         refreshGyro();
-        ChassisSpeeds t;
-        if(useUdiKinematics) {
-            t = udiKinematics1.getChassisSpeeds(moduleStatePos, getHeading());
-
-        } else {
-            t = kinematics.toChassisSpeeds(moduleStates);
-        }
+        ChassisSpeeds t = kinematics.toChassisSpeeds(moduleStates);
         currentChassisSpeeds.vxMetersPerSecond = t.vxMetersPerSecond;
         currentChassisSpeeds.vyMetersPerSecond = t.vyMetersPerSecond;
         currentChassisSpeeds.omegaRadiansPerSecond = t.omegaRadiansPerSecond;
         poseEstimator.update(gyroRotation, modulePositions);
         updatePose();
-        robotField.setRobotPose(pose);
 //        udiEstimator.updatePose();
 //        robotField2.setRobotPose(udiPose);
     }
