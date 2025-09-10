@@ -143,8 +143,9 @@ public class DriveSubsystem extends SubsystemBase {
      * reset heading to zero
      */
     public void setFieldHeading() {
-        resetPose(pose.getTranslation(), new Rotation2d());
-        System.out.println(" reset heading");
+        poseEstimator.resetRotation(new edu.wpi.first.math.geometry.Rotation2d());
+        updatePose();
+        System.out.println(" reset heading - heading = " + getHeading()  + " pose=" + pose);
     }
 
     /**
@@ -168,7 +169,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getHeading() {
-        return getHeadingRotation().getDegrees();
+        return pose.getRotation().getDegrees();
     }
 
     private edu.wpi.first.math.geometry.Rotation2d getGyroRotation2d() {
@@ -181,19 +182,17 @@ public class DriveSubsystem extends SubsystemBase {
      * @param rotation2d
      */
     public void resetPose(Translation2d translation2d, Rotation2d rotation2d) {
+        poseEstimator.resetRotation(rotation2d);
         poseEstimator.resetPosition(getGyroRotation2d(), 
                                     modulePositions,
                                     new edu.wpi.first.math.geometry.Pose2d(
                                         new edu.wpi.first.math.geometry.Translation2d(translation2d.getX(), translation2d.getY()), 
                                         new edu.wpi.first.math.geometry.Rotation2d(rotation2d.getRadians())));
         updatePose();
-        System.out.println("Reset pose to " + translation2d + " " + rotation2d);
-        System.out.println(" new pose - " + pose);
+        System.out.println("Reset pose to " + translation2d + " " + rotation2d + " new pose - " + pose + " heading = " + getHeading());
         poseEstimator.update(getGyroRotation2d(), modulePositions);
         updatePose();
-        System.out.println("Reset pose to " + translation2d + " " + rotation2d);
-        System.out.println(" new pose - " + pose);
-        System.out.println(" heading = " + getHeading());
+        System.out.println("Reset pose to " + translation2d + " " + rotation2d + " new pose - " + pose + " heading = " + getHeading());
     }
 
     private void updatePose() {

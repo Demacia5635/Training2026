@@ -134,7 +134,7 @@ public class DriveSubsystem2 extends SubsystemBase {
      * @param time
      */
     public void updateVisionPosition(Pose2d pose, double time) {
-//        poseEstimator.addVisionMeasurement(pose, time);
+        poseEstimator.updateVision(pose, time);
     }
 
     /**

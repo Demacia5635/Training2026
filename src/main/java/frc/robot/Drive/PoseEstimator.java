@@ -120,6 +120,17 @@ public class PoseEstimator {
         return t;
     }
 
+    public void updateVision(Pose2d visionPose, double time) {
+        if(time > last.time - MAX_BUFFER_TIME) {
+            Translation2d t = getAccumulatedCorrection(time);
+            Translation2d t1 = pose.getTranslation().minus(t);
+            Translation2d correction = visionPose.getTranslation().minus(t);
+            correction.timesSelf(0.5);
+            t1.plusSelf(correction).plusSelf(t);
+            pose.getTranslation().set(t1.getX(), t1.getY());
+        }
+    }
+
     void cleanAll() {
         first.next = null;
         last = first;
