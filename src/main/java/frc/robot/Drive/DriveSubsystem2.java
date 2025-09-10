@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.Radians;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -15,7 +14,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,7 +28,7 @@ import frc.Demacia.utils.Motors.MotorInterface;
 import frc.Demacia.utils.Log.SwerveLogEntry;
 import frc.Demacia.utils.DriverUtils.JoystickSide;
 
-public class DriveSubsystem extends SubsystemBase {
+public class DriveSubsystem2 extends SubsystemBase {
 
     // components - controller, modules, gyro and motors
     CommandXboxController controller;
@@ -46,9 +44,9 @@ public class DriveSubsystem extends SubsystemBase {
     frc.robot.Drive.SwerveModuleState[] moduleStatePos;
 
     // pose data
-    SwerveDrivePoseEstimator poseEstimator;     
+    PoseEstimator poseEstimator;     
     Field2d robotField;
-    SwerveDriveKinematics kinematics;
+    UdiKinematics1 kinematics;
     Pose2d pose;
 
     // gyro 
@@ -59,7 +57,7 @@ public class DriveSubsystem extends SubsystemBase {
     ChassisSpeeds currentChassisSpeeds = new ChassisSpeeds();
     ChassisSpeeds targetChassisSpeeds = new ChassisSpeeds();
 
-    public DriveSubsystem(CommandXboxController controller) {
+    public DriveSubsystem2(CommandXboxController controller) {
         super();
         this.controller = controller;
         // create the arrays of modules and modules data
@@ -83,11 +81,11 @@ public class DriveSubsystem extends SubsystemBase {
             moduleStatePos[i] = modules[i].state;
         }
         // kinemtics and gyro
-        kinematics = new SwerveDriveKinematics(modulePositionOnRobot);
+        kinematics = new UdiKinematics1(modulePositionOnRobot);
         gyro = new Pigeon2(Constants.GYRO_ID, Constants.GYRO_CANBUS.canbus);
         gyroSignal = gyro.getYaw();
         refreshGyro();
-        poseEstimator = new SwerveDrivePoseEstimator(kinematics, gyroRotation, modulePositions,new Pose2d());
+        poseEstimator = new PoseEstimator(currentChassisSpeeds, modules[0].steerHeadingSignal(), gyroSignal,new Pose2d());
         pose = new Pose2d();
         robotField = new Field2d();
         updatePose();
@@ -136,7 +134,7 @@ public class DriveSubsystem extends SubsystemBase {
      * @param time
      */
     public void updateVisionPosition(Pose2d pose, double time) {
-        poseEstimator.addVisionMeasurement(pose, time);
+//        poseEstimator.addVisionMeasurement(pose, time);
     }
 
     /**
@@ -171,8 +169,11 @@ public class DriveSubsystem extends SubsystemBase {
         return getHeadingRotation().getDegrees();
     }
 
-    private edu.wpi.first.math.geometry.Rotation2d getGyroRotation2d() {
-        return new edu.wpi.first.math.geometry.Rotation2d(gyroRotation.getRadians());
+    private edu.wpi.first.math.geometry.Pose2d getPoseCopy() {
+        return new edu.wpi.first.math.geometry.Pose2d(
+            new edu.wpi.first.math.geometry.Translation2d(pose.getX(), pose.getY()),
+            new edu.wpi.first.math.geometry.Rotation2d(pose.getRotation().getRadians()));
+
     }
 
     /**
@@ -181,26 +182,20 @@ public class DriveSubsystem extends SubsystemBase {
      * @param rotation2d
      */
     public void resetPose(Translation2d translation2d, Rotation2d rotation2d) {
-        poseEstimator.resetPosition(getGyroRotation2d(), 
-                                    modulePositions,
-                                    new edu.wpi.first.math.geometry.Pose2d(
-                                        new edu.wpi.first.math.geometry.Translation2d(translation2d.getX(), translation2d.getY()), 
-                                        new edu.wpi.first.math.geometry.Rotation2d(rotation2d.getRadians())));
-        updatePose();
-        System.out.println("Reset pose to " + translation2d + " " + rotation2d);
-        System.out.println(" new pose - " + pose);
-        poseEstimator.update(getGyroRotation2d(), modulePositions);
+        pose.getTranslation().set(translation2d.getX(), translation2d.getY());
+        pose.getRotation().set(rotation2d.getRadians());
+        poseEstimator.setPose();
         updatePose();
         System.out.println("Reset pose to " + translation2d + " " + rotation2d);
         System.out.println(" new pose - " + pose);
         System.out.println(" heading = " + getHeading());
     }
 
+
+
     private void updatePose() {
-        var p = poseEstimator.getEstimatedPosition();
-        pose.getTranslation().set(p.getX(), p.getY());
-        pose.getRotation().set(p.getRotation().getRadians());
-        robotField.setRobotPose(p);
+        poseEstimator.updatePose();
+        robotField.setRobotPose(getPoseCopy());
     }
 
 
@@ -215,9 +210,8 @@ public class DriveSubsystem extends SubsystemBase {
             }
             return;
         }
-        ChassisSpeeds robotRelativSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getHeadingRotation());
-        limitSpeeds(robotRelativSpeeds);
-        SwerveModuleState[] states = kinematics.toSwerveModuleStates(robotRelativSpeeds);
+        limitSpeeds(speeds);
+        var states = kinematics.getModuleStates(getHeading(), speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.MAX_SPEED);
         for(int i = 0; i < modules.length; i++) {
             modules[i].setState(states[i]);
@@ -252,14 +246,6 @@ public class DriveSubsystem extends SubsystemBase {
         }
     }
 
-    public Command getTestCommand() {
-        return new InstantCommand(()->resetPose(new Translation2d(0,6),new Rotation2d(0))).andThen(
-            new DriveTo(4, 6, 1000, 2, 1, 90, this, false),
-            new DriveTo(6, 3, 2, -1000, -1, 90, this, false),
-            new DriveTo(2, 3, 2, 1000,  -1, 90, this, false),
-            new DriveTo(0, 6, 0, 2, 1, 90, this, true));
-    }
-
     @Override
     public void periodic() {
         super.periodic();
@@ -267,14 +253,8 @@ public class DriveSubsystem extends SubsystemBase {
             m.refreshStateAndPosition();
         }
         refreshGyro();
-        ChassisSpeeds t = kinematics.toChassisSpeeds(moduleStates);
-        currentChassisSpeeds.vxMetersPerSecond = t.vxMetersPerSecond;
-        currentChassisSpeeds.vyMetersPerSecond = t.vyMetersPerSecond;
-        currentChassisSpeeds.omegaRadiansPerSecond = t.omegaRadiansPerSecond;
-        poseEstimator.update(gyroRotation, modulePositions);
+        kinematics.getChassisSpeeds(moduleStatePos, getHeading());
         updatePose();
-//        udiEstimator.updatePose();
-//        robotField2.setRobotPose(udiPose);
     }
 
     @Override

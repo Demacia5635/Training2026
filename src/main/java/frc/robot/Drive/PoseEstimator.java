@@ -77,6 +77,11 @@ public class PoseEstimator {
         this.pose = pose;
     }
 
+    public void setPose() {
+        lastHeading = pose.getRotation().getDegrees();
+        gyroOffset = lastHeading - gyroSignal.getValue().in(Degrees);
+    }
+
     public void updatePose() {
         double currentTime = timeSignal.getTimestamp().getTime();
         double deltaTime = currentTime - lastTime;
