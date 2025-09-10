@@ -1,0 +1,108 @@
+package frc.robot.Drive;
+
+import frc.Demacia.Geometry.Pose2d;
+
+import static edu.wpi.first.units.Units.Degrees;
+
+import com.ctre.phoenix6.StatusSignal;
+
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.measure.Angle;
+import frc.Demacia.utils.StatusSignalData;
+
+public class PoseEstimator {
+
+    private ChassisSpeeds lastSpeeds;
+    private ChassisSpeeds currentSpeeds;
+    private StatusSignal<Angle> timeSignal;
+    private StatusSignal<Angle> gyroSignal;
+    private double lastTime;
+    private double lastHeading;
+    private double gyroOffset;
+    private Pose2d pose;
+
+    private static final double MAX_BUFFER_TIME = 1.5;
+
+    class PositionCorrection {
+        double deltaX;
+        double deltaY;
+        double deltaHeading;
+        double time;
+
+        PositionCorrection next = null;
+        PositionCorrection prev = null;
+
+        PositionCorrection(double deltaX, double deltaY, double deltaHeading, double time) {
+            this.deltaX = deltaX;
+            this.deltaY = deltaY;
+            this.deltaHeading = deltaHeading;
+            this.time = time;
+            addToList();
+        }
+
+        private void addToList() {
+            if(last == null) {
+                last = this;
+            } else if(time > last.time - MAX_BUFFER_TIME) {
+                PositionCorrection p = last;
+                while(p.time > time)
+                    p = p.prev;
+                prev = p;
+                next = p.next;
+                p.next = this;
+                if(next == null) {
+                    last = this;
+                } else {
+                    next.prev = this;
+                }
+            }           
+        }
+        private void removeFromList() {
+            prev.next = next;
+            next.prev = prev;
+        }
+    }
+
+    PositionCorrection last = null;
+    PositionCorrection first = new PositionCorrection(0,0,0,0);
+
+    public PoseEstimator(ChassisSpeeds currentSpeeds, StatusSignal<Angle> timeSignal,StatusSignal<Angle> gyroSignal, Pose2d pose) {
+        this.currentSpeeds = currentSpeeds;
+        lastSpeeds = new ChassisSpeeds(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond, currentSpeeds.omegaRadiansPerSecond);
+        this.timeSignal = timeSignal;
+        this.gyroSignal = gyroSignal;
+        lastTime = timeSignal.getTimestamp().getTime();
+        lastHeading = pose.getRotation().getDegrees();
+        gyroOffset = lastHeading - gyroSignal.getValue().in(Degrees);
+        this.pose = pose;
+    }
+
+    public void updatePose() {
+        double currentTime = timeSignal.getTimestamp().getTime();
+        double deltaTime = currentTime - lastTime;
+        double heading = gyroSignal.getValue().in(Degrees) + gyroOffset;
+        PositionCorrection p = new PositionCorrection(
+            (currentSpeeds.vxMetersPerSecond + lastSpeeds.vxMetersPerSecond)*deltaTime/2,
+            (currentSpeeds.vyMetersPerSecond + lastSpeeds.vyMetersPerSecond)*deltaTime/2,
+            heading - lastHeading,
+            currentTime);
+        cleanList();
+        pose.getTranslation().set(pose.getX() + p.deltaX, pose.getY() + p.deltaY);
+        pose.getRotation().setDegrees(heading);
+        lastTime = currentTime;
+        lastSpeeds.vxMetersPerSecond = currentSpeeds.vxMetersPerSecond;
+        lastSpeeds.vyMetersPerSecond = currentSpeeds.vyMetersPerSecond;
+        lastSpeeds.omegaRadiansPerSecond = currentSpeeds.omegaRadiansPerSecond;
+        lastHeading = heading;
+    }
+
+    void cleanAll() {
+        first.next = null;
+        last = first;
+    }
+    void cleanList() {
+        while(first.next != null && first.next.time < last.time - MAX_BUFFER_TIME) {
+            first.next.removeFromList();
+        }
+    }
+}

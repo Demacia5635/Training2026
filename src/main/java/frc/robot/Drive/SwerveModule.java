@@ -1,7 +1,10 @@
 package frc.robot.Drive;
 
-import edu.wpi.first.math.MathUtil;
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -120,6 +123,10 @@ public class SwerveModule implements Sendable {
         System.out.println(config.name + " coast");
         steer.setNeutralMode(false);
         drive.setNeutralMode(false);
+    }
+
+    public StatusSignal<Angle> steerHeadingSignal() {
+        return ((TalonFX)steer).getPosition();
     }
 
     @Override

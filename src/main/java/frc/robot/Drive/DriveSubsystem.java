@@ -34,6 +34,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     SwerveModule[] modules;
     SwerveDrivePoseEstimator poseEstimator;
+    PoseEstimator udiEstimator;
     Field2d robotField;
     SwerveDriveKinematics kinematics;
     UdiKinematics1 udiKinematics1;
@@ -46,6 +47,7 @@ public class DriveSubsystem extends SubsystemBase {
     String moduleNames[];
     StatusSignal<Angle> gyroSignal;
     Pose2d pose;
+    Pose2d udiPose;
     ChassisSpeeds currentChassisSpeeds = new ChassisSpeeds();
     CommandXboxController controller;
     ChassisSpeeds targetChassisSpeeds = new ChassisSpeeds();
@@ -80,8 +82,11 @@ public class DriveSubsystem extends SubsystemBase {
         gyroSignal = gyro.getYaw();
         poseEstimator = new SwerveDrivePoseEstimator(kinematics, getGyroRotation(), modulePositions,new Pose2d());
         pose = new Pose2d();
+        udiPose = new Pose2d();
         pose.set(poseEstimator.getEstimatedPosition());
+        udiPose.set(poseEstimator.getEstimatedPosition());
         robotField = new Field2d();
+        udiEstimator = new PoseEstimator(currentChassisSpeeds, modules[0].steerHeadingSignal(), gyroSignal, pose);
         SmartDashboard.putData("Drive", this);
         SmartDashboard.putData("Robot Position", robotField);
         SmartDashboard.putData("Set Drive Brake", new InstantCommand(()-> {for(SwerveModule m : modules) m.setBrake();}).ignoringDisable(true));
