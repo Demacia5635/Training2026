@@ -32,35 +32,53 @@ import frc.Demacia.utils.DriverUtils.JoystickSide;
 
 public class DriveSubsystem extends SubsystemBase {
 
-    SwerveModule[] modules;
-    SwerveDrivePoseEstimator poseEstimator;
-    Field2d robotField;
-    SwerveDriveKinematics kinematics;
-    UdiKinematics1 udiKinematics1;
+    // components - controller, modules, gyro and motors
+    CommandXboxController controller;
+    SwerveModule[] modules;                     
     Pigeon2 gyro;
     MotorInterface[] steerMotors;
     MotorInterface[] driveMotors;
+
+    // modules state and data
+    String moduleNames[];
     SwerveModulePosition[] modulePositions;
     SwerveModuleState[] moduleStates;
-    String moduleNames[];
-    StatusSignal<Angle> gyroSignal;
+    frc.robot.Drive.SwerveModuleState[] moduleStatePos;
+
+    // pose data
+    SwerveDrivePoseEstimator poseEstimator;     
+    Field2d robotField;
+    SwerveDriveKinematics kinematics;
     Pose2d pose;
-    ChassisSpeeds currentChassisSpeeds = new ChassisSpeeds();
-    CommandXboxController controller;
-    ChassisSpeeds targetChassisSpeeds = new ChassisSpeeds();
+
+    // gyro 
+    StatusSignal<Angle> gyroSignal;
     Rotation2d gyroRotation = new Rotation2d();
-    Rotation2d lastGyroRotation = new Rotation2d();
+
+    // current and target speeds
+    ChassisSpeeds currentChassisSpeeds = new ChassisSpeeds();
+    ChassisSpeeds targetChassisSpeeds = new ChassisSpeeds();
+
+    // optional kinemtaics and estimator
+    boolean useUdiKinematics = false;
+    PoseEstimator udiEstimator;
+    Field2d robotField2;
+    UdiKinematics1 udiKinematics1;
+    Pose2d udiPose;
 
     public DriveSubsystem(CommandXboxController controller) {
         super();
         this.controller = controller;
+        // create the arrays of modules and modules data
         modules = new SwerveModule[Constants.CONFIGS.length];
         Translation2d[] modulePositionOnRobot = new Translation2d[modules.length];
         modulePositions = new SwerveModulePosition[modules.length];
         moduleStates = new SwerveModuleState[modules.length];
+        moduleStatePos = new frc.robot.Drive.SwerveModuleState[modules.length];
         steerMotors = new MotorInterface[modules.length];
         driveMotors = new MotorInterface[modules.length];
         moduleNames = new String[modules.length];
+        // fill modules data
         for(int i = 0; i < modules.length; i++) {
             modules[i] = new SwerveModule(Constants.CONFIGS[i]);
             modulePositionOnRobot[i] = modules[i].config.positionRelativeToRobotCenter;
@@ -69,27 +87,42 @@ public class DriveSubsystem extends SubsystemBase {
             steerMotors[i] = modules[i].steerMotor();
             driveMotors[i] = modules[i].driveMotor();
             moduleNames[i] = Constants.CONFIGS[i].name;
+            moduleStatePos[i] = modules[i].state;
         }
+        // kinemtics and gyro
         kinematics = new SwerveDriveKinematics(modulePositionOnRobot);
-        udiKinematics1 = new UdiKinematics1(modulePositionOnRobot);
-        gyro = new Pigeon2(Constants.GYRO_ID, Constants.GYRO_CANBUS);
+        gyro = new Pigeon2(Constants.GYRO_ID, Constants.GYRO_CANBUS.canbus);
         gyroSignal = gyro.getYaw();
         poseEstimator = new SwerveDrivePoseEstimator(kinematics, getGyroRotation(), modulePositions,new Pose2d());
         pose = new Pose2d();
         pose.set(poseEstimator.getEstimatedPosition());
         robotField = new Field2d();
+        // alternate kinematics
+        udiKinematics1 = new UdiKinematics1(modulePositionOnRobot);
+        udiPose = new Pose2d();
+        udiEstimator = new PoseEstimator(currentChassisSpeeds, modules[0].steerHeadingSignal(), gyroSignal, udiPose);
+        robotField2 = new Field2d();
+        robotField2.setRobotPose(udiPose);
+
+        // smart dashboard
         SmartDashboard.putData("Drive", this);
         SmartDashboard.putData("Robot Position", robotField);
+        SmartDashboard.putData("Robot Position2", robotField2);
         SmartDashboard.putData("Set Drive Brake", new InstantCommand(()-> {for(SwerveModule m : modules) m.setBrake();}).ignoringDisable(true));
         SmartDashboard.putData("Set Drive Coast", new InstantCommand(()-> {for(SwerveModule m : modules) m.setCoast();}).ignoringDisable(true));
         SmartDashboard.putData("Reset Heading", new InstantCommand(this::setFieldHeading).ignoringDisable(true));
+        // commands
         controller.start().onTrue(new InstantCommand(this::setFieldHeading).ignoringDisable(true));
         SmartDashboard.putData("Drive Command", new RunCommand(this::drive, this));
 //        setDefaultCommand(new RunCommand(this::drive, this));
         showBaseCommands();
+        // Log
         SwerveLogEntry.add(moduleNames, moduleStates, modulePositions, pose, currentChassisSpeeds, targetChassisSpeeds);
     }
 
+    /**
+     * Show the base Sysid commands
+     */
     private void showBaseCommands() {
         MotorCommands.showRandomPowerCommand("Steers Random Power", -6, 6, 0.3, this, steerMotors);
         MotorCommands.showRandomPowerCommand("Drives Random Power", -9, 9, 0.2, this, driveMotors);
@@ -100,6 +133,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     }
 
+    /**
+     * the drive by controller function
+     */
     private void drive() {
         targetChassisSpeeds.vxMetersPerSecond = DriverUtils.getJSvalue(controller, JoystickSide.RightY) * Constants.MAX_SPEED;
         targetChassisSpeeds.vyMetersPerSecond = -DriverUtils.getJSvalue(controller, JoystickSide.RightX) * Constants.MAX_SPEED;
@@ -107,13 +143,26 @@ public class DriveSubsystem extends SubsystemBase {
         setSpeeds(targetChassisSpeeds);
     }
 
+    /**
+     * Vision Data update
+     * @param pose
+     * @param time
+     */
     public void updateVisionPosition(Pose2d pose, double time) {
         poseEstimator.addVisionMeasurement(pose, time);
     }
-    
+
+    /**
+     * reset heading to zero
+     */
     public void setFieldHeading() {
         resetPose(pose.getTranslation(), Rotation2d.kZero);
     }
+
+    /**
+     * Gyro data
+     * @return
+     */
     public Rotation2d getGyroRotation() {
         gyroSignal.refresh();
         gyroRotation.set(gyroSignal.getValue().in(Radians));
@@ -124,6 +173,9 @@ public class DriveSubsystem extends SubsystemBase {
         return getGyroRotation().getDegrees();
     }
 
+    /*
+     * Heading
+     */
     public Rotation2d getHeadingRotation() {
         return pose.getRotation();
     }
@@ -132,21 +184,51 @@ public class DriveSubsystem extends SubsystemBase {
         return getHeadingRotation().getDegrees();
     }
 
+    /**
+     * reset the pose
+     * @param translation2d
+     * @param rotation2d
+     */
     public void resetPose(Translation2d translation2d, Rotation2d rotation2d) {
         poseEstimator.resetPose(new Pose2d(translation2d, rotation2d));
     }
 
 
+    /**
+     * Set the robot to the required ChassisSpeeds
+     * @param speeds
+     */
     public void setSpeeds(ChassisSpeeds speeds) {
-        ChassisSpeeds robotRelativSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getHeadingRotation());
-        limitSpeeds(robotRelativSpeeds);
-        SwerveModuleState[] states = kinematics.toSwerveModuleStates(robotRelativSpeeds);
+        if(isZeroZpeed(speeds)) {
+            for(SwerveModule m : modules) {
+                m.stop();
+            }
+            return;
+        }
+        SwerveModuleState[] states;
+        if(useUdiKinematics) {
+            states = udiKinematics1.getModuleStates(getHeading(), speeds);
+        } else {
+            ChassisSpeeds robotRelativSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getHeadingRotation());
+            limitSpeeds(robotRelativSpeeds);
+            states = kinematics.toSwerveModuleStates(robotRelativSpeeds);
+        }
         SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.MAX_SPEED);
         for(int i = 0; i < modules.length; i++) {
             modules[i].setState(states[i]);
         }
     }
 
+    private boolean isZeroZpeed(ChassisSpeeds speeds) {
+        return Math.abs(speeds.vxMetersPerSecond) < 0.01 && 
+            Math.abs(speeds.vyMetersPerSecond) < 0.01 && 
+            Math.abs(speeds.omegaRadiansPerSecond) < 0.01; 
+    }
+
+    /**
+     * Limit the robot relative speeds based on max acceleration
+     * @param speeds
+     */
     private void limitSpeeds(ChassisSpeeds speeds) {
         // limit robot relative speeds to account for MAX accelration
         if(Math.abs(speeds.vxMetersPerSecond) > 0.1) {
@@ -179,15 +261,21 @@ public class DriveSubsystem extends SubsystemBase {
         for(SwerveModule m : modules) {
             m.refreshStateAndPosition();
         }
-        lastGyroRotation.set(gyroRotation.getRadians());
-        ChassisSpeeds t = kinematics.toChassisSpeeds(moduleStates);
+        ChassisSpeeds t;
+        if(useUdiKinematics) {
+            t = udiKinematics1.getChassisSpeeds(moduleStatePos, getHeading());
+
+        } else {
+            t = kinematics.toChassisSpeeds(moduleStates);
+        }
         currentChassisSpeeds.vxMetersPerSecond = t.vxMetersPerSecond;
         currentChassisSpeeds.vyMetersPerSecond = t.vyMetersPerSecond;
         currentChassisSpeeds.omegaRadiansPerSecond = t.omegaRadiansPerSecond;
         poseEstimator.update(getGyroRotation(), modulePositions);
         pose.set(poseEstimator.getEstimatedPosition());
         robotField.setRobotPose(pose);
-
+        udiEstimator.updatePose();
+        robotField2.setRobotPose(udiPose);
     }
 
     @Override

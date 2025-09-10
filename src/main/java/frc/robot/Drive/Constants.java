@@ -19,7 +19,7 @@ public class Constants {
     public static final double Y_POSITION = 0.3;
 
     public static final int GYRO_ID = 14;
-    public static final CANBus GYRO_CANBUS = Canbus.Rio.canbus;
+    public static final Canbus GYRO_CANBUS = Canbus.CANIvore;
 
     public static double CYCLE_TIME = 0.02;
 
@@ -32,8 +32,8 @@ public class Constants {
 
     public static final double STEER_TO_DISTANCE_RATIO = 0.14/360.0; // 14 cm for 1 steer rotation
 
-    public static double MAX_SET_STATE_STEER_ADDITION = 5.0;
-    public static double STATE_STEER_ADDITION = 0.7;
+    public static double MAX_STEER_CORRECTION = 25.0;
+    public static double STATE_STEER_MULTIPLIER = 1.7;
 
     public static boolean CANCODER_INVERTED = false;
 
@@ -68,7 +68,7 @@ public class Constants {
                 double cancoderOffset) {
             positionRelativeToRobotCenter = new Translation2d(xPosition, yPosition);
             name = (xPosition > 0 ? "Front" : "Back") + (yPosition > 0 ? "Left" : "Right");
-            cancoderConfig = new CancoderConfig(cancoderId, BASE_STEER_CONFIG.canbus, name + "/Cancoder").withInvert(CANCODER_INVERTED);
+            cancoderConfig = new CancoderConfig(cancoderId, BASE_DRIVE_CONFIG.canbus, name + "/Cancoder").withInvert(CANCODER_INVERTED);
             this.cancoderOffset = cancoderOffset;
             steerConfig = new TalonConfig(steerId, name + "/Steer", BASE_STEER_CONFIG);
             driveConfig = new TalonConfig(driveId, name + "/Drive", BASE_DRIVE_CONFIG);
