@@ -28,8 +28,8 @@ public final class Constants {
   }
   public static final int GYRO_ID = 0;
   public static final double NumberOfWheelCyclesIn1Sec=8.14;
-    public static final double SteerGearRetio=12.8;
-    public static final double diameterWheel = 0.1016;
+  public static final double SteerGearRetio=12.8;
+  public static final double diameterWheel = 0.1016;
   public static class ModuleConstants {
     public static final int STEER_ID = 1;
     public static final int DRIVE_ID = 2;
@@ -67,6 +67,8 @@ public final class Constants {
     public static final double kd2 = 0.001;
     public static double kS = 0.0;
     public static double kV = 0.00938;
+    public static final double Degree_ratio = 6.14;
+
   }
   
   public static class BaseConfigs {

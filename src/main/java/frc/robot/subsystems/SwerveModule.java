@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,23 +38,50 @@ public class SwerveModule extends SubsystemBase {
     FF = new SimpleMotorFeedforward(Constants.ModuleConstants.kS, Constants.ModuleConstants.kV);
     SmartDashboard.putData(this);
   }
-  public void setPositionSteer(double angle){
-    steerMotor.setPosition(angle);
+
+
+  public void setPowerDriveMotor(double power){
+    driveMotor.set(power);
+    driveController.setTolerance(0.1);
+    driveController.setIntegratorRange(-0.1, 0.1);
+  } 
+
+
+  public void setPowerSteerMotor(double power){
+    steerMotor.set(power);
+    steerController.setTolerance(1.0);
+    steerController.setIntegratorRange(-1, 1);
   }
-  public double getPositionOfSteer(){
-    return (steerMotor.)
-  }
+
   public double getDriveMotorVelocity(){
     return (driveMotor.getVelocity().getValueAsDouble()/NumberOfWheelCyclesIn1Sec)*diameterWheel*Math.PI;
   }
+
+  public double getDriveMotorPosition(){
+    return (driveMotor.getPosition().getValueAsDouble()/NumberOfWheelCyclesIn1Sec)*diameterWheel*Math.PI;
+  }
+
   public double getSteerMotorVelocity(){
-    return (steerMotor.getVelocity().getValueAsDouble()/NumberOfWheelCyclesIn1Sec)*diameterWheel*Math.PI;
+    return (steerMotor.getVelocity().getValueAsDouble()/Constants.ModuleConstants.Degree_ratio)*360;
   }
-  public void setVelocityDrive(double velocity){
-    driveMotor.setVelocity(velocity);
+
+  public void setPositionSteer(double angle){
+    steerMotor.setPosition(angle);
   }
-  public void setVelocitySteer(double velocity){
-    steerMotor.setVelocity(velocity);
+
+  public double getPositionOfSteer(){
+    return ((steerMotor.getPosition().getValueAsDouble()/Constants.ModuleConstants.Degree_ratio)*360)%360;
+  }
+
+  public void setVelocityDrive(double velocityTarget){
+    double currentVelocity = getDriveMotorVelocity();
+    double power = driveController.calculate(currentVelocity, velocityTarget) + FF.calculateWithVelocities(currentVelocity, velocityTarget);
+    setPowerDriveMotor(power);
+  }
+  public void SetSteerAngle(double targetAngle){
+    double currentAngle = getPositionOfSteer();
+    double PowerToTargetAngle = steerController.calculate(currentAngle, targetAngle);
+    setPowerSteerMotor(PowerToTargetAngle); 
   }
   public double getAbsouluteAngle(){
     return cancoder.getAbsolutePosition().getValueAsDouble();
@@ -62,11 +90,21 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.set(0);
     steerMotor.set(0);
   }
+
+
+  // public void SetState(SwerveModuleState state){
+  //       double wantedAngle = state.angle.getDegrees();
+  //       double velocty = state.speedMetersPerSecond;
+  //       setVeloctyDrive(velocty);
+  //       SetSteerAngle(wantedAngle);
+  // }
+
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.addDoubleProperty("driveVelocity", this::getDriveMotorVelocity, null);
     builder.addDoubleProperty("steerVelocity", this::getSteerMotorVelocity, null);
-    builder.addDoubleProperty("absouluteAngle", this::getAbsouluteAngle, null);
+    builder.addDoubleProperty("steerAngle", this::getPositionOfSteer, null);
+    builder.addDoubleProperty("DriveMotorPosition", this::getDriveMotorPosition, null);
 
   }
   @Override
