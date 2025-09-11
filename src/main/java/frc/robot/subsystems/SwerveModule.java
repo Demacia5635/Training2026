@@ -32,9 +32,9 @@ public class SwerveModule extends SubsystemBase {
     cancoder = new Cancoder(new CancoderConfig(cancoderId ,Canbus.Rio, canCoderName));
     driveMotor = new TalonMotor(new TalonConfig(driveId , Canbus.Rio, driveName));
     steerMotor = new TalonMotor(new TalonConfig(steerId , Canbus.Rio, steerName));
-    steerController = new PIDController(Constants.ModuleConstants.STEER_KP, Constants.ModuleConstants.STEER_KI, Constants.ModuleConstants.STEER_KD);
-    driveController = new PIDController(Constants.ModuleConstants.DRIVE_KP, Constants.ModuleConstants.DRIVE_KI, Constants.ModuleConstants.DRIVE_KD);
-    FF = new SimpleMotorFeedforward(steerId, driveId)
+    steerController = new PIDController(Constants.ModuleConstants.Kp, Constants.ModuleConstants.Ki, Constants.ModuleConstants.Kd);
+    driveController = new PIDController(Constants.ModuleConstants.kp2, Constants.ModuleConstants.ki2, Constants.ModuleConstants.kd2);
+    FF = new SimpleMotorFeedforward(Constants.ModuleConstants.kS, Constants.ModuleConstants.kV);
     SmartDashboard.putData(this);
   }
   public void setPositionSteer(double angle){

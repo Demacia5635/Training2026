@@ -25,9 +25,6 @@ public final class Constants {
     public static final String MOTOR_CAN ="rio";
     public static final int MOTOR_STEER_ID2 = 11;
     public static final String MOTOR_CAN2 ="rio";
-    public static final 
-
-
   }
   public static final int GYRO_ID = 0;
   public static final double NumberOfWheelCyclesIn1Sec=8.14;
@@ -58,9 +55,18 @@ public final class Constants {
     public static final double STEER_RAMP = 0.2;
     public static final double DRIVE_RAMP = 0.2;
     public static final double WHEEL_CIRCUMFERENCE = Math.PI * 4 * 0.0254;
-
+    
     public static final double STEER_VELOCITY_P = 2;
     public static final double ABS_ENCODER_OFFSET = 10;
+
+    public static final double Kp = 0.005;
+    public static final double Ki = 0.00;
+    public static final double Kd = 0.0002;
+    public static final double kp2 = 0.015;
+    public static final double ki2 = 0.0000;
+    public static final double kd2 = 0.001;
+    public static double kS = 0.0;
+    public static double kV = 0.00938;
   }
   
   public static class BaseConfigs {
