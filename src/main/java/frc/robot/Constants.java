@@ -68,6 +68,22 @@ public final class Constants {
     public static double kS = 0.0;
     public static double kV = 0.00938;
     public static final double Degree_ratio = 6.14;
+    public static final int MotorId = 7;
+    public static final int Drive_MOTOR_ID_Front_left= 1;
+    public static final int steer_Motor_ID_Front_left= 2;
+    public static final int steer_Motor_ID_Front_right= 5;
+    public static final int Drive_Motor_ID_Front_right= 4;
+    public static final int steer_Motor_ID_back_left= 8;
+    public static final int Drive_Motor_ID_back_left= 7;
+    public static final int steer_Motor_ID_back_right=11 ;
+    public static final int Drive_Motor_ID_back_right= 10;
+    public static final int Gyro_Id= 14;
+    public static final String MOTOR_CAN = "canivore";
+    public static final double Drive_ratio = 12.8;
+    public static final String Gyro_Can = "rio";
+    public static final double Drive_Radios_In_Meter = 5;
+    public static final int DriveID = 7;
+    public static final boolean MotorInverted = true;
 
   }
   

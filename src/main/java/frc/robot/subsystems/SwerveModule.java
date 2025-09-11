@@ -92,12 +92,12 @@ public class SwerveModule extends SubsystemBase {
   }
 
 
-  // public void SetState(SwerveModuleState state){
-  //       double wantedAngle = state.angle.getDegrees();
-  //       double velocty = state.speedMetersPerSecond;
-  //       setVeloctyDrive(velocty);
-  //       SetSteerAngle(wantedAngle);
-  // }
+  public void SetState(SwerveModuleState state){
+        double wantedAngle = state.angle.getDegrees();
+        double velocity = state.speedMetersPerSecond;
+        setVelocityDrive(velocity);
+        SetSteerAngle(wantedAngle);
+  }
 
   @Override
   public void initSendable(SendableBuilder builder) {
