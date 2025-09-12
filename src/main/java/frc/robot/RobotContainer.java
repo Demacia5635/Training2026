@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.DriveCommand;
 import frc.robot.commands.MoveDriveMotor1Meter;
 import frc.robot.commands.MoveInSameVelocity;
 import frc.robot.commands.MoveInSameVelocityWithFF;
@@ -31,6 +32,8 @@ public class RobotContainer {
     ModuleSubsystem module;
     TurningOnTheMotorByXboxOrElastic turnOnTheDriveMotorOfTheModule;
     MoveInSameVelocityWithFF MovingInSameVelocityWithFF;
+    Chassis chassis;
+    DriveCommand driveCommand;
     public RobotContainer() {
       subsystem1 = new MyFirstSubsystem();
       subsystem2 = new TestUtils();
@@ -38,11 +41,15 @@ public class RobotContainer {
       SteerMotorcmd = new MoveToAngle(subsystem1);
       MovingInSameVelocity = new MoveInSameVelocity(subsystem1);
       MovingInSameVelocityWithFF = new MoveInSameVelocityWithFF(subsystem2);
-      
+      chassis = new Chassis();
+      chassis.getDefaultCommand(driveCommand);
 
       //module = new ModuleSubsystem(); 
       //turnOnTheDriveMotorOfTheModule = new TurningOnTheMotorByXboxOrElastic(module);
       configureBindings();
+
+
+      
     }
   
     /**
