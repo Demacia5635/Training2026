@@ -43,7 +43,7 @@ public class RobotContainer {
       MovingInSameVelocityWithFF = new MoveInSameVelocityWithFF(subsystem2);
       chassis = new Chassis();
       driveCommand = new DriveCommand(chassis);
-      chassis.getDefaultCommand(driveCommand);
+      chassis.setDefaultCommand(driveCommand);
 
       //module = new ModuleSubsystem(); 
       //turnOnTheDriveMotorOfTheModule = new TurningOnTheMotorByXboxOrElastic(module);
