@@ -4,12 +4,15 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Demacia.utils.Motors.TalonConfig;
@@ -29,10 +32,10 @@ public class SwerveModule extends SubsystemBase {
   private PIDController driveController;
   private SimpleMotorFeedforward FF;
 
-  public SwerveModule(String name, int cancoderId, int steerId, int driveId, String steerName, String driveName, String canCoderName) {
-    cancoder = new Cancoder(new CancoderConfig(cancoderId ,Canbus.Rio, canCoderName));
-    driveMotor = new TalonMotor(new TalonConfig(driveId , Canbus.Rio, driveName));
-    steerMotor = new TalonMotor(new TalonConfig(steerId , Canbus.Rio, steerName));
+  public SwerveModule(String name,int steerId, int driveId) {
+    super();
+    driveMotor = new TalonMotor(new TalonConfig(driveId , Canbus.CANIvore , name));
+    steerMotor = new TalonMotor(new TalonConfig(steerId , Canbus.CANIvore, name));
     steerController = new PIDController(Constants.ModuleConstants.Kp, Constants.ModuleConstants.Ki, Constants.ModuleConstants.Kd);
     driveController = new PIDController(Constants.ModuleConstants.kp2, Constants.ModuleConstants.ki2, Constants.ModuleConstants.kd2);
     FF = new SimpleMotorFeedforward(Constants.ModuleConstants.kS, Constants.ModuleConstants.kV);
