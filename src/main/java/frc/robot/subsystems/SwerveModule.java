@@ -29,7 +29,7 @@ public class SwerveModule extends SubsystemBase {
   private PIDController driveController;
   private SimpleMotorFeedforward FF;
 
-  public SwerveModule(int cancoderId, int steerId, int driveId, String steerName, String driveName, String canCoderName) {
+  public SwerveModule(String name, int cancoderId, int steerId, int driveId, String steerName, String driveName, String canCoderName) {
     cancoder = new Cancoder(new CancoderConfig(cancoderId ,Canbus.Rio, canCoderName));
     driveMotor = new TalonMotor(new TalonConfig(driveId , Canbus.Rio, driveName));
     steerMotor = new TalonMotor(new TalonConfig(steerId , Canbus.Rio, steerName));
