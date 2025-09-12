@@ -77,6 +77,10 @@ public final class Constants {
     public static final int Drive_Motor_ID_back_left= 7;
     public static final int steer_Motor_ID_back_right=11 ;
     public static final int Drive_Motor_ID_back_right= 10;
+    public static final int Cancoder_ID_Front_Left= 0;
+    public static final int Cancoder_ID_Front_Right= 0;
+    public static final int Cancoder_ID_Back_Left= 0;
+    public static final int Cancoder_ID_Back_Right= 0;
     public static final int Gyro_Id= 14;
     public static final String MOTOR_CAN = "canivore";
     public static final double Drive_ratio = 12.8;
