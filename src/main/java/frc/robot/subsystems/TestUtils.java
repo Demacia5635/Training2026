@@ -19,7 +19,7 @@ public class TestUtils extends SubsystemBase {
   /** Creates a new TestUtils. */
   public TestUtils() {
     super();
-    talonMotor = new TalonMotor(Constants.DRIVE_CONFIG);
+    talonMotor = new TalonMotor(Constants.BASE_DRIVE_CONFIG);
     SmartDashboard.putData(this);
     
   }
