@@ -39,7 +39,7 @@ public class Chassis extends SubsystemBase {
     moduleRightFront = new SwerveModule("RightFront", Constants.ModuleConstants.steer_Motor_ID_Front_right, Constants.ModuleConstants.Drive_Motor_ID_Front_right);
     gyro = new Pigeon2(Constants.ModuleConstants.Gyro_Id, Constants.ModuleConstants.Gyro_Can);
     kinematics=new SwerveDriveKinematics(Constants.Swerve.KINEMATICS);
-    poseEstimator = new SwerveDrivePoseEstimator(kinematics, null, null, null)
+    poseEstimator = new SwerveDrivePoseEstimator(kinematics, getAngle(), getModulePositions(), new Pose2d());
     field = new Field2d(); 
     SmartDashboard.putData("resetGyro", new InstantCommand(() -> resetGyro()).ignoringDisable(true));
     SmartDashboard.putData("field", field);
@@ -47,6 +47,9 @@ public class Chassis extends SubsystemBase {
   }
   public void resetPose(Pose2d pose2d){
     poseEstimator.resetPose(pose2d);
+  }
+  public void resetGyro() {
+    resetPose(new Pose2d(getPose2d().getTranslation(), Rotation2d.kZero));
   }
   public Rotation2d getAngle(){ 
     return Rotation2d.fromRadians(gyro.getYaw().getValue().in(Radians));
