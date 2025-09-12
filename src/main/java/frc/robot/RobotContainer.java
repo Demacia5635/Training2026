@@ -42,6 +42,7 @@ public class RobotContainer {
       MovingInSameVelocity = new MoveInSameVelocity(subsystem1);
       MovingInSameVelocityWithFF = new MoveInSameVelocityWithFF(subsystem2);
       chassis = new Chassis();
+      driveCommand = new DriveCommand(chassis);
       chassis.getDefaultCommand(driveCommand);
 
       //module = new ModuleSubsystem(); 
@@ -74,6 +75,6 @@ public class RobotContainer {
     // An example command will be run in autonomous
     
     // return DriveMotorcmd.andThen(SteerMotorcmd);
-    return MovingInSameVelocityWithFF;
+    return driveCommand;
   }
 }

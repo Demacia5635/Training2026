@@ -23,7 +23,7 @@ public class DriveCommand extends Command {
 
   
   /** Creates a new DriveCommand. */
-  public DriveCommand() {
+  public DriveCommand(Chassis chassis) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.chassis = chassis;
     xboxController = new CommandXboxController(Constants.ModuleConstants.DriveID);
