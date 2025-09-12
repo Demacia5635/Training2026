@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -39,8 +40,8 @@ public class Chassis extends SubsystemBase {
     gyro = new Pigeon2(Constants.ModuleConstants.Gyro_Id, Constants.ModuleConstants.Gyro_Can);
     kinematics=new SwerveDriveKinematics(Constants.Swerve.KINEMATICS);
     poseEstimator = new SwerveDrivePoseEstimator(kinematics, null, null, null)
-    field = new Field2d();
-    SmartDashboard.putData("resetGyro", );
+    field = new Field2d(); 
+    SmartDashboard.putData("resetGyro", new InstantCommand(() -> resetGyro()).ignoringDisable(true));
     SmartDashboard.putData("field", field);
 
   }
